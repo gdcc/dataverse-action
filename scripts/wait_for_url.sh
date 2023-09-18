@@ -8,7 +8,7 @@
 #
 # - Just pass as many urls as required to the script - the script will wait for each, one by one
 #
-# Example: ./wait_for_urls.sh "${MY_VARIABLE}" "http://192.168.56.101:8080"
+# Example: ./wait_for_url.sh "${MY_VARIABLE}" "http://192.168.56.101:8080"
 ##############################################################################################
 
 wait-for-url() {
@@ -19,7 +19,7 @@ wait-for-url() {
         done' ${1}
     local TIMEOUT_RETURN="$?"
     if [[ "${TIMEOUT_RETURN}" == 0 ]]; then
-        echo -e "├─ Endpoint is up"
+        echo -e "│  ╰ Endpoint is up"
         return
     elif [[ "${TIMEOUT_RETURN}" == 120000 ]]; then
         echo "├─ Timeout: ${1} -> EXIT"
