@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: |
         echo "::group::Bootstrap Dataverse service"
-        docker run -i --network apitest_dataverse gdcc/configbaker:manual bootstrap.sh dev
+        docker run -i --network apitest_dataverse gdcc/configbaker:alpha bootstrap.sh dev
         echo "::endgroup::"
     - name: Retrieve API Token
       run: ${{ github.action_path }}/scripts/get_api_token.sh
