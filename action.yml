@@ -10,6 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: "Start Dataverse service in background"
+      shell: bash
       run: |
         echo "::group::Start Dataverse service in background"
         docker compose \
@@ -20,6 +21,7 @@ runs:
         echo "::endgroup::"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
+      shell: bash
       run: |
         echo "::group::Bootstrap Dataverse service"
         docker run -i --network apitest_dataverse gdcc/configbaker:manual bootstrap.sh dev
