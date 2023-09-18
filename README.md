@@ -16,7 +16,6 @@ with:
 ### Parameters
 
 * `create-dv`: Whether to create a Dataverse to add data to or not. Default: `true`
-* `port`: The port to run the Dataverse instance on. Default: `8080`
 
 ## License
 
