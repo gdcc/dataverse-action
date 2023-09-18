@@ -5,17 +5,25 @@ inputs:
   create-dv:
     description: "Whether or not to create an example Dataverse"
     required: true
+    default: "true"
 runs:
   using: "composite"
   steps:
-    - name: "Checkout"
-      uses: "actions/checkout@v4"
-    - name: Setup Dataverse
-      run: ${{ github.action_path }}/scripts/dataverse_setup.sh
-      shell: bash
-    - name: Check API Status
-      run: ${{ github.action_path }}/scripts/check_api_status.sh
-      shell: bash
+    - name: "Start Dataverse service in background"
+      run: |
+        echo "::group::Start Dataverse service in background"
+        docker compose \
+        -f ${{ github.action_path }}/docker-compose.yml \
+        -p apitest \
+        --env-file ${{ github.action_path }}/.env.dataverse \
+        up -d --quiet-pull && echo -e "✅ Dataverse containers have been started."
+        echo "::endgroup::"
+    # Bootstrap will wait up until accessible, so blocking here.
+    - name: "Bootstrap Dataverse service"
+      run: |
+        echo "::group::Bootstrap Dataverse service"
+        docker run -i --network apitest_dataverse gdcc/configbaker:manual bootstrap.sh dev
+        echo "::endgroup::"
     - name: Retrieve API Token
       run: ${{ github.action_path }}/scripts/get_api_token.sh
       shell: bash
