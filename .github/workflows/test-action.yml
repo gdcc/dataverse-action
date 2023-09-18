@@ -1,0 +1,19 @@
+on: [push]
+
+jobs:
+  custom_test:
+    runs-on: ubuntu-latest
+    name: Test the action
+    env:
+      PORT: 8080
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - name: Run Dataverse Action
+        uses: ./
+        with:
+          create-dv: true
+      - name: Check Dataverse Setup
+        run: |
+          echo $(curl http://localhost:8080/api/info/version) && \
+          echo $(curl http://localhost:8080/api/metadatablocks)

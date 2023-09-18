@@ -1,0 +1,25 @@
+name: dv-configbaker
+description: |
+  "This GitHub Action serves as a powerful tool to create a functional Dataverse instance, enabling developers to run tests and perform other critical tasks within their GitHub CI workflows."
+inputs:
+  create-dv:
+    description: "Whether or not to create an example Dataverse"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Checkout"
+      uses: "actions/checkout@v4"
+    - name: Setup Dataverse
+      run: ${{ github.action_path }}/scripts/dataverse_setup.sh
+      shell: bash
+    - name: Check API Status
+      run: ${{ github.action_path }}/scripts/check_api_status.sh
+      shell: bash
+    - name: Retrieve API Token
+      run: ${{ github.action_path }}/scripts/get_api_token.sh
+      shell: bash
+    - name: Create Dataverse
+      run: ${{ github.action_path }}/scripts/create_dataverse.sh
+      shell: bash
+
