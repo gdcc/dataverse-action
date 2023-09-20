@@ -2,6 +2,18 @@ name: dv-configbaker
 description: |
   "This GitHub Action serves as a powerful tool to create a functional Dataverse instance, enabling developers to run tests and perform other critical tasks within their GitHub CI workflows."
 inputs:
+  image_tag:
+    description: "Tag of image for Dataverse app and Configbaker"
+    required: true
+    default: "unstable"
+  image_dataverse:
+    description: "Name of Dataverse app image (can include registry)"
+    required: true
+    default: "docker.io/gdcc/dataverse"
+  image_configbaker:
+    description: "Name of Configbaker image (can include registry)"
+    required: true
+    default: "docker.io/gdcc/configbaker"
   create-dv:
     description: "Whether or not to create an example Dataverse"
     required: true
@@ -9,21 +21,30 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Pull images for inspection and cache"
+      shell: bash
+      run: |
+        docker pull -q ${{ inputs.image_dataverse }}:${{ inputs.image_tag }}
+        docker pull -q ${{ inputs.image_configbaker }}:${{ inputs.image_tag }}
+    - name: "Prepare environment variables"
+      shell: bash
+      run: |
+        echo "POSTGRES_VERSION=$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.postgresql.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')" >> ${GITHUB_ENV}
+        echo "SOLR_VERSION=$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.solr.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')" >> ${GITHUB_ENV}
+        echo "DATAVERSE_DB_USER=dataverse" >> "${GITHUB_ENV}"
+        echo "DATAVERSE_DB_PASSWORD=secret" >> "${GITHUB_ENV}"
     - name: "Start Dataverse service in background"
       shell: bash
       run: |
-        echo "::group::Start Dataverse service in background"
-        docker compose \
-        -f ${{ github.action_path }}/docker-compose.yml \
-        -p apitest \
-        --env-file ${{ github.action_path }}/.env.dataverse \
-        up -d --quiet-pull && echo -e "✅ Dataverse containers have been started."
+        echo "::group::🥎 Start Dataverse service in background"
+        docker compose -f ${{ github.action_path }}/docker-compose.yml -p apitest up -d --quiet-pull \
+          && echo -e "✅️ Dataverse containers have been started."
         echo "::endgroup::"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
       shell: bash
       run: |
-        echo "::group::Bootstrap Dataverse service"
+        echo "::group::🤖 Bootstrap Dataverse service"
         docker run -i --network apitest_dataverse gdcc/configbaker:alpha bootstrap.sh dev
         echo "::endgroup::"
     - name: Retrieve API Token
@@ -32,4 +53,3 @@ runs:
     - name: Create Dataverse
       run: ${{ github.action_path }}/scripts/create_dataverse.sh
       shell: bash
-
