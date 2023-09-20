@@ -14,6 +14,12 @@ inputs:
     description: "Name of Configbaker image (can include registry)"
     required: true
     default: "docker.io/gdcc/configbaker"
+  postgresql_version:
+    description: "Override the PostgreSQL version to use"
+    required: false
+  solr_version:
+    description: "Override the Solr version to use"
+    required: false
   create-dv:
     description: "Whether or not to create an example Dataverse"
     required: true
@@ -29,10 +35,26 @@ runs:
     - name: "Prepare environment variables"
       shell: bash
       run: |
-        echo "POSTGRES_VERSION=$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.postgresql.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')" >> ${GITHUB_ENV}
-        echo "SOLR_VERSION=$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.solr.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')" >> ${GITHUB_ENV}
-        echo "DATAVERSE_DB_USER=dataverse" >> "${GITHUB_ENV}"
-        echo "DATAVERSE_DB_PASSWORD=secret" >> "${GITHUB_ENV}"
+        PG_VERSION="${{ inputs.postgresql_version }}"
+        PG_VERSION="${PG_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.postgresql.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
+        if [[ -z "${PG_VERSION}" ]]; then
+          echo "Cannot find PostgreSQL version"; exit 1
+        else
+          echo "POSTGRES_VERSION=$PG_VERSION" | tee -a "${GITHUB_ENV}" 
+        fi
+        
+        SOLR_VERSION=${{ inputs.solr_version }}
+        SOLR_VERSION="${SOLR_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.solr.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
+        if [[ -z "${SOLR_VERSION}" ]]; then
+          echo "Cannot find Solr version"; exit 1
+        else
+          echo "SOLR_VERSION=$SOLR_VERSION" | tee -a "${GITHUB_ENV}" 
+        fi
+        
+        echo "CONFIGBAKER_IMAGE=${{ inputs.image_configbaker }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
+        echo "DATAVERSE_IMAGE=${{ inputs.image_dataverse }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
+        echo "DATAVERSE_DB_USER=dataverse" | tee -a "${GITHUB_ENV}"
+        echo "DATAVERSE_DB_PASSWORD=secret" | tee -a "${GITHUB_ENV}"
     - name: "Start Dataverse service in background"
       shell: bash
       run: |
@@ -45,7 +67,7 @@ runs:
       shell: bash
       run: |
         echo "::group::🤖 Bootstrap Dataverse service"
-        docker run -i --network apitest_dataverse gdcc/configbaker:alpha bootstrap.sh dev
+        docker run -i --network apitest_dataverse "${CONFIGBAKER_IMAGE}" bootstrap.sh dev
         echo "::endgroup::"
     - name: Retrieve API Token
       run: ${{ github.action_path }}/scripts/get_api_token.sh

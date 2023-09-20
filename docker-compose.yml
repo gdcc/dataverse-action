@@ -4,7 +4,7 @@ services:
   dataverse:
     container_name: 'dataverse'
     hostname: dataverse
-    image: gdcc/dataverse:alpha
+    image: ${DATAVERSE_IMAGE}
     restart: on-failure
     user: payara
     environment:
@@ -40,7 +40,7 @@ services:
 
   solr_initializer:
     container_name: 'solr_initializer'
-    image: gdcc/configbaker:alpha
+    image: ${CONFIGBAKER_IMAGE}
     restart: 'no'
     command:
       - sh

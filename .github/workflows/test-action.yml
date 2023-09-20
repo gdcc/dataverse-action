@@ -12,6 +12,7 @@ jobs:
       - name: Run Dataverse Action
         uses: ./
         with:
+          postgresql_version: 15
           create-dv: true
       - name: Check Dataverse Setup
         run: |
