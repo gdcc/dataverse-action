@@ -38,6 +38,7 @@ runs:
     - name: "Prepare environment"
       shell: bash
       run: |
+        # Get PostgreSQL version from action config or application image metadata, fail otherwise
         PG_VERSION="${{ inputs.postgresql_version }}"
         PG_VERSION="${PG_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.postgresql.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
         if [[ -z "${PG_VERSION}" ]]; then
@@ -46,6 +47,7 @@ runs:
           echo "POSTGRES_VERSION=$PG_VERSION" | tee -a "${GITHUB_ENV}" 
         fi
         
+        # Get Solr version from action config or application image metadata, fail otherwise
         SOLR_VERSION=${{ inputs.solr_version }}
         SOLR_VERSION="${SOLR_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.solr.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
         if [[ -z "${SOLR_VERSION}" ]]; then
@@ -59,6 +61,8 @@ runs:
         echo "DATAVERSE_DB_USER=dataverse" | tee -a "${GITHUB_ENV}"
         echo "DATAVERSE_DB_PASSWORD=secret" | tee -a "${GITHUB_ENV}"
         
+        # We use the MicroProfile Config Source trick of reading properties from a directory.
+        # See also https://docs.payara.fish/community/docs/Technical%20Documentation/MicroProfile/Config/Directory.html
         echo "CONFIG_DIR=${RUNNER_TEMP}/dv/conf" | tee -a "${GITHUB_ENV}"
         mkdir -p "${RUNNER_TEMP}/dv/conf"
         while IFS= read -r line; do
@@ -77,7 +81,13 @@ runs:
       shell: bash
       run: |
         echo "::group::🤖 Bootstrap Dataverse service"
-        docker run -i --network apitest_dataverse "${CONFIGBAKER_IMAGE}" bootstrap.sh dev
+        mkdir -p "${RUNNER_TEMP}/dv"
+        touch "${RUNNER_TEMP}/dv/bootstrap.exposed.env"
+        docker run -i --network apitest_dataverse \
+          -v "${RUNNER_TEMP}/dv/bootstrap.exposed.env:/.env" \
+          "${CONFIGBAKER_IMAGE}" bootstrap.sh -e /.env dev
+        echo "Exposed bootstrap results:"
+        cat "${RUNNER_TEMP}/dv/bootstrap.exposed.env"
         echo "::endgroup::"
     - name: Retrieve API Token
       run: ${{ github.action_path }}/scripts/get_api_token.sh
