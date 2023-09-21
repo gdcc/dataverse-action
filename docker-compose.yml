@@ -18,12 +18,25 @@ services:
     depends_on:
       - postgres
       - solr
+    volumes:
+      - ${RUNNER_TEMP}/dv/data:/dv
     tmpfs:
       - /dumps:mode=770,size=2052M,uid=1000,gid=1000
       - /tmp:mode=770,size=2052M,uid=1000,gid=1000
     mem_limit: 2147483648 # 2 GiB
     mem_reservation: 1024m
     privileged: false
+
+  dv_initializer:
+    container_name: 'dv_initializer'
+    image: ${CONFIGBAKER_IMAGE}
+    restart: 'no'
+    command:
+      - sh
+      - -c
+      - 'fix-fs-perms.sh dv'
+    volumes:
+      - ${RUNNER_TEMP}/dv/data:/dv
 
   postgres:
     container_name: 'postgres'
