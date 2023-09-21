@@ -20,6 +20,9 @@ inputs:
   solr_version:
     description: "Override the Solr version to use"
     required: false
+  jvm_options:
+    description: "Line separated key-value pairs of JVM options to be set before startup. Example: dataverse.spi.exporters.directory=/..."
+    required: false
   create-dv:
     description: "Whether or not to create an example Dataverse"
     required: true
@@ -32,7 +35,7 @@ runs:
       run: |
         docker pull -q ${{ inputs.image_dataverse }}:${{ inputs.image_tag }}
         docker pull -q ${{ inputs.image_configbaker }}:${{ inputs.image_tag }}
-    - name: "Prepare environment variables"
+    - name: "Prepare environment"
       shell: bash
       run: |
         PG_VERSION="${{ inputs.postgresql_version }}"
@@ -55,6 +58,13 @@ runs:
         echo "DATAVERSE_IMAGE=${{ inputs.image_dataverse }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
         echo "DATAVERSE_DB_USER=dataverse" | tee -a "${GITHUB_ENV}"
         echo "DATAVERSE_DB_PASSWORD=secret" | tee -a "${GITHUB_ENV}"
+        
+        echo "CONFIG_DIR=${RUNNER_TEMP}/dv/conf" | tee -a "${GITHUB_ENV}"
+        mkdir -p "${RUNNER_TEMP}/dv/conf"
+        while IFS= read -r line; do
+          FILENAME="${RUNNER_TEMP}/dv/conf/$(echo "$line" | cut -f1 -d=)"
+          echo "$line" | cut -f2- -d= > "$FILENAME"
+        done < <(printf '%s' "${{ inputs.jvm_options }}")
     - name: "Start Dataverse service in background"
       shell: bash
       run: |
