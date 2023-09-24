@@ -27,6 +27,13 @@ inputs:
     description: "Whether or not to create an example Dataverse"
     required: true
     default: "true"
+outputs:
+  api_token:
+    description: "API Token of dataverseAdmin superuser"
+    value: ${{ steps.bootstrap.outputs.API_TOKEN }}
+  base_url:
+    description: "Base URL where to reach the instance via HTTP"
+    value: ${{ steps.bootstrap.outputs.base_url }}
 runs:
   using: "composite"
   steps:
@@ -78,16 +85,21 @@ runs:
         echo "::endgroup::"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
+      id: bootstrap
       shell: bash
       run: |
         echo "::group::🤖 Bootstrap Dataverse service"
         mkdir -p "${RUNNER_TEMP}/dv"
         touch "${RUNNER_TEMP}/dv/bootstrap.exposed.env"
+        
         docker run -i --network apitest_dataverse \
           -v "${RUNNER_TEMP}/dv/bootstrap.exposed.env:/.env" \
           "${CONFIGBAKER_IMAGE}" bootstrap.sh -e /.env dev
-        echo "Exposed bootstrap results:"
-        cat "${RUNNER_TEMP}/dv/bootstrap.exposed.env"
+        
+        # Expose outputs
+        grep "API_TOKEN" "${RUNNER_TEMP}/dv/bootstrap.exposed.env" >> "$GITHUB_OUTPUT"
+        echo "base_url=http://localhost:8080/" >> "$GITHUB_OUTPUT"
+        
         echo "::endgroup::"
     - name: Retrieve API Token
       run: ${{ github.action_path }}/scripts/get_api_token.sh

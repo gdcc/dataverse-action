@@ -10,6 +10,7 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v4"
       - name: Run Dataverse Action
+        id: dataverse
         uses: ./
         with:
           postgresql_version: 15
@@ -19,5 +20,7 @@ jobs:
           create-dv: true
       - name: Check Dataverse Setup
         run: |
+          echo "api_token=${{ steps.dataverse.outputs.api_token }}"
+          echo "base_url=${{ steps.dataverse.outputs.base_url }}"
           echo $(curl http://localhost:8080/api/info/version) && \
           echo $(curl http://localhost:8080/api/metadatablocks)
