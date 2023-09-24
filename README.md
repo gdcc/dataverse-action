@@ -13,9 +13,9 @@ with:
     create-dv: true
 ```
 
-### Parameters
+## Inputs
 
-* `create-dv`: Whether to create a Dataverse to add data to or not. Default: `true`
+## Outputs
 
 ## License
 
