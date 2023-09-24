@@ -16,8 +16,12 @@ services:
     networks:
       - dataverse
     depends_on:
-      - postgres
-      - solr
+      postgres:
+        condition: service_started
+      solr:
+        condition: service_started
+      dv_initializer:
+        condition: service_completed_successfully
     volumes:
       - ${RUNNER_TEMP}/dv/data:/dv
       - ${CONFIG_DIR}:/secrets
@@ -69,7 +73,8 @@ services:
     hostname: 'solr'
     image: solr:${SOLR_VERSION}
     depends_on:
-      - solr_initializer
+      solr_initializer:
+        condition: service_completed_successfully
     restart: on-failure
     ports:
       - '8983:8983'
