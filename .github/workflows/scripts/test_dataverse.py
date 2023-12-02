@@ -36,11 +36,13 @@ class TestNativeAPI:
         code is 200 and the 'status' field in the response JSON is 'OK'.
         """
 
+        DV_VERSION = os.getenv("DV_VERSION")
         url = self.construct_url("api/info/version")
         response = requests.get(url)
 
         assert response.status_code == 200, response.text
         assert response.json()["status"] == "OK"
+        assert response.json()["data"]["version"] == DV_VERSION
 
     def test_metadatablocks(self):
         """
