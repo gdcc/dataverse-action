@@ -22,7 +22,7 @@ env:
     API_TOKEN: ${{ steps.dataverse.outputs.api_token }}
     BASE_URL: ${{ steps.dataverse.outputs.base_url }}
 run: |
-    my-app --api-token $API_TOKEN --base-url $BASE_URL
+    my-app --api-token "${{ env.API_TOKEN }}" --base-url "${{ env.BASE_URL }}"
 ```
 
 ## Inputs
