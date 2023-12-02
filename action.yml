@@ -30,6 +30,9 @@ outputs:
   base_url:
     description: "Base URL where to reach the instance via HTTP"
     value: ${{ steps.bootstrap.outputs.base_url }}
+  dv_version:
+    description: "Dataverse version"
+    value: ${{ steps.bootstrap.outputs.dv_version }}
 runs:
   using: "composite"
   steps:
@@ -95,5 +98,9 @@ runs:
         # Expose outputs
         grep "API_TOKEN" "${RUNNER_TEMP}/dv/bootstrap.exposed.env" >> "$GITHUB_OUTPUT"
         echo "base_url=http://localhost:8080/" >> "$GITHUB_OUTPUT"
+        
+        # Expose version
+        version=$(curl -s 'http://localhost:8080/api/info/version' | jq -r '.data.version')
+        echo "dv_version=$version" >>"$GITHUB_OUTPUT"
         
         echo "::endgroup::"
