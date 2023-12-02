@@ -18,7 +18,6 @@ jobs:
           jvm_options: |
             dataverse.api.signature-secret=eikaizieb2Oghaex
             dataverse.pid.datacite.rest-api-url=https://api.datacite.org
-          create-dv: true
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
