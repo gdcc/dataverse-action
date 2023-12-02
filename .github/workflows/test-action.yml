@@ -30,5 +30,6 @@ jobs:
         env:
           API_TOKEN: ${{ steps.dataverse.outputs.api_token }}
           BASE_URL: ${{ steps.dataverse.outputs.base_url }}
+          DV_VERSION: ${{ steps.dataverse.outputs.dv_version }}
         run: |
           python3 -m pytest .github/workflows/scripts/test_dataverse.py
