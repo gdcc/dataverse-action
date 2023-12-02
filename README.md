@@ -17,7 +17,7 @@ uses: gdcc/dataverse-action@main
 This will create a Dataverse instance with the default configuration. The action will output the API token and base URL of the instance, which can be used to interact with the instance. Here is an example on how to re-use the API token and base URL in a subsequent step:
 
 ```yaml
-name: Check Dataverse Setup
+name: How to re-use outputs
 env:
     API_TOKEN: ${{ steps.dataverse.outputs.api_token }}
     BASE_URL: ${{ steps.dataverse.outputs.base_url }}
