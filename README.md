@@ -1,16 +1,28 @@
 # Dataverse Configbaker Action
 
+![Tests](https://github.com/gdcc/dataverse-action/actions/workflows/test-action.yml/badge.svg)
+
 This GitHub Action serves as a powerful tool to effortlessly create a functional Dataverse instance, enabling developers to run comprehensive tests and perform other critical tasks within their GitHub CI workflows.
 
 ## Usage
 
-In order to use this action you need to add the following to your workflow file:
+In order to use the baseline action you need to add the following to your workflow file:
 
 ```yaml
-name: Test Dataverse
+name: Run Dataverse Action
+id: dataverse
 uses: gdcc/dataverse-action@main
-with:
-    create-dv: true
+```
+
+This will create a Dataverse instance with the default configuration. The action will output the API token and base URL of the instance, which can be used to interact with the instance. Here is an example on how to re-use the API token and base URL in a subsequent step:
+
+```yaml
+name: How to re-use outputs
+env:
+    API_TOKEN: ${{ steps.dataverse.outputs.api_token }}
+    BASE_URL: ${{ steps.dataverse.outputs.base_url }}
+run: |
+    my-app --api-token "${{ env.API_TOKEN }}" --base-url "${{ env.BASE_URL }}"
 ```
 
 ## Inputs
