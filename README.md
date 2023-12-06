@@ -31,7 +31,6 @@ run: |
 
 |                                         INPUT                                          |  TYPE  | REQUIRED |            DEFAULT             |                                                           DESCRIPTION                                                            |
 |----------------------------------------------------------------------------------------|--------|----------|--------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-|              <a name="input_create-dv"></a>[create-dv](#input_create-dv)               | string |   true   |            `"true"`            |                                        Whether or not to create <br>an example Dataverse                                         |
 |  <a name="input_image_configbaker"></a>[image_configbaker](#input_image_configbaker)   | string |   true   | `"docker.io/gdcc/configbaker"` |                                        Name of Configbaker image (can include registry)                                          |
 |     <a name="input_image_dataverse"></a>[image_dataverse](#input_image_dataverse)      | string |   true   |  `"docker.io/gdcc/dataverse"`  |                                     Name of Dataverse app image <br>(can include registry)                                       |
 |              <a name="input_image_tag"></a>[image_tag](#input_image_tag)               | string |   true   |          `"unstable"`          |                                       Tag of image for Dataverse <br>app and Configbaker                                         |
@@ -45,10 +44,11 @@ run: |
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-|                            OUTPUT                             |  TYPE  |                    DESCRIPTION                     |
-|---------------------------------------------------------------|--------|----------------------------------------------------|
-| <a name="output_api_token"></a>[api_token](#output_api_token) | string |       API Token of dataverseAdmin superuser        |
-|  <a name="output_base_url"></a>[base_url](#output_base_url)   | string | Base URL where to reach <br>the instance via HTTP  |
+|                              OUTPUT                              |  TYPE  |                    DESCRIPTION                     |
+|------------------------------------------------------------------|--------|----------------------------------------------------|
+|  <a name="output_api_token"></a>[api_token](#output_api_token)   | string |       API Token of dataverseAdmin superuser        |
+|    <a name="output_base_url"></a>[base_url](#output_base_url)    | string | Base URL where to reach <br>the instance via HTTP  |
+| <a name="output_dv_version"></a>[dv_version](#output_dv_version) | string |                 Dataverse version                  |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 
