@@ -5,7 +5,7 @@ inputs:
   image_tag:
     description: "Tag of image for Dataverse app and Configbaker"
     required: true
-    default: "unstable"
+    default: "alpha"
   image_dataverse:
     description: "Name of Dataverse app image (can include registry)"
     required: true
