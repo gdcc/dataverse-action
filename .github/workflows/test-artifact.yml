@@ -21,10 +21,10 @@ jobs:
             dataverse.pid.datacite.rest-api-url=https://api.datacite.org
       - name: Check artifact
         id: artifact-check
-        if: ${{ failure(steps.dataverse) }}
+        if: steps.dataverse.outcome == 'failure'
         uses: xSAVIKx/artifact-exists-action@v0
         with:
           name: "logs.tgz"
       - name: Set GitHub Action as success if "dataverse" has failed
-        if: ${{ success(steps.artifact-check) }}
+        if: steps.artifact-check.outcome == 'success'
         run: exit 0
