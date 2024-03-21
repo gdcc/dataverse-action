@@ -14,7 +14,7 @@ jobs:
         id: dataverse
         uses: ./
         with:
-          image_tag: "burritohasbeeneaten" 
+          image_tag: "burritohasbeeneaten"
           postgresql_version: 15
           jvm_options: |
             dataverse.api.signature-secret=eikaizieb2Oghaex
@@ -24,7 +24,7 @@ jobs:
         if: ${{ failure(steps.dataverse) }}
         uses: xSAVIKx/artifact-exists-action@v0
         with:
-          name: "logs.tgz"      
+          name: "logs.tgz"
       - name: Set GitHub Action as success if "dataverse" has failed
         if: ${{ success(steps.artifact-check) }}
         run: exit 0
