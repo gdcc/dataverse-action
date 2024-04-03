@@ -11,6 +11,15 @@ services:
       - DATAVERSE_DB_HOST=postgres
       - DATAVERSE_DB_USER=${DATAVERSE_DB_USER}
       - DATAVERSE_DB_PASSWORD=${DATAVERSE_DB_PASSWORD}
+      DATAVERSE_DB_HOST: postgres
+      DATAVERSE_DB_USER: ${DATAVERSE_DB_USER}
+      DATAVERSE_DB_PASSWORD: ${DATAVERSE_DB_PASSWORD}
+      JVM_ARGS: -Ddataverse.pid.providers=fake
+        -Ddataverse.pid.default-provider=fake
+        -Ddataverse.pid.fake.type=FAKE
+        -Ddataverse.pid.fake.label=FakeDOIProvider
+        -Ddataverse.pid.fake.authority=10.5072
+        -Ddataverse.pid.fake.shoulder=FK2/
     ports:
       - '8080:8080'
     networks:
