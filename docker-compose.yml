@@ -8,18 +8,17 @@ services:
     restart: on-failure
     user: payara
     environment:
-      - DATAVERSE_DB_HOST=postgres
-      - DATAVERSE_DB_USER=${DATAVERSE_DB_USER}
-      - DATAVERSE_DB_PASSWORD=${DATAVERSE_DB_PASSWORD}
+      # Database Connection
       DATAVERSE_DB_HOST: postgres
       DATAVERSE_DB_USER: ${DATAVERSE_DB_USER}
       DATAVERSE_DB_PASSWORD: ${DATAVERSE_DB_PASSWORD}
-      JVM_ARGS: -Ddataverse.pid.providers=fake
-        -Ddataverse.pid.default-provider=fake
-        -Ddataverse.pid.fake.type=FAKE
-        -Ddataverse.pid.fake.label=FakeDOIProvider
-        -Ddataverse.pid.fake.authority=10.5072
-        -Ddataverse.pid.fake.shoulder=FK2/
+      # Simple PID Provider Setup (as necessary since Dataverse 6.2)
+      DATAVERSE_PID_PROVIDERS: fake
+      DATAVERSE_PID_DEFAULT_PROVIDER: fake
+      DATAVERSE_PID_FAKE_TYPE: FAKE
+      DATAVERSE_PID_FAKE_LABEL: Fake DOI Provider
+      DATAVERSE_PID_FAKE_AUTHORITY: 10.5072
+      DATAVERSE_PID_FAKE_SHOULDER: FK2/
     ports:
       - '8080:8080'
     networks:
