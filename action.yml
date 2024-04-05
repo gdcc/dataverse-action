@@ -60,8 +60,7 @@ runs:
       shell: bash
       run: |
         echo "::group::🥎 Start Dataverse service in background"
-        docker compose -f ${{ github.action_path }}/docker-compose.yml -p apitest up -d --quiet-pull \
-          && echo -e "✅️ Dataverse containers have been started."
+        ${{ github.action_path }}/scripts/service.sh -d
         echo "::endgroup::"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
