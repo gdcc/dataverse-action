@@ -61,6 +61,8 @@ services:
       - '5432:5432'
     networks:
       - dataverse
+    volumes:
+      - ${RUNNER_TEMP}/postgresql/data:/var/lib/postgresql/data
 
   solr_initializer:
     container_name: 'solr_initializer'
