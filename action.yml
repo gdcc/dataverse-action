@@ -44,32 +44,13 @@ runs:
     - name: "Prepare environment"
       shell: bash
       run: |
-        # Get PostgreSQL version from action config or application image metadata, fail otherwise
-        PG_VERSION="${{ inputs.postgresql_version }}"
-        PG_VERSION="${PG_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.postgresql.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
-        if [[ -z "${PG_VERSION}" ]]; then
-          echo "Cannot find PostgreSQL version"; exit 1
-        else
-          echo "POSTGRES_VERSION=$PG_VERSION" | tee -a "${GITHUB_ENV}" 
-        fi
-        
-        # Get Solr version from action config or application image metadata, fail otherwise
-        SOLR_VERSION=${{ inputs.solr_version }}
-        SOLR_VERSION="${SOLR_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.solr.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
-        if [[ -z "${SOLR_VERSION}" ]]; then
-          echo "Cannot find Solr version"; exit 1
-        else
-          echo "SOLR_VERSION=$SOLR_VERSION" | tee -a "${GITHUB_ENV}" 
-        fi
-        
-        echo "CONFIGBAKER_IMAGE=${{ inputs.image_configbaker }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
-        echo "DATAVERSE_IMAGE=${{ inputs.image_dataverse }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
-        echo "DATAVERSE_DB_USER=dataverse" | tee -a "${GITHUB_ENV}"
-        echo "DATAVERSE_DB_PASSWORD=secret" | tee -a "${GITHUB_ENV}"
+        # Prepare environment variables. Will push them into file GITHUB_ENV and log
+        ${{ github.action_path }}/scripts/prepare.sh -p ${{ input.postgresql_version }} -s ${{ input.solr_version }} \
+            -d ${{ input.image_dataverse }} -c ${{ input.image_configbaker }} -t ${{ input.image_tag }} \
+            -o dv/conf
         
         # We use the MicroProfile Config Source trick of reading properties from a directory.
         # See also https://docs.payara.fish/community/docs/Technical%20Documentation/MicroProfile/Config/Directory.html
-        echo "CONFIG_DIR=${RUNNER_TEMP}/dv/conf" | tee -a "${GITHUB_ENV}"
         mkdir -p "${RUNNER_TEMP}/dv/conf"
         while IFS= read -r line; do
           FILENAME="${RUNNER_TEMP}/dv/conf/$(echo "$line" | cut -f1 -d=)"
