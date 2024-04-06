@@ -1,0 +1,60 @@
+# This file is meant to be merged with a base file!
+services:
+  dataverse:
+    environment:
+      JVM_ARGS:
+        -Ddataverse.files.localstack.type=s3
+        -Ddataverse.files.localstack.label=LocalStack
+        -Ddataverse.files.localstack.custom-endpoint-url=http://localstack:4566
+        -Ddataverse.files.localstack.custom-endpoint-region=us-east-2
+        -Ddataverse.files.localstack.bucket-name=localstack
+        -Ddataverse.files.localstack.path-style-access=true
+        -Ddataverse.files.localstack.upload-redirect=true
+        -Ddataverse.files.localstack.download-redirect=true
+        -Ddataverse.files.localstack.access-key=default
+        -Ddataverse.files.localstack.secret-key=default
+        -Ddataverse.files.minio.type=s3
+        -Ddataverse.files.minio.label=MinIO
+        -Ddataverse.files.minio.custom-endpoint-url=http://minio:9000
+        -Ddataverse.files.minio.custom-endpoint-region=us-east-1
+        -Ddataverse.files.minio.bucket-name=minio
+        -Ddataverse.files.minio.path-style-access=true
+        -Ddataverse.files.minio.upload-redirect=false
+        -Ddataverse.files.minio.download-redirect=false
+        -Ddataverse.files.minio.access-key=supersecret
+        -Ddataverse.files.minio.secret-key=supersecret
+
+  localstack:
+    container_name: "localstack"
+    image: localstack/localstack:latest
+    restart: on-failure
+    ports:
+      - "4566:4566"
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_HOST=localstack
+    networks:
+      - dataverse
+    volumes:
+      - "${RUNNER_TEMP}/localstack:/var/lib/localstack"
+      - "${GITHUB_ACTION_PATH}/s3/localstack:/etc/localstack/init/ready.d"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  minio:
+    container_name: "minio"
+    image: minio/minio
+    restart: on-failure
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - dataverse
+    volumes:
+      - "${RUNNER_TEMP}/minio:/data"
+    environment:
+      MINIO_ROOT_USER: supersecret
+      MINIO_ROOT_PASSWORD: supersecret
+    entrypoint: sh
+    command: -c 'mkdir -p /data/minio && /usr/bin/minio server /data'
+
