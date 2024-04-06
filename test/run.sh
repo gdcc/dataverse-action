@@ -20,14 +20,14 @@ if ! [[ "$ACTION" == "start" || "$ACTION" == "stop" ]]; then
   echo "First parameter must be 'start' or 'stop'" >&2; exit 1
 fi
 
-COMPOSE_FILE=""
-FILE_OPTION=""
+FLAVOR_COMPOSE_FILE=""
+FLAVOR_FILE_OPTION=""
 DETACH_OPTION="-d"
 
 while getopts ":f:dh" OPTION
 do
   case "$OPTION" in
-    f  ) COMPOSE_FILE="$OPTARG"; FILE_OPTION="-f ${COMPOSE_FILE}" ;;
+    f  ) FLAVOR_COMPOSE_FILE="$OPTARG"; FLAVOR_FILE_OPTION="-f ${FLAVOR_COMPOSE_FILE}" ;;
     d  ) DETACH_OPTION="" ;;
     h  ) usage; exit 0;;
     \? ) echo "Unknown option: -$OPTARG" >&2; usage; exit 1;;
@@ -54,8 +54,8 @@ fi
 
 if [[ "$ACTION" == "start" ]]; then
   # shellcheck disable=SC2086
-  "${TEST_DIR}/../scripts/service.sh" ${FILE_OPTION} -p "apitest" "${DETACH_OPTION}"
+  "${TEST_DIR}/../scripts/service.sh" ${FLAVOR_FILE_OPTION} -p "apitest" "${DETACH_OPTION}"
 elif [[ "$ACTION" == "stop" ]]; then
   # shellcheck disable=SC2086
-  docker compose -f "$TEST_DIR/../docker-compose.yml" ${FILE_OPTION} -p "apitest" down -v
+  docker compose -f "$TEST_DIR/../docker-compose.yml" ${FLAVOR_FILE_OPTION} -p "apitest" down -v
 fi
