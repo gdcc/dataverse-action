@@ -24,6 +24,16 @@ do
 done
 shift $((OPTIND-1))
 
+ACTION=${1:-invalid}
+ACTION_OPTION=""
+if [[ "$ACTION" == "up" ]]; then
+  ACTION_OPTION=" up --quiet-pull ${DETACH_OPTION}"
+elif [[ "$ACTION" == down ]]; then
+  ACTION_OPTION=" down -v"
+else
+  echo "Unsupported action '$ACTION'. Must be 'up' or 'down'"; exit 1
+fi
+
 FLAVOR_COMPOSE_FILE=""
 # Let's try an absolute path first
 if [[ "${FLAVOR_DIRECTORY:0:1}" == / && -f "${FLAVOR_DIRECTORY}/compose.yml" ]]; then
@@ -46,7 +56,8 @@ if [[ ! -z "${FLAVOR_COMPOSE_FILE}" ]]; then
 fi
 
 # shellcheck disable=SC2086
-docker compose -f "${SCRIPT_DIR}/../docker-compose.yml" ${FLAVOR_FILE_OPTION} \
-    -p "${PROJECT_OPTION}" up ${DETACH_OPTION} --quiet-pull
+docker compose -f "${GITHUB_ACTION_PATH}/docker-compose.yml" ${FLAVOR_FILE_OPTION} -p "${PROJECT_OPTION}" ${ACTION_OPTION}
 
-echo -e "✅️ Dataverse containers have been started."
+if [[ "$ACTION" == "up" ]]; then
+  echo -e "✅️ Dataverse containers have been started."
+fi
