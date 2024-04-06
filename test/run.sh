@@ -20,13 +20,13 @@ if ! [[ "$ACTION" == "start" || "$ACTION" == "stop" ]]; then
   echo "First parameter must be 'start' or 'stop'" >&2; exit 1
 fi
 
-FLAVOR_COMPOSE_FILE=""
+FLAVOR_DIRECTORY=""
 DETACH_OPTION="-d"
 
 while getopts ":f:dh" OPTION
 do
   case "$OPTION" in
-    f  ) FLAVOR_COMPOSE_FILE="$OPTARG" ;;
+    f  ) FLAVOR_DIRECTORY="$OPTARG" ;;
     d  ) DETACH_OPTION="" ;;
     h  ) usage; exit 0;;
     \? ) echo "Unknown option: -$OPTARG" >&2; usage; exit 1;;
@@ -46,16 +46,11 @@ while read -r line; do
     [ -n "$line" ] && export "${line?}"
 done < "${GITHUB_ENV}"
 
-# If file path via option might be relative path, make it absolute
-if [[ "${FLAVOR_COMPOSE_FILE:0:1}" != / ]]; then
-  FLAVOR_COMPOSE_FILE=$(pwd)"/$FLAVOR_COMPOSE_FILE"
-fi
-FLAVOR_FILE_OPTION="-f ${FLAVOR_COMPOSE_FILE}"
-
 if [[ "$ACTION" == "start" ]]; then
   # shellcheck disable=SC2086
-  "${TEST_DIR}/../scripts/service.sh" ${FLAVOR_FILE_OPTION} -p "apitest" "${DETACH_OPTION}"
+  "${TEST_DIR}/../scripts/service.sh" -f ${FLAVOR_DIRECTORY} -p "apitest" "${DETACH_OPTION}" up
 elif [[ "$ACTION" == "stop" ]]; then
   # shellcheck disable=SC2086
   docker compose -f "$TEST_DIR/../docker-compose.yml" ${FLAVOR_FILE_OPTION} -p "apitest" down -v
+  "${TEST_DIR}/../scripts/service.sh" -f ${FLAVOR_DIRECTORY} -p "apitest" "${DETACH_OPTION}" down
 fi
