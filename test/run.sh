@@ -21,13 +21,12 @@ if ! [[ "$ACTION" == "start" || "$ACTION" == "stop" ]]; then
 fi
 
 FLAVOR_COMPOSE_FILE=""
-FLAVOR_FILE_OPTION=""
 DETACH_OPTION="-d"
 
 while getopts ":f:dh" OPTION
 do
   case "$OPTION" in
-    f  ) FLAVOR_COMPOSE_FILE="$OPTARG"; FLAVOR_FILE_OPTION="-f ${FLAVOR_COMPOSE_FILE}" ;;
+    f  ) FLAVOR_COMPOSE_FILE="$OPTARG" ;;
     d  ) DETACH_OPTION="" ;;
     h  ) usage; exit 0;;
     \? ) echo "Unknown option: -$OPTARG" >&2; usage; exit 1;;
@@ -48,9 +47,10 @@ while read -r line; do
 done < "${GITHUB_ENV}"
 
 # If file path via option might be relative path, make it absolute
-if [[ "${COMPOSE_FILE:0:1}" != / ]]; then
-  COMPOSE_FILE=$(pwd)"/$COMPOSE_FILE"
+if [[ "${FLAVOR_COMPOSE_FILE:0:1}" != / ]]; then
+  FLAVOR_COMPOSE_FILE=$(pwd)"/$FLAVOR_COMPOSE_FILE"
 fi
+FLAVOR_FILE_OPTION="-f ${FLAVOR_COMPOSE_FILE}"
 
 if [[ "$ACTION" == "start" ]]; then
   # shellcheck disable=SC2086
