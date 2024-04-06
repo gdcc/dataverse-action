@@ -12,7 +12,8 @@ ACTION=${1:-"invalid"}
 shift # Must shift here to enable getopts!
 
 # See https://docs.github.com/en/actions/learn-github-actions/variables
-GITHUB_ACTION_PATH=${GITHUB_ACTION_PATH:-"$(dirname "${0}")/.."}
+GITHUB_ACTION_PATH=${GITHUB_ACTION_PATH:-$(realpath "$(dirname "${0}")/..")}
+export GITHUB_ACTION_PATH
 GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-""}
 
 FLAVOR_DIRECTORY=""
