@@ -45,8 +45,8 @@ runs:
       shell: bash
       run: |
         # Prepare environment variables. Will push them into file GITHUB_ENV and log
-        ${{ github.action_path }}/scripts/prepare.sh -p ${{ input.postgresql_version }} -s ${{ input.solr_version }} \
-            -d ${{ input.image_dataverse }} -c ${{ input.image_configbaker }} -t ${{ input.image_tag }} \
+        ${{ github.action_path }}/scripts/prepare.sh -p ${{ inputs.postgresql_version }} -s ${{ inputs.solr_version }} \
+            -d ${{ inputs.image_dataverse }} -c ${{ inputs.image_configbaker }} -t ${{ inputs.image_tag }} \
             -o dv/conf
         
         # We use the MicroProfile Config Source trick of reading properties from a directory.
