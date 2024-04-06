@@ -1,2 +1,5 @@
 # IDE folders
 .idea/
+
+# Ignore run.sh files
+test/envfile_ref
