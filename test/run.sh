@@ -7,11 +7,7 @@ function usage() {
 }
 
 TEST_DIR=$(dirname "${0}")
-
-GITHUB_ENV=$(mktemp)
-export GITHUB_ENV
-RUNNER_TEMP=$(mktemp -d)
-export RUNNER_TEMP
+TEST_ENVFILE_REF="$TEST_DIR/envfile_ref"
 
 # Get action and check for validity
 ACTION=${1:-"invalid"}
@@ -36,9 +32,28 @@ do
 done
 shift $((OPTIND-1))
 
-# Prepare the environment variables used in compose file
-# TODO: the image names probably should be not hardcoded
-"${TEST_DIR}/../scripts/prepare.sh" -d gdcc/dataverse -c gdcc/configbaker -t unstable
+GITHUB_ENV=""
+RUNNER_TEMP=""
+
+if [[ -f "${TEST_ENVFILE_REF}" ]]; then
+  # Reuse existing environment
+  # shellcheck disable=SC1090
+  . "${TEST_ENVFILE_REF}"
+  export GITHUB_ENV
+  export RUNNER_TEMP
+  echo "🏕️  Reusing environment from $GITHUB_ENV and runner temp $RUNNER_TEMP"
+else
+  # Prepare the environment variables used in compose file
+  GITHUB_ENV=$(mktemp)
+  export GITHUB_ENV
+  RUNNER_TEMP=$(mktemp -d)
+  export RUNNER_TEMP
+
+  # TODO: the image names probably should be not hardcoded
+  "${TEST_DIR}/../scripts/prepare.sh" -d gdcc/dataverse -c gdcc/configbaker -t unstable
+  echo "GITHUB_ENV=$GITHUB_ENV" > "$TEST_DIR/envfile_ref"
+  echo "RUNNER_TEMP=$RUNNER_TEMP" >> "$TEST_DIR/envfile_ref"
+fi
 
 # Source the env vars we prepared
 while read -r line; do
@@ -50,7 +65,8 @@ if [[ "$ACTION" == "start" ]]; then
   # shellcheck disable=SC2086
   "${TEST_DIR}/../scripts/service.sh" -f ${FLAVOR_DIRECTORY} -p "apitest" "${DETACH_OPTION}" up
 elif [[ "$ACTION" == "stop" ]]; then
-  # shellcheck disable=SC2086
-  docker compose -f "$TEST_DIR/../docker-compose.yml" ${FLAVOR_FILE_OPTION} -p "apitest" down -v
   "${TEST_DIR}/../scripts/service.sh" -f ${FLAVOR_DIRECTORY} -p "apitest" "${DETACH_OPTION}" down
+  rm -rf "$RUNNER_TEMP"
+  rm "$GITHUB_ENV"
+  rm "$TEST_ENVFILE_REF"
 fi
