@@ -23,6 +23,9 @@ inputs:
   jvm_options:
     description: "Line separated key-value pairs of JVM options to be set before startup. Example: dataverse.spi.exporters.directory=/..."
     required: false
+  flavor:
+    description: "Path to a directory containing your flavored configuration"
+    required: false
 outputs:
   api_token:
     description: "API Token of dataverseAdmin superuser"
@@ -60,7 +63,7 @@ runs:
       shell: bash
       run: |
         echo "::group::🥎 Start Dataverse service in background"
-        ${{ github.action_path }}/scripts/service.sh -d -p apitest
+        ${{ github.action_path }}/scripts/service.sh up -d -p apitest -f "${{ inputs.flavor }}"
         echo "::endgroup::"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
