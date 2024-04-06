@@ -3,7 +3,9 @@
 set -euo pipefail
 
 function usage() {
-  echo "run.sh <start|stop> [-f <flavor compose file>] [-d] (debug)"
+  echo "run.sh <start|stop> [-f <flavor directory>] [-d]"
+  echo "    -f: absolute or relative path to a flavor directory"
+  echo "    -d: enable log output to stdout"
 }
 
 TEST_DIR=$(dirname "${0}")

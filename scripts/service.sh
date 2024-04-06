@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+function usage() {
+  echo "service.sh -p <project name> -f <flavor directory> [-d] <up|down>"
+  echo "    -f: absolute or relative path to a flavor directory"
+  echo "    -d: detach to background"
+}
+
 # See https://docs.github.com/en/actions/learn-github-actions/variables
 GITHUB_ACTION_PATH=${GITHUB_ACTION_PATH:-"$(dirname "${0}")/.."}
 GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-""}
