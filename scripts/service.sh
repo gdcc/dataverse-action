@@ -3,10 +3,13 @@
 set -euo pipefail
 
 function usage() {
-  echo "service.sh -p <project name> -f <flavor directory> [-d] <up|down>"
+  echo "service.sh <up|down> -p <project name> -f <flavor directory> [-d]"
   echo "    -f: absolute or relative path to a flavor directory"
   echo "    -d: detach to background"
 }
+
+ACTION=${1:-"invalid"}
+shift # Must shift here to enable getopts!
 
 # See https://docs.github.com/en/actions/learn-github-actions/variables
 GITHUB_ACTION_PATH=${GITHUB_ACTION_PATH:-"$(dirname "${0}")/.."}
@@ -30,7 +33,6 @@ do
 done
 shift $((OPTIND-1))
 
-ACTION=${1:-invalid}
 ACTION_OPTION=""
 if [[ "$ACTION" == "up" ]]; then
   ACTION_OPTION=" up --quiet-pull ${DETACH_OPTION}"

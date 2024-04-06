@@ -65,9 +65,9 @@ done < "${GITHUB_ENV}"
 
 if [[ "$ACTION" == "start" ]]; then
   # shellcheck disable=SC2086
-  "${TEST_DIR}/../scripts/service.sh" -f ${FLAVOR_DIRECTORY} -p "apitest" "${DETACH_OPTION}" up
+  "${TEST_DIR}/../scripts/service.sh" up -f "${FLAVOR_DIRECTORY}" -p "apitest" "${DETACH_OPTION}"
 elif [[ "$ACTION" == "stop" ]]; then
-  "${TEST_DIR}/../scripts/service.sh" -f ${FLAVOR_DIRECTORY} -p "apitest" "${DETACH_OPTION}" down
+  "${TEST_DIR}/../scripts/service.sh" down -f "${FLAVOR_DIRECTORY}" -p "apitest" "${DETACH_OPTION}"
   rm -rf "$RUNNER_TEMP"
   rm "$GITHUB_ENV"
   rm "$TEST_ENVFILE_REF"
