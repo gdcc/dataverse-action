@@ -60,7 +60,7 @@ runs:
       shell: bash
       run: |
         echo "::group::🥎 Start Dataverse service in background"
-        ${{ github.action_path }}/scripts/service.sh -d
+        ${{ github.action_path }}/scripts/service.sh -d -p apitest
         echo "::endgroup::"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
