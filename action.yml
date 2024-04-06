@@ -1,6 +1,6 @@
 name: dv-configbaker
-description: |
-  "This GitHub Action serves as a powerful tool to create a functional Dataverse instance, enabling developers to run tests and perform other critical tasks within their GitHub CI workflows."
+description:
+  Deploy customizable Dataverse services in Docker and test your integrations and features within CI. Choose your flavors!
 inputs:
   image_tag:
     description: "Tag of image for Dataverse app and Configbaker"
