@@ -24,3 +24,5 @@ echo "base_url=http://localhost:8080/" >> "$GITHUB_OUTPUT"
 # Expose version
 version=$(curl -s 'http://localhost:8080/api/info/version' | jq -r '.data.version')
 echo "dv_version=$version" >>"$GITHUB_OUTPUT"
+
+echo "🎉 Your Dataverse instance is ready to go!"
