@@ -59,13 +59,17 @@ elif [[ -f "$(pwd)/${FLAVOR_DIRECTORY}/compose.yml" ]]; then
 fi
 
 FLAVOR_FILE_OPTION=""
-if [[ ! -z "${FLAVOR_COMPOSE_FILE}" ]]; then
+if [[ -n "${FLAVOR_COMPOSE_FILE}" ]]; then
   echo "🌶️  Using flavor compose file at ${FLAVOR_COMPOSE_FILE}"
   FLAVOR_FILE_OPTION="-f ${FLAVOR_COMPOSE_FILE}"
+elif [[ -n "${FLAVOR_DIRECTORY}" ]]; then
+  echo "😱 Could not find a ${FLAVOR_DIRECTORY}/compose.yml anywhere."
 fi
 
+echo "::group::🥎 Start Dataverse services"
 # shellcheck disable=SC2086
 docker compose -f "${GITHUB_ACTION_PATH}/docker-compose.yml" ${FLAVOR_FILE_OPTION} -p "${PROJECT_OPTION}" ${ACTION_OPTION}
+echo "::endgroup::"
 
 if [[ "$ACTION" == "up" ]]; then
   echo -e "✅️ Dataverse containers have been started."
