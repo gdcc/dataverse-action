@@ -1,6 +1,11 @@
-name: dv-configbaker
+name: dataverse-action
 description:
   Deploy customizable Dataverse services in Docker and test your integrations and features within CI. Choose your flavors!
+author: Oliver Bertuch, Jan Range and friends
+branding:
+  icon: box
+  color: orange
+
 inputs:
   image_tag:
     description: "Tag of image for Dataverse app and Configbaker"
