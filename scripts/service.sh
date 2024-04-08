@@ -66,7 +66,7 @@ elif [[ -n "${FLAVOR_DIRECTORY}" ]]; then
   echo "😱 Could not find a compose.yml for a flavor directory '${FLAVOR_DIRECTORY}' anywhere. Exiting."; exit 1
 fi
 
-echo "::group::🥎 Start Dataverse services"
+echo "::group::🚀 Start Dataverse services"
 # shellcheck disable=SC2086
 docker compose -f "${GITHUB_ACTION_PATH}/docker-compose.yml" ${FLAVOR_FILE_OPTION} -p "${PROJECT_OPTION}" ${ACTION_OPTION}
 echo "::endgroup::"
