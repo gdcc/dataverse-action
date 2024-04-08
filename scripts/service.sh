@@ -63,7 +63,7 @@ if [[ -n "${FLAVOR_COMPOSE_FILE}" ]]; then
   echo "🌶️  Using flavor compose file at ${FLAVOR_COMPOSE_FILE}"
   FLAVOR_FILE_OPTION="-f ${FLAVOR_COMPOSE_FILE}"
 elif [[ -n "${FLAVOR_DIRECTORY}" ]]; then
-  echo "😱 Could not find a ${FLAVOR_DIRECTORY}/compose.yml anywhere."
+  echo "😱 Could not find a compose.yml for a flavor directory '${FLAVOR_DIRECTORY}' anywhere. Exiting."; exit 1
 fi
 
 echo "::group::🥎 Start Dataverse services"
