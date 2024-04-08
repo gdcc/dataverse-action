@@ -51,8 +51,10 @@ runs:
         docker pull -q ${{ inputs.image_configbaker }}:${{ inputs.image_tag }}
     - name: "Prepare environment variables, push them to GITHUB_ENV file"
       shell: bash
+      working-directory: ${{ github.action_path }}/scripts
       run: |
-        ${{ github.action_path }}/scripts/prepare.sh -p "${{ inputs.postgresql_version }}" -s "${{ inputs.solr_version }}" \
+        prepare.sh \
+          -p "${{ inputs.postgresql_version }}" -s "${{ inputs.solr_version }}" \
           -d "${{ inputs.image_dataverse }}" -c "${{ inputs.image_configbaker }}" -t "${{ inputs.image_tag }}" \
           -o dv/conf
         
@@ -65,8 +67,9 @@ runs:
         done < <(printf '%s' "${{ inputs.jvm_options }}")
     - name: "Start Dataverse service in background"
       shell: bash
+      working-directory: ${{ github.action_path }}/scripts
       run: |
-        ${{ github.action_path }}/scripts/service.sh up -d -p apitest -f "${{ inputs.flavor }}"
+        service.sh up -d -p apitest -f "${{ inputs.flavor }}"
     # Bootstrap will wait up until accessible, so blocking here.
     - name: "Bootstrap Dataverse service"
       id: bootstrap
