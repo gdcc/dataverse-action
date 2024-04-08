@@ -74,21 +74,6 @@ runs:
     - name: "Bootstrap Dataverse service"
       id: bootstrap
       shell: bash
+      working-directory: ${{ github.action_path }}/scripts
       run: |
-        echo "::group::🤖 Bootstrap Dataverse service"
-        mkdir -p "${RUNNER_TEMP}/dv"
-        touch "${RUNNER_TEMP}/dv/bootstrap.exposed.env"
-        
-        docker run -i --network apitest_dataverse \
-          -v "${RUNNER_TEMP}/dv/bootstrap.exposed.env:/.env" \
-          "${CONFIGBAKER_IMAGE}" bootstrap.sh -e /.env dev
-        
-        # Expose outputs
-        grep "API_TOKEN" "${RUNNER_TEMP}/dv/bootstrap.exposed.env" >> "$GITHUB_OUTPUT"
-        echo "base_url=http://localhost:8080/" >> "$GITHUB_OUTPUT"
-        
-        # Expose version
-        version=$(curl -s 'http://localhost:8080/api/info/version' | jq -r '.data.version')
-        echo "dv_version=$version" >>"$GITHUB_OUTPUT"
-        
-        echo "::endgroup::"
+        ./bootstrap.sh 
