@@ -106,3 +106,50 @@ class TestNativeAPI:
 
         assert response.status_code == 201, response.text
         assert response.json()["status"] == "OK"
+
+    def test_set_storage_driver(self):
+        """
+        Test case for setting the storage driver.
+
+        This test creates a new collection, sets the storage driver to LocalStack,
+        and then tests that the storage driver is set correctly.
+        """
+
+        # First create a new collection
+        url = self.construct_url("api/dataverses/root")
+        response = requests.post(
+            url=url,
+            headers=self.construct_header(),
+            json={
+                "name": "TestStorageDriver",
+                "alias": "test_storage_driver",
+                "dataverseContacts": [
+                    {"contactEmail": "burrito@burritoplace.com"},
+                ],
+                "affiliation": "Burrito Research University",
+                "description": "We do all the (burrito) science.",
+                "dataverseType": "LABORATORY",
+            },
+        )
+
+        # Next, set the storage driver to LocalStack
+        url = self.construct_url(
+            "api/admin/dataverse/test_storage_driver/storageDriver"
+        )
+
+        response = requests.post(
+            url,
+            headers=self.construct_header(),
+            data="LocalStack",
+        )
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+
+        # Next, test the storage driver
+        url = self.construct_url("api/dataverses/test_storage_driver/storageDriver")
+        response = requests.get(url)
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+        assert response.json()["data"]["message"] == "localstack1"
