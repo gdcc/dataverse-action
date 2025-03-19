@@ -137,7 +137,7 @@ class TestNativeAPI:
             "api/admin/dataverse/test_storage_driver/storageDriver"
         )
 
-        response = requests.post(
+        response = requests.put(
             url,
             headers=self.construct_header(),
             data="LocalStack",
