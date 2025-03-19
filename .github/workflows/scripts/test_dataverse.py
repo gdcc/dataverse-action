@@ -147,10 +147,7 @@ class TestNativeAPI:
         assert response.json()["status"] == "OK"
 
         # Next, test the storage driver
-        url = self.construct_url(
-            "api/admin/dataverses/test_storage_driver/storageDriver"
-        )
-        response = requests.get(url)
+        response = requests.get(url, headers=self.construct_header())
 
         assert response.status_code == 200, response.text
         assert response.json()["status"] == "OK"
