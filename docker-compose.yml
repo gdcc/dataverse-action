@@ -23,7 +23,6 @@ services:
         -Ddataverse.files.file1.type=file
         -Ddataverse.files.file1.label=Filesystem
         -Ddataverse.files.file1.directory=${STORAGE_DIR}/store
-
         -Ddataverse.files.localstack1.type=s3
         -Ddataverse.files.localstack1.label=LocalStack10MB
         -Ddataverse.files.localstack1.custom-endpoint-url=http://localstack:4566
@@ -35,7 +34,6 @@ services:
         -Ddataverse.files.localstack1.access-key=default
         -Ddataverse.files.localstack1.secret-key=default
         -Ddataverse.files.localstack1.min-part-size=10485760
-
         -Ddataverse.files.localstack2.type=s3
         -Ddataverse.files.localstack2.label=LocalStack100MB
         -Ddataverse.files.localstack2.custom-endpoint-url=http://localstack:4566
