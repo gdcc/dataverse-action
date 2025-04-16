@@ -3,15 +3,6 @@ from urllib.parse import urljoin
 import requests
 import json
 
-# These are the possible storage drivers that can be used for the test.
-# The keys are the names of the storage drivers, and the values are the identifiers
-# of the storage drivers.
-POSSIBLE_BACKENDS = {
-    "LocalStack10MB": "localstack1",
-    "LocalStack100MB": "localstack2",
-    "LocalStack1000MB": "localstack3",
-}
-
 
 class TestNativeAPI:
     """
@@ -142,29 +133,28 @@ class TestNativeAPI:
             },
         )
 
-        for name, identifier in POSSIBLE_BACKENDS.items():
-            # Next, set the storage driver to LocalStack
-            url = self.construct_url(
-                "api/admin/dataverse/test_storage_driver/storageDriver"
-            )
+        # Next, set the storage driver to LocalStack
+        url = self.construct_url(
+            "api/admin/dataverse/test_storage_driver/storageDriver"
+        )
 
-            response = requests.put(
-                url,
-                headers=self.construct_header(),
-                data=name,
-            )
+        response = requests.put(
+            url,
+            headers=self.construct_header(),
+            data="LocalStack",
+        )
 
-            assert response.status_code == 200, response.text
-            assert response.json()["status"] == "OK"
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
 
-            # Next, test the storage driver
-            response = requests.get(url, headers=self.construct_header())
+        # Next, test the storage driver
+        response = requests.get(url, headers=self.construct_header())
 
-            assert response.status_code == 200, response.text
-            assert response.json()["status"] == "OK"
-            assert response.json()["data"]["message"] == identifier, (
-                f"Expected {identifier} but got {response.json()['data']['message']}"
-            )
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+        assert response.json()["data"]["message"] == "localstack1", (
+            f"Expected localstack1 but got {response.json()['data']['message']}"
+        )
 
     def test_direct_upload_ticket(self):
         """
@@ -200,7 +190,7 @@ class TestNativeAPI:
         response = requests.put(
             url,
             headers=self.construct_header(),
-            data="LocalStack10MB",
+            data="LocalStack",
         )
 
         assert response.status_code == 200, response.text
