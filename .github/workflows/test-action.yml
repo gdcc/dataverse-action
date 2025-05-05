@@ -15,10 +15,6 @@ jobs:
         uses: ./
         with:
           postgresql_version: 15
-          jvm_options: |
-            dataverse.api.signature-secret=eikaizieb2Oghaex
-            dataverse.pid.datacite.rest-api-url=https://api.datacite.org
-            dataverse.files.localstack1.min-part-size=7242880
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
