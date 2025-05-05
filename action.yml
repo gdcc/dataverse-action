@@ -35,7 +35,7 @@ outputs:
     value: ${{ steps.bootstrap.outputs.dv_version }}
   localstack_min_part_size:
     description: "Localstack min part size to be re-used in tests"
-    value: "7242880"
+    value: "1073741824"
 runs:
   using: "composite"
   steps:
