@@ -210,7 +210,7 @@ class TestNativeAPI:
 
         # Next, get the upload URLs
         url = self.construct_url(
-            f"/api/datasets/:persistentId/uploadurls/?persistentId={pid}&size=7242880"
+            f"/api/datasets/:persistentId/uploadurls/?persistentId={pid}&size=10242880"
         )
 
         response = requests.get(url, headers=self.construct_header())
