@@ -29,6 +29,7 @@ services:
         -Ddataverse.files.localstack1.download-redirect=true
         -Ddataverse.files.localstack1.access-key=default
         -Ddataverse.files.localstack1.secret-key=default
+        -Ddataverse.files.localstack1.min-part-size=7242880
     ports:
       - '8080:8080'
     networks:

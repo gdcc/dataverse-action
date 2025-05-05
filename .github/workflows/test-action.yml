@@ -15,8 +15,6 @@ jobs:
         uses: ./
         with:
           postgresql_version: 15
-          jvm_options: |
-            dataverse.files.localstack1.min-part-size=7242880
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
