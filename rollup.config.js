@@ -4,7 +4,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 const config = [
     {
-        input: "index.js",
+        input: "src/index.js",
         output: {
             esModule: true,
             file: "dist/index.js",
@@ -14,7 +14,7 @@ const config = [
         plugins: [commonjs(), json(), nodeResolve({ preferBuiltins: true })],
     },
     {
-        input: "post.js",
+        input: "src/post.js",
         output: {
             esModule: true,
             file: "dist/post.js",
