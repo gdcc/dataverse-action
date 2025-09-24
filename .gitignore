@@ -1,2 +1,5 @@
 # IDE folders
 .idea/
+
+# Node modules
+node_modules/
