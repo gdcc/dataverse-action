@@ -229,7 +229,7 @@ async function resolveImageLabelOrInput(inputValue, imageRef, labelKey) {
 
     let output = '';
     try {
-        await exec.exec('docker', ['inspect', '-f', `{{ index .Config.Labels \"${labelKey}\"}}`, imageRef], {
+        await exec.exec('docker', ['inspect', '-f', `{{ index .Config.Labels "${labelKey}"}}`, imageRef], {
             listeners: {
                 stdout: (data) => { output += data.toString(); }
             }
