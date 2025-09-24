@@ -8,7 +8,7 @@ import artifact from '@actions/artifact';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const rootDir = path.join('..', __dirname);
+const __root = path.dirname(__dirname);
 
 /**
  * Post-run configuration
@@ -42,7 +42,7 @@ async function run() {
  */
 function getPostRunConfig() {
     const composeFile = core.getState('compose_file') ||
-        path.join(process.env.GITHUB_ACTION_PATH || rootDir, 'docker-compose.yml');
+        path.join(process.env.GITHUB_ACTION_PATH || __root, 'docker-compose.yml');
     const projectName = core.getState('compose_project') || 'apitest';
 
     return { composeFile, projectName };
