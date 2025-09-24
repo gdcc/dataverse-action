@@ -119,7 +119,6 @@ async function collectComposeServiceLogs(config, logFile) {
  */
 async function uploadLogArtifacts(logFile, artifactsDir) {
     try {
-        const client = artifact.create();
         const files = fs.existsSync(logFile) ? [logFile] : [];
 
         if (files.length === 0) {
@@ -127,7 +126,7 @@ async function uploadLogArtifacts(logFile, artifactsDir) {
             return;
         }
 
-        await client.uploadArtifact('dataverse-logs', files, artifactsDir, {
+        await artifact.uploadArtifact('dataverse-logs', files, artifactsDir, {
             retentionDays: 14
         });
 
