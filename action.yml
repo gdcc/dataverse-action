@@ -32,5 +32,5 @@ outputs:
     description: "Dataverse version"
 runs:
   using: "node20"
-  main: "index.js"
-  post: "post.js"
+  main: "dist/index.js"
+  post: "dist/post.js"
