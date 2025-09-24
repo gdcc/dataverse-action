@@ -6,10 +6,9 @@ export default [
     files: ["**/*.{js,mjs,cjs}"],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "commonjs",
+      sourceType: "module",
       globals: {
         ...globals.node,
-        ...globals.commonjs
       }
     },
     rules: {
