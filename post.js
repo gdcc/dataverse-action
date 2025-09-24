@@ -1,13 +1,13 @@
-/**
- * @fileoverview Post-run cleanup for the Dataverse GitHub Action.
- * Collects logs, uploads artifacts, and tears down the Docker Compose stack.
- */
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import core from '@actions/core';
+import exec from '@actions/exec';
+import fs from 'fs';
+import path from 'path';
+import artifact from '@actions/artifact';
 
-const core = require('@actions/core');
-const exec = require('@actions/exec');
-const fs = require('fs');
-const path = require('path');
-const artifact = require('@actions/artifact');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Post-run configuration

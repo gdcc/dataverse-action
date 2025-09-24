@@ -1,12 +1,12 @@
-/**
- * @fileoverview Main entry point for the Dataverse GitHub Action.
- * Sets up and bootstraps a Dataverse instance using Docker Compose.
- */
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import core from '@actions/core';
+import exec from '@actions/exec';
+import fs from 'fs';
+import path from 'path';
 
-const core = require('@actions/core');
-const exec = require('@actions/exec');
-const fs = require('fs');
-const path = require('path');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Configuration object for the action
