@@ -206310,6 +206310,7 @@ var artifact = /*@__PURE__*/getDefaultExportFromCjs(artifactExports);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const rootDir = require$$1$7.join('..', __dirname);
 
 /**
  * Post-run configuration
@@ -206343,7 +206344,7 @@ async function run() {
  */
 function getPostRunConfig() {
     const composeFile = core$1.getState('compose_file') ||
-        require$$1$7.join(process.env.GITHUB_ACTION_PATH || __dirname, 'docker-compose.yml');
+        require$$1$7.join(process.env.GITHUB_ACTION_PATH || rootDir, 'docker-compose.yml');
     const projectName = core$1.getState('compose_project') || 'apitest';
 
     return { composeFile, projectName };

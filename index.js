@@ -7,6 +7,7 @@ import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const rootDir = path.join('..', __dirname);
 
 /**
  * Configuration object for the action
@@ -135,7 +136,7 @@ async function setupJvmConfiguration(config) {
  * @returns {Promise<{composeFile: string, projectName: string}>} Compose configuration
  */
 async function startDataverseStack() {
-    const composeFile = path.join(process.env.GITHUB_ACTION_PATH || __dirname, 'docker-compose.yml');
+    const composeFile = path.join(process.env.GITHUB_ACTION_PATH || rootDir, 'docker-compose.yml');
     const projectName = 'apitest';
 
     // Save state for post-run cleanup
