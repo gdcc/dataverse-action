@@ -1,11 +1,12 @@
+import require$$1$3, { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
 import require$$0 from 'os';
 import require$$0$1 from 'crypto';
-import require$$1 from 'fs';
-import require$$1$5 from 'path';
+import fs from 'fs';
 import require$$2 from 'http';
 import require$$3 from 'https';
 import require$$0$4 from 'net';
-import require$$1$1 from 'tls';
+import require$$1 from 'tls';
 import require$$4 from 'events';
 import require$$0$3 from 'assert';
 import require$$0$2 from 'util';
@@ -14,14 +15,13 @@ import require$$7 from 'buffer';
 import require$$8 from 'querystring';
 import require$$14 from 'stream/web';
 import require$$0$7 from 'node:stream';
-import require$$1$2 from 'node:util';
+import require$$1$1 from 'node:util';
 import require$$0$6 from 'node:events';
 import require$$0$8 from 'worker_threads';
 import require$$2$1 from 'perf_hooks';
 import require$$5 from 'util/types';
 import require$$4$1 from 'async_hooks';
-import require$$1$3 from 'console';
-import require$$1$4 from 'url';
+import require$$1$2 from 'console';
 import require$$3$1 from 'zlib';
 import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
@@ -34,9 +34,7 @@ function getDefaultExportFromCjs (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 }
 
-var dataverseAction = {};
-
-var core = {};
+var core$1 = {};
 
 var command = {};
 
@@ -228,7 +226,7 @@ function requireFileCommand () {
 	// We use any as a valid input type
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	const crypto = __importStar(require$$0$1);
-	const fs = __importStar(require$$1);
+	const fs$1 = __importStar(fs);
 	const os = __importStar(require$$0);
 	const utils_1 = requireUtils$1();
 	function issueFileCommand(command, message) {
@@ -236,10 +234,10 @@ function requireFileCommand () {
 	    if (!filePath) {
 	        throw new Error(`Unable to find environment variable for file command ${command}`);
 	    }
-	    if (!fs.existsSync(filePath)) {
+	    if (!fs$1.existsSync(filePath)) {
 	        throw new Error(`Missing file at path: ${filePath}`);
 	    }
-	    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
+	    fs$1.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
 	        encoding: 'utf8'
 	    });
 	}
@@ -378,7 +376,7 @@ var hasRequiredTunnel$1;
 function requireTunnel$1 () {
 	if (hasRequiredTunnel$1) return tunnel$1;
 	hasRequiredTunnel$1 = 1;
-	var tls = require$$1$1;
+	var tls = require$$1;
 	var http = require$$2;
 	var https = require$$3;
 	var events = require$$4;
@@ -1760,7 +1758,7 @@ function requireSbmh () {
 	 * by Hongli Lai at: https://github.com/FooBarWidget/boyer-moore-horspool
 	 */
 	const EventEmitter = require$$0$6.EventEmitter;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 
 	function SBMH (needle) {
 	  if (typeof needle === 'string') {
@@ -1969,7 +1967,7 @@ function requirePartStream () {
 	if (hasRequiredPartStream) return PartStream_1;
 	hasRequiredPartStream = 1;
 
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 	const ReadableStream = require$$0$7.Readable;
 
 	function PartStream (opts) {
@@ -2015,7 +2013,7 @@ function requireHeaderParser () {
 	hasRequiredHeaderParser = 1;
 
 	const EventEmitter = require$$0$6.EventEmitter;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 	const getLimit = requireGetLimit();
 
 	const StreamSearch = requireSbmh();
@@ -2123,7 +2121,7 @@ function requireDicer () {
 	hasRequiredDicer = 1;
 
 	const WritableStream = require$$0$7.Writable;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 
 	const StreamSearch = requireSbmh();
 
@@ -2700,7 +2698,7 @@ function requireMultipart () {
 	//     -- this will require modifications to utils.parseParams
 
 	const { Readable } = require$$0$7;
-	const { inherits } = require$$1$2;
+	const { inherits } = require$$1$1;
 
 	const Dicer = requireDicer();
 
@@ -3266,7 +3264,7 @@ function requireMain () {
 	hasRequiredMain = 1;
 
 	const WritableStream = require$$0$7.Writable;
-	const { inherits } = require$$1$2;
+	const { inherits } = require$$1$1;
 	const Dicer = requireDicer();
 
 	const MultipartParser = requireMultipart();
@@ -8090,7 +8088,7 @@ function requireConnect () {
 	    let socket;
 	    if (protocol === 'https:') {
 	      if (!tls) {
-	        tls = require$$1$1;
+	        tls = require$$1;
 	      }
 	      servername = servername || options.servername || util.getServerName(host) || null;
 
@@ -14114,7 +14112,7 @@ function requirePendingInterceptorsFormatter () {
 	hasRequiredPendingInterceptorsFormatter = 1;
 
 	const { Transform } = require$$0$5;
-	const { Console } = require$$1$3;
+	const { Console } = require$$1$2;
 
 	/**
 	 * Gets the output of `console.table(…)` as a string.
@@ -14341,7 +14339,7 @@ function requireProxyAgent () {
 	hasRequiredProxyAgent = 1;
 
 	const { kProxy, kClose, kDestroy, kInterceptors } = requireSymbols$4();
-	const { URL } = require$$1$4;
+	const { URL } = require$$1$3;
 	const Agent = requireAgent();
 	const Pool = requirePool();
 	const DispatcherBase = requireDispatcherBase();
@@ -25206,7 +25204,7 @@ function requireSummary () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
 		const os_1 = require$$0;
-		const fs_1 = require$$1;
+		const fs_1 = fs;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 		exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
@@ -25512,7 +25510,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = void 0;
-	const path = __importStar(require$$1$5);
+	const path$1 = __importStar(path);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -25544,7 +25542,7 @@ function requirePathUtils () {
 	 * @return string The platform-specific path.
 	 */
 	function toPlatformPath(pth) {
-	    return pth.replace(/[/\\]/g, path.sep);
+	    return pth.replace(/[/\\]/g, path$1.sep);
 	}
 	pathUtils.toPlatformPath = toPlatformPath;
 	
@@ -25553,7 +25551,7 @@ function requirePathUtils () {
 
 var platform = {};
 
-var exec = {};
+var exec$1 = {};
 
 var toolrunner = {};
 
@@ -25598,16 +25596,16 @@ function requireIoUtil () {
 		var _a;
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
-		const fs = __importStar(require$$1);
-		const path = __importStar(require$$1$5);
-		_a = fs.promises
+		const fs$1 = __importStar(fs);
+		const path$1 = __importStar(path);
+		_a = fs$1.promises
 		// export const {open} = 'fs'
 		, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 		// export const {open} = 'fs'
 		exports.IS_WINDOWS = process.platform === 'win32';
 		// See https://github.com/nodejs/node/blob/d0153aee367422d0858105abec186da4dff0a0c5/deps/uv/include/uv/win.h#L691
 		exports.UV_FS_O_EXLOCK = 0x10000000;
-		exports.READONLY = fs.constants.O_RDONLY;
+		exports.READONLY = fs$1.constants.O_RDONLY;
 		function exists(fsPath) {
 		    return __awaiter(this, void 0, void 0, function* () {
 		        try {
@@ -25668,7 +25666,7 @@ function requireIoUtil () {
 		        if (stats && stats.isFile()) {
 		            if (exports.IS_WINDOWS) {
 		                // on Windows, test for valid extension
-		                const upperExt = path.extname(filePath).toUpperCase();
+		                const upperExt = path$1.extname(filePath).toUpperCase();
 		                if (extensions.some(validExt => validExt.toUpperCase() === upperExt)) {
 		                    return filePath;
 		                }
@@ -25697,11 +25695,11 @@ function requireIoUtil () {
 		                if (exports.IS_WINDOWS) {
 		                    // preserve the case of the actual file (since an extension was appended)
 		                    try {
-		                        const directory = path.dirname(filePath);
-		                        const upperName = path.basename(filePath).toUpperCase();
+		                        const directory = path$1.dirname(filePath);
+		                        const upperName = path$1.basename(filePath).toUpperCase();
 		                        for (const actualName of yield exports.readdir(directory)) {
 		                            if (upperName === actualName.toUpperCase()) {
-		                                filePath = path.join(directory, actualName);
+		                                filePath = path$1.join(directory, actualName);
 		                                break;
 		                            }
 		                        }
@@ -25789,7 +25787,7 @@ function requireIo () {
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = void 0;
 	const assert_1 = require$$0$3;
-	const path = __importStar(require$$1$5);
+	const path$1 = __importStar(path);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
 	 * Copies a file or folder.
@@ -25809,7 +25807,7 @@ function requireIo () {
 	        }
 	        // If dest is an existing directory, should copy inside.
 	        const newDest = destStat && destStat.isDirectory() && copySourceDirectory
-	            ? path.join(dest, path.basename(source))
+	            ? path$1.join(dest, path$1.basename(source))
 	            : dest;
 	        if (!(yield ioUtil.exists(source))) {
 	            throw new Error(`no such file or directory: ${source}`);
@@ -25824,7 +25822,7 @@ function requireIo () {
 	            }
 	        }
 	        else {
-	            if (path.relative(source, newDest) === '') {
+	            if (path$1.relative(source, newDest) === '') {
 	                // a file cannot be copied to itself
 	                throw new Error(`'${newDest}' and '${source}' are the same file`);
 	            }
@@ -25846,7 +25844,7 @@ function requireIo () {
 	            let destExists = true;
 	            if (yield ioUtil.isDirectory(dest)) {
 	                // If dest is directory copy src into dest
-	                dest = path.join(dest, path.basename(source));
+	                dest = path$1.join(dest, path$1.basename(source));
 	                destExists = yield ioUtil.exists(dest);
 	            }
 	            if (destExists) {
@@ -25858,7 +25856,7 @@ function requireIo () {
 	                }
 	            }
 	        }
-	        yield mkdirP(path.dirname(dest));
+	        yield mkdirP(path$1.dirname(dest));
 	        yield ioUtil.rename(source, dest);
 	    });
 	}
@@ -25953,7 +25951,7 @@ function requireIo () {
 	        // build the list of extensions to try
 	        const extensions = [];
 	        if (ioUtil.IS_WINDOWS && process.env['PATHEXT']) {
-	            for (const extension of process.env['PATHEXT'].split(path.delimiter)) {
+	            for (const extension of process.env['PATHEXT'].split(path$1.delimiter)) {
 	                if (extension) {
 	                    extensions.push(extension);
 	                }
@@ -25968,7 +25966,7 @@ function requireIo () {
 	            return [];
 	        }
 	        // if any path separators, return empty
-	        if (tool.includes(path.sep)) {
+	        if (tool.includes(path$1.sep)) {
 	            return [];
 	        }
 	        // build the list of directories
@@ -25979,7 +25977,7 @@ function requireIo () {
 	        // across platforms.
 	        const directories = [];
 	        if (process.env.PATH) {
-	            for (const p of process.env.PATH.split(path.delimiter)) {
+	            for (const p of process.env.PATH.split(path$1.delimiter)) {
 	                if (p) {
 	                    directories.push(p);
 	                }
@@ -25988,7 +25986,7 @@ function requireIo () {
 	        // find all matches
 	        const matches = [];
 	        for (const directory of directories) {
-	            const filePath = yield ioUtil.tryGetExecutablePath(path.join(directory, tool), extensions);
+	            const filePath = yield ioUtil.tryGetExecutablePath(path$1.join(directory, tool), extensions);
 	            if (filePath) {
 	                matches.push(filePath);
 	            }
@@ -26097,7 +26095,7 @@ function requireToolrunner () {
 	const os = __importStar(require$$0);
 	const events = __importStar(require$$4);
 	const child = __importStar(require$$2$2);
-	const path = __importStar(require$$1$5);
+	const path$1 = __importStar(path);
 	const io = __importStar(requireIo());
 	const ioUtil = __importStar(requireIoUtil());
 	const timers_1 = require$$6$1;
@@ -26452,7 +26450,7 @@ function requireToolrunner () {
 	                (this.toolPath.includes('/') ||
 	                    (IS_WINDOWS && this.toolPath.includes('\\')))) {
 	                // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
-	                this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+	                this.toolPath = path$1.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
 	            }
 	            // if the tool is only a file name, then resolve it from the PATH
 	            // otherwise verify it exists (add extension on Windows if necessary)
@@ -26687,28 +26685,28 @@ function requireToolrunner () {
 var hasRequiredExec;
 
 function requireExec () {
-	if (hasRequiredExec) return exec;
+	if (hasRequiredExec) return exec$1;
 	hasRequiredExec = 1;
-	var __createBinding = (exec && exec.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+	var __createBinding = (exec$1 && exec$1.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 	}) : (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    o[k2] = m[k];
 	}));
-	var __setModuleDefault = (exec && exec.__setModuleDefault) || (Object.create ? (function(o, v) {
+	var __setModuleDefault = (exec$1 && exec$1.__setModuleDefault) || (Object.create ? (function(o, v) {
 	    Object.defineProperty(o, "default", { enumerable: true, value: v });
 	}) : function(o, v) {
 	    o["default"] = v;
 	});
-	var __importStar = (exec && exec.__importStar) || function (mod) {
+	var __importStar = (exec$1 && exec$1.__importStar) || function (mod) {
 	    if (mod && mod.__esModule) return mod;
 	    var result = {};
 	    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
 	    __setModuleDefault(result, mod);
 	    return result;
 	};
-	var __awaiter = (exec && exec.__awaiter) || function (thisArg, _arguments, P, generator) {
+	var __awaiter = (exec$1 && exec$1.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 	    return new (P || (P = Promise))(function (resolve, reject) {
 	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -26717,8 +26715,8 @@ function requireExec () {
 	        step((generator = generator.apply(thisArg, _arguments || [])).next());
 	    });
 	};
-	Object.defineProperty(exec, "__esModule", { value: true });
-	exec.getExecOutput = exec.exec = void 0;
+	Object.defineProperty(exec$1, "__esModule", { value: true });
+	exec$1.getExecOutput = exec$1.exec = void 0;
 	const string_decoder_1 = require$$6;
 	const tr = __importStar(requireToolrunner());
 	/**
@@ -26731,7 +26729,7 @@ function requireExec () {
 	 * @param     options            optional exec options.  See ExecOptions
 	 * @returns   Promise<number>    exit code
 	 */
-	function exec$1(commandLine, args, options) {
+	function exec(commandLine, args, options) {
 	    return __awaiter(this, void 0, void 0, function* () {
 	        const commandArgs = tr.argStringToArray(commandLine);
 	        if (commandArgs.length === 0) {
@@ -26744,7 +26742,7 @@ function requireExec () {
 	        return runner.exec();
 	    });
 	}
-	exec.exec = exec$1;
+	exec$1.exec = exec;
 	/**
 	 * Exec a command and get the output.
 	 * Output will be streamed to the live console.
@@ -26778,7 +26776,7 @@ function requireExec () {
 	            }
 	        };
 	        const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
-	        const exitCode = yield exec$1(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+	        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
 	        //flush any remaining characters
 	        stdout += stdoutDecoder.end();
 	        stderr += stderrDecoder.end();
@@ -26789,9 +26787,9 @@ function requireExec () {
 	        };
 	    });
 	}
-	exec.getExecOutput = getExecOutput;
+	exec$1.getExecOutput = getExecOutput;
 	
-	return exec;
+	return exec$1;
 }
 
 var hasRequiredPlatform;
@@ -26900,10 +26898,10 @@ function requirePlatform () {
 var hasRequiredCore;
 
 function requireCore () {
-	if (hasRequiredCore) return core;
+	if (hasRequiredCore) return core$1;
 	hasRequiredCore = 1;
 	(function (exports) {
-		var __createBinding = (core && core.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+		var __createBinding = (core$1 && core$1.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
 		    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -26914,19 +26912,19 @@ function requireCore () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __setModuleDefault = (core && core.__setModuleDefault) || (Object.create ? (function(o, v) {
+		var __setModuleDefault = (core$1 && core$1.__setModuleDefault) || (Object.create ? (function(o, v) {
 		    Object.defineProperty(o, "default", { enumerable: true, value: v });
 		}) : function(o, v) {
 		    o["default"] = v;
 		});
-		var __importStar = (core && core.__importStar) || function (mod) {
+		var __importStar = (core$1 && core$1.__importStar) || function (mod) {
 		    if (mod && mod.__esModule) return mod;
 		    var result = {};
 		    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
 		    __setModuleDefault(result, mod);
 		    return result;
 		};
-		var __awaiter = (core && core.__awaiter) || function (thisArg, _arguments, P, generator) {
+		var __awaiter = (core$1 && core$1.__awaiter) || function (thisArg, _arguments, P, generator) {
 		    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 		    return new (P || (P = Promise))(function (resolve, reject) {
 		        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -26941,7 +26939,7 @@ function requireCore () {
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$1();
 		const os = __importStar(require$$0);
-		const path = __importStar(require$$1$5);
+		const path$1 = __importStar(path);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -26996,7 +26994,7 @@ function requireCore () {
 		    else {
 		        (0, command_1.issueCommand)('add-path', {}, inputPath);
 		    }
-		    process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
+		    process.env['PATH'] = `${inputPath}${path$1.delimiter}${process.env['PATH']}`;
 		}
 		exports.addPath = addPath;
 		/**
@@ -27246,264 +27244,251 @@ function requireCore () {
 		 */
 		exports.platform = __importStar(requirePlatform());
 		
-	} (core));
-	return core;
+	} (core$1));
+	return core$1;
+}
+
+var coreExports = requireCore();
+var core = /*@__PURE__*/getDefaultExportFromCjs(coreExports);
+
+var execExports = requireExec();
+var exec = /*@__PURE__*/getDefaultExportFromCjs(execExports);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+/**
+ * Configuration object for the action
+ * @typedef {Object} ActionConfig
+ * @property {string} imageTag - Docker image tag to use
+ * @property {string} imageDataverse - Dataverse image name
+ * @property {string} imageConfigbaker - Configbaker image name
+ * @property {string} postgresqlVersion - PostgreSQL version override
+ * @property {string} solrVersion - Solr version override
+ * @property {string} jvmOptions - JVM configuration options
+ */
+
+/**
+ * Main entry point for the action
+ */
+async function run() {
+    try {
+        const config = getActionInputs();
+
+        await pullDockerImages(config);
+        const versions = await resolveDependencyVersions(config);
+        await setupEnvironment(config, versions);
+        await setupJvmConfiguration(config);
+
+        const composeConfig = await startDataverseStack();
+        await bootstrapDataverse(config, composeConfig);
+        await setActionOutputs();
+
+    } catch (error) {
+        core.setFailed(error.message);
+    }
 }
 
 /**
- * @fileoverview Main entry point for the Dataverse GitHub Action.
- * Sets up and bootstraps a Dataverse instance using Docker Compose.
+ * Retrieves and validates action inputs
+ * @returns {ActionConfig} Configuration object
  */
-
-var hasRequiredDataverseAction;
-
-function requireDataverseAction () {
-	if (hasRequiredDataverseAction) return dataverseAction;
-	hasRequiredDataverseAction = 1;
-	const core = requireCore();
-	const exec = requireExec();
-	const fs = require$$1;
-	const path = require$$1$5;
-
-	/**
-	 * Configuration object for the action
-	 * @typedef {Object} ActionConfig
-	 * @property {string} imageTag - Docker image tag to use
-	 * @property {string} imageDataverse - Dataverse image name
-	 * @property {string} imageConfigbaker - Configbaker image name
-	 * @property {string} postgresqlVersion - PostgreSQL version override
-	 * @property {string} solrVersion - Solr version override
-	 * @property {string} jvmOptions - JVM configuration options
-	 */
-
-	/**
-	 * Main entry point for the action
-	 */
-	async function run() {
-	    try {
-	        const config = getActionInputs();
-
-	        await pullDockerImages(config);
-	        const versions = await resolveDependencyVersions(config);
-	        await setupEnvironment(config, versions);
-	        await setupJvmConfiguration(config);
-
-	        const composeConfig = await startDataverseStack();
-	        await bootstrapDataverse(config, composeConfig);
-	        await setActionOutputs();
-
-	    } catch (error) {
-	        core.setFailed(error.message);
-	    }
-	}
-
-	/**
-	 * Retrieves and validates action inputs
-	 * @returns {ActionConfig} Configuration object
-	 */
-	function getActionInputs() {
-	    return {
-	        imageTag: core.getInput('image_tag', { required: true }),
-	        imageDataverse: core.getInput('image_dataverse', { required: true }),
-	        imageConfigbaker: core.getInput('image_configbaker', { required: true }),
-	        postgresqlVersion: core.getInput('postgresql_version'),
-	        solrVersion: core.getInput('solr_version'),
-	        jvmOptions: core.getInput('jvm_options') || ''
-	    };
-	}
-
-	/**
-	 * Pulls required Docker images for caching and inspection
-	 * @param {ActionConfig} config - Action configuration
-	 */
-	async function pullDockerImages(config) {
-	    core.info('Pulling Docker images...');
-	    await exec.exec('docker', ['pull', '-q', `${config.imageDataverse}:${config.imageTag}`]);
-	    await exec.exec('docker', ['pull', '-q', `${config.imageConfigbaker}:${config.imageTag}`]);
-	}
-
-	/**
-	 * Resolves PostgreSQL and Solr versions from inputs or image labels
-	 * @param {ActionConfig} config - Action configuration
-	 * @returns {Promise<{pgVersion: string, solrVersion: string}>} Resolved versions
-	 */
-	async function resolveDependencyVersions(config) {
-	    const pgVersion = await resolveImageLabelOrInput(
-	        config.postgresqlVersion,
-	        `${config.imageDataverse}:${config.imageTag}`,
-	        'org.dataverse.deps.postgresql.version'
-	    );
-
-	    const solrVersion = await resolveImageLabelOrInput(
-	        config.solrVersion,
-	        `${config.imageDataverse}:${config.imageTag}`,
-	        'org.dataverse.deps.solr.version'
-	    );
-
-	    if (!pgVersion) throw new Error('Cannot find PostgreSQL version');
-	    if (!solrVersion) throw new Error('Cannot find Solr version');
-
-	    return { pgVersion, solrVersion };
-	}
-
-	/**
-	 * Sets up environment variables for Docker Compose
-	 * @param {ActionConfig} config - Action configuration
-	 * @param {Object} versions - Resolved dependency versions
-	 */
-	async function setupEnvironment(config, versions) {
-	    core.info('Setting up environment variables...');
-
-	    core.exportVariable('POSTGRES_VERSION', versions.pgVersion);
-	    core.exportVariable('SOLR_VERSION', versions.solrVersion);
-	    core.exportVariable('CONFIGBAKER_IMAGE', `${config.imageConfigbaker}:${config.imageTag}`);
-	    core.exportVariable('DATAVERSE_IMAGE', `${config.imageDataverse}:${config.imageTag}`);
-	    core.exportVariable('DATAVERSE_DB_USER', 'dataverse');
-	    core.exportVariable('DATAVERSE_DB_PASSWORD', 'secret');
-	}
-
-	/**
-	 * Sets up JVM configuration from input options
-	 * @param {ActionConfig} config - Action configuration
-	 */
-	async function setupJvmConfiguration(config) {
-	    if (!config.jvmOptions.trim()) return;
-
-	    core.info('Setting up JVM configuration...');
-
-	    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
-	    const configDir = path.join(runnerTemp, 'dv', 'conf');
-	    fs.mkdirSync(configDir, { recursive: true });
-
-	    // Parse JVM options (key=value lines) and create MicroProfile Config files
-	    for (const line of config.jvmOptions.split(/\r?\n/)) {
-	        if (!line.trim() || !line.includes('=')) continue;
-
-	        const [key, ...rest] = line.split('=');
-	        const value = rest.join('=');
-	        fs.writeFileSync(path.join(configDir, key), value || '', 'utf8');
-	    }
-
-	    core.exportVariable('CONFIG_DIR', configDir);
-	}
-
-	/**
-	 * Starts the Dataverse Docker Compose stack
-	 * @returns {Promise<{composeFile: string, projectName: string}>} Compose configuration
-	 */
-	async function startDataverseStack() {
-	    const composeFile = path.join(process.env.GITHUB_ACTION_PATH || __dirname, 'docker-compose.yml');
-	    const projectName = 'apitest';
-
-	    // Save state for post-run cleanup
-	    core.saveState('compose_file', composeFile);
-	    core.saveState('compose_project', projectName);
-
-	    core.startGroup('🥎 Start Dataverse service in background');
-	    await exec.exec('docker', ['compose', '-f', composeFile, '-p', projectName, 'up', '-d', '--quiet-pull']);
-	    core.endGroup();
-
-	    return { composeFile, projectName };
-	}
-
-	/**
-	 * Bootstraps the Dataverse instance using Configbaker
-	 * @param {ActionConfig} config - Action configuration
-	 * @param {Object} composeConfig - Docker Compose configuration
-	 */
-	async function bootstrapDataverse(config, composeConfig) {
-	    core.startGroup('🤖 Bootstrap Dataverse service');
-
-	    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
-	    const dvDir = path.join(runnerTemp, 'dv');
-	    fs.mkdirSync(dvDir, { recursive: true });
-
-	    const exposeEnv = path.join(dvDir, 'bootstrap.exposed.env');
-	    fs.closeSync(fs.openSync(exposeEnv, 'a'));
-
-	    const networkName = `${composeConfig.projectName}_dataverse`;
-	    await exec.exec('docker', [
-	        'run', '-i', '--network', networkName,
-	        '-v', `${exposeEnv}:/.env`,
-	        `${config.imageConfigbaker}:${config.imageTag}`,
-	        'bootstrap.sh', '-e', '/.env', 'dev'
-	    ]);
-
-	    core.endGroup();
-	}
-
-	/**
-	 * Sets action outputs from bootstrap results and API calls
-	 */
-	async function setActionOutputs() {
-	    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
-	    const exposeEnv = path.join(runnerTemp, 'dv', 'bootstrap.exposed.env');
-
-	    // Read API token from bootstrap output
-	    const envContent = fs.readFileSync(exposeEnv, 'utf8');
-	    const apiTokenMatch = envContent.match(/^API_TOKEN=(.*)$/m);
-	    if (apiTokenMatch) {
-	        core.setOutput('api_token', apiTokenMatch[1]);
-	    }
-
-	    core.setOutput('base_url', 'http://localhost:8080/');
-
-	    // Query Dataverse version from API
-	    const dvVersion = await getDataverseVersion();
-	    if (dvVersion) {
-	        core.setOutput('dv_version', dvVersion);
-	    }
-	}
-
-	/**
-	 * Queries the Dataverse API for version information
-	 * @returns {Promise<string>} Dataverse version or empty string if unavailable
-	 */
-	async function getDataverseVersion() {
-	    try {
-	        let output = '';
-	        await exec.exec('bash', ['-c', "curl -s 'http://localhost:8080/api/info/version' | jq -r '.data.version'"], {
-	            listeners: {
-	                stdout: (data) => { output += data.toString(); }
-	            }
-	        });
-	        return output.trim();
-	    } catch (error) {
-	        core.warning(`Could not retrieve Dataverse version: ${error.message}`);
-	        return '';
-	    }
-	}
-
-	/**
-	 * Resolves a version from input parameter or Docker image label
-	 * @param {string} inputValue - Input parameter value
-	 * @param {string} imageRef - Docker image reference
-	 * @param {string} labelKey - Docker label key to inspect
-	 * @returns {Promise<string>} Resolved version or empty string
-	 */
-	async function resolveImageLabelOrInput(inputValue, imageRef, labelKey) {
-	    if (inputValue) return inputValue;
-
-	    let output = '';
-	    try {
-	        await exec.exec('docker', ['inspect', '-f', `{{ index .Config.Labels "${labelKey}"}}`, imageRef], {
-	            listeners: {
-	                stdout: (data) => { output += data.toString(); }
-	            }
-	        });
-	        return output.trim();
-	    } catch (error) {
-	        core.debug(`Could not inspect image label ${labelKey}: ${error.message}`);
-	        return '';
-	    }
-	}
-
-	run();
-	return dataverseAction;
+function getActionInputs() {
+    return {
+        imageTag: core.getInput('image_tag', { required: true }),
+        imageDataverse: core.getInput('image_dataverse', { required: true }),
+        imageConfigbaker: core.getInput('image_configbaker', { required: true }),
+        postgresqlVersion: core.getInput('postgresql_version'),
+        solrVersion: core.getInput('solr_version'),
+        jvmOptions: core.getInput('jvm_options') || ''
+    };
 }
 
-var dataverseActionExports = requireDataverseAction();
-var index = /*@__PURE__*/getDefaultExportFromCjs(dataverseActionExports);
+/**
+ * Pulls required Docker images for caching and inspection
+ * @param {ActionConfig} config - Action configuration
+ */
+async function pullDockerImages(config) {
+    core.info('Pulling Docker images...');
+    await exec.exec('docker', ['pull', '-q', `${config.imageDataverse}:${config.imageTag}`]);
+    await exec.exec('docker', ['pull', '-q', `${config.imageConfigbaker}:${config.imageTag}`]);
+}
 
-export { index as default };
+/**
+ * Resolves PostgreSQL and Solr versions from inputs or image labels
+ * @param {ActionConfig} config - Action configuration
+ * @returns {Promise<{pgVersion: string, solrVersion: string}>} Resolved versions
+ */
+async function resolveDependencyVersions(config) {
+    const pgVersion = await resolveImageLabelOrInput(
+        config.postgresqlVersion,
+        `${config.imageDataverse}:${config.imageTag}`,
+        'org.dataverse.deps.postgresql.version'
+    );
+
+    const solrVersion = await resolveImageLabelOrInput(
+        config.solrVersion,
+        `${config.imageDataverse}:${config.imageTag}`,
+        'org.dataverse.deps.solr.version'
+    );
+
+    if (!pgVersion) throw new Error('Cannot find PostgreSQL version');
+    if (!solrVersion) throw new Error('Cannot find Solr version');
+
+    return { pgVersion, solrVersion };
+}
+
+/**
+ * Sets up environment variables for Docker Compose
+ * @param {ActionConfig} config - Action configuration
+ * @param {Object} versions - Resolved dependency versions
+ */
+async function setupEnvironment(config, versions) {
+    core.info('Setting up environment variables...');
+
+    core.exportVariable('POSTGRES_VERSION', versions.pgVersion);
+    core.exportVariable('SOLR_VERSION', versions.solrVersion);
+    core.exportVariable('CONFIGBAKER_IMAGE', `${config.imageConfigbaker}:${config.imageTag}`);
+    core.exportVariable('DATAVERSE_IMAGE', `${config.imageDataverse}:${config.imageTag}`);
+    core.exportVariable('DATAVERSE_DB_USER', 'dataverse');
+    core.exportVariable('DATAVERSE_DB_PASSWORD', 'secret');
+}
+
+/**
+ * Sets up JVM configuration from input options
+ * @param {ActionConfig} config - Action configuration
+ */
+async function setupJvmConfiguration(config) {
+    if (!config.jvmOptions.trim()) return;
+
+    core.info('Setting up JVM configuration...');
+
+    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
+    const configDir = path.join(runnerTemp, 'dv', 'conf');
+    fs.mkdirSync(configDir, { recursive: true });
+
+    // Parse JVM options (key=value lines) and create MicroProfile Config files
+    for (const line of config.jvmOptions.split(/\r?\n/)) {
+        if (!line.trim() || !line.includes('=')) continue;
+
+        const [key, ...rest] = line.split('=');
+        const value = rest.join('=');
+        fs.writeFileSync(path.join(configDir, key), value || '', 'utf8');
+    }
+
+    core.exportVariable('CONFIG_DIR', configDir);
+}
+
+/**
+ * Starts the Dataverse Docker Compose stack
+ * @returns {Promise<{composeFile: string, projectName: string}>} Compose configuration
+ */
+async function startDataverseStack() {
+    const composeFile = path.join(process.env.GITHUB_ACTION_PATH || __dirname, 'docker-compose.yml');
+    const projectName = 'apitest';
+
+    // Save state for post-run cleanup
+    core.saveState('compose_file', composeFile);
+    core.saveState('compose_project', projectName);
+
+    core.startGroup('🥎 Start Dataverse service in background');
+    await exec.exec('docker', ['compose', '-f', composeFile, '-p', projectName, 'up', '-d', '--quiet-pull']);
+    core.endGroup();
+
+    return { composeFile, projectName };
+}
+
+/**
+ * Bootstraps the Dataverse instance using Configbaker
+ * @param {ActionConfig} config - Action configuration
+ * @param {Object} composeConfig - Docker Compose configuration
+ */
+async function bootstrapDataverse(config, composeConfig) {
+    core.startGroup('🤖 Bootstrap Dataverse service');
+
+    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
+    const dvDir = path.join(runnerTemp, 'dv');
+    fs.mkdirSync(dvDir, { recursive: true });
+
+    const exposeEnv = path.join(dvDir, 'bootstrap.exposed.env');
+    fs.closeSync(fs.openSync(exposeEnv, 'a'));
+
+    const networkName = `${composeConfig.projectName}_dataverse`;
+    await exec.exec('docker', [
+        'run', '-i', '--network', networkName,
+        '-v', `${exposeEnv}:/.env`,
+        `${config.imageConfigbaker}:${config.imageTag}`,
+        'bootstrap.sh', '-e', '/.env', 'dev'
+    ]);
+
+    core.endGroup();
+}
+
+/**
+ * Sets action outputs from bootstrap results and API calls
+ */
+async function setActionOutputs() {
+    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
+    const exposeEnv = path.join(runnerTemp, 'dv', 'bootstrap.exposed.env');
+
+    // Read API token from bootstrap output
+    const envContent = fs.readFileSync(exposeEnv, 'utf8');
+    const apiTokenMatch = envContent.match(/^API_TOKEN=(.*)$/m);
+    if (apiTokenMatch) {
+        core.setOutput('api_token', apiTokenMatch[1]);
+    }
+
+    core.setOutput('base_url', 'http://localhost:8080/');
+
+    // Query Dataverse version from API
+    const dvVersion = await getDataverseVersion();
+    if (dvVersion) {
+        core.setOutput('dv_version', dvVersion);
+    }
+}
+
+/**
+ * Queries the Dataverse API for version information
+ * @returns {Promise<string>} Dataverse version or empty string if unavailable
+ */
+async function getDataverseVersion() {
+    try {
+        let output = '';
+        await exec.exec('bash', ['-c', "curl -s 'http://localhost:8080/api/info/version' | jq -r '.data.version'"], {
+            listeners: {
+                stdout: (data) => { output += data.toString(); }
+            }
+        });
+        return output.trim();
+    } catch (error) {
+        core.warning(`Could not retrieve Dataverse version: ${error.message}`);
+        return '';
+    }
+}
+
+/**
+ * Resolves a version from input parameter or Docker image label
+ * @param {string} inputValue - Input parameter value
+ * @param {string} imageRef - Docker image reference
+ * @param {string} labelKey - Docker label key to inspect
+ * @returns {Promise<string>} Resolved version or empty string
+ */
+async function resolveImageLabelOrInput(inputValue, imageRef, labelKey) {
+    if (inputValue) return inputValue;
+
+    let output = '';
+    try {
+        await exec.exec('docker', ['inspect', '-f', `{{ index .Config.Labels "${labelKey}"}}`, imageRef], {
+            listeners: {
+                stdout: (data) => { output += data.toString(); }
+            }
+        });
+        return output.trim();
+    } catch (error) {
+        core.debug(`Could not inspect image label ${labelKey}: ${error.message}`);
+        return '';
+    }
+}
+
+run();
 //# sourceMappingURL=index.js.map

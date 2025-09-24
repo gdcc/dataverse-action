@@ -61,6 +61,18 @@ npm install
 npm run build
 ```
 
+This project provides a pre-commit hook to automatically build the action. To install the hook, run the following command:
+
+```bash
+chmod +x .git/hooks/pre-commit
+```
+
+To remove the hook, run the following command:
+
+```bash
+chmod -x .git/hooks/pre-commit
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

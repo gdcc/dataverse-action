@@ -1,7 +1,8 @@
+import Url, { fileURLToPath } from 'url';
+import require$$1$7, { dirname } from 'path';
 import require$$0$4 from 'os';
 import require$$0$5 from 'crypto';
 import require$$0$6 from 'fs';
-import require$$1$7 from 'path';
 import require$$2$3 from 'http';
 import require$$1$2 from 'https';
 import require$$0$a from 'net';
@@ -21,7 +22,6 @@ import require$$2$4 from 'perf_hooks';
 import require$$5$1 from 'util/types';
 import require$$4$1 from 'async_hooks';
 import require$$1$6 from 'console';
-import Url from 'url';
 import zlib from 'zlib';
 import require$$6$1 from 'string_decoder';
 import require$$0$f from 'diagnostics_channel';
@@ -79,9 +79,7 @@ function getAugmentedNamespace(n) {
 	return a;
 }
 
-var post$1 = {};
-
-var core$1 = {};
+var core$2 = {};
 
 var command = {};
 
@@ -25598,7 +25596,7 @@ function requirePathUtils () {
 
 var platform = {};
 
-var exec = {};
+var exec$1 = {};
 
 var toolrunner = {};
 
@@ -26732,28 +26730,28 @@ function requireToolrunner () {
 var hasRequiredExec;
 
 function requireExec () {
-	if (hasRequiredExec) return exec;
+	if (hasRequiredExec) return exec$1;
 	hasRequiredExec = 1;
-	var __createBinding = (exec && exec.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+	var __createBinding = (exec$1 && exec$1.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 	}) : (function(o, m, k, k2) {
 	    if (k2 === undefined) k2 = k;
 	    o[k2] = m[k];
 	}));
-	var __setModuleDefault = (exec && exec.__setModuleDefault) || (Object.create ? (function(o, v) {
+	var __setModuleDefault = (exec$1 && exec$1.__setModuleDefault) || (Object.create ? (function(o, v) {
 	    Object.defineProperty(o, "default", { enumerable: true, value: v });
 	}) : function(o, v) {
 	    o["default"] = v;
 	});
-	var __importStar = (exec && exec.__importStar) || function (mod) {
+	var __importStar = (exec$1 && exec$1.__importStar) || function (mod) {
 	    if (mod && mod.__esModule) return mod;
 	    var result = {};
 	    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
 	    __setModuleDefault(result, mod);
 	    return result;
 	};
-	var __awaiter = (exec && exec.__awaiter) || function (thisArg, _arguments, P, generator) {
+	var __awaiter = (exec$1 && exec$1.__awaiter) || function (thisArg, _arguments, P, generator) {
 	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 	    return new (P || (P = Promise))(function (resolve, reject) {
 	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -26762,8 +26760,8 @@ function requireExec () {
 	        step((generator = generator.apply(thisArg, _arguments || [])).next());
 	    });
 	};
-	Object.defineProperty(exec, "__esModule", { value: true });
-	exec.getExecOutput = exec.exec = void 0;
+	Object.defineProperty(exec$1, "__esModule", { value: true });
+	exec$1.getExecOutput = exec$1.exec = void 0;
 	const string_decoder_1 = require$$6$1;
 	const tr = __importStar(requireToolrunner());
 	/**
@@ -26776,7 +26774,7 @@ function requireExec () {
 	 * @param     options            optional exec options.  See ExecOptions
 	 * @returns   Promise<number>    exit code
 	 */
-	function exec$1(commandLine, args, options) {
+	function exec(commandLine, args, options) {
 	    return __awaiter(this, void 0, void 0, function* () {
 	        const commandArgs = tr.argStringToArray(commandLine);
 	        if (commandArgs.length === 0) {
@@ -26789,7 +26787,7 @@ function requireExec () {
 	        return runner.exec();
 	    });
 	}
-	exec.exec = exec$1;
+	exec$1.exec = exec;
 	/**
 	 * Exec a command and get the output.
 	 * Output will be streamed to the live console.
@@ -26823,7 +26821,7 @@ function requireExec () {
 	            }
 	        };
 	        const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
-	        const exitCode = yield exec$1(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+	        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
 	        //flush any remaining characters
 	        stdout += stdoutDecoder.end();
 	        stderr += stderrDecoder.end();
@@ -26834,9 +26832,9 @@ function requireExec () {
 	        };
 	    });
 	}
-	exec.getExecOutput = getExecOutput;
+	exec$1.getExecOutput = getExecOutput;
 	
-	return exec;
+	return exec$1;
 }
 
 var hasRequiredPlatform;
@@ -26945,10 +26943,10 @@ function requirePlatform () {
 var hasRequiredCore$1;
 
 function requireCore$1 () {
-	if (hasRequiredCore$1) return core$1;
+	if (hasRequiredCore$1) return core$2;
 	hasRequiredCore$1 = 1;
 	(function (exports) {
-		var __createBinding = (core$1 && core$1.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+		var __createBinding = (core$2 && core$2.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
 		    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -26959,19 +26957,19 @@ function requireCore$1 () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __setModuleDefault = (core$1 && core$1.__setModuleDefault) || (Object.create ? (function(o, v) {
+		var __setModuleDefault = (core$2 && core$2.__setModuleDefault) || (Object.create ? (function(o, v) {
 		    Object.defineProperty(o, "default", { enumerable: true, value: v });
 		}) : function(o, v) {
 		    o["default"] = v;
 		});
-		var __importStar = (core$1 && core$1.__importStar) || function (mod) {
+		var __importStar = (core$2 && core$2.__importStar) || function (mod) {
 		    if (mod && mod.__esModule) return mod;
 		    var result = {};
 		    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
 		    __setModuleDefault(result, mod);
 		    return result;
 		};
-		var __awaiter = (core$1 && core$1.__awaiter) || function (thisArg, _arguments, P, generator) {
+		var __awaiter = (core$2 && core$2.__awaiter) || function (thisArg, _arguments, P, generator) {
 		    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 		    return new (P || (P = Promise))(function (resolve, reject) {
 		        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -27291,11 +27289,17 @@ function requireCore$1 () {
 		 */
 		exports.platform = __importStar(requirePlatform());
 		
-	} (core$1));
-	return core$1;
+	} (core$2));
+	return core$2;
 }
 
-var artifact$1 = {};
+var coreExports = requireCore$1();
+var core$1 = /*@__PURE__*/getDefaultExportFromCjs(coreExports);
+
+var execExports = requireExec();
+var exec = /*@__PURE__*/getDefaultExportFromCjs(execExports);
+
+var artifact$2 = {};
 
 var client = {};
 
@@ -31445,7 +31449,7 @@ function requireWrappers () {
 	return wrappers$1;
 }
 
-var artifact = {};
+var artifact$1 = {};
 
 /**
  * Turns PartialMethodInfo into MethodInfo.
@@ -32500,7 +32504,7 @@ var require$$0$3 = /*@__PURE__*/getAugmentedNamespace(es2015);
 var hasRequiredArtifact$1;
 
 function requireArtifact$1 () {
-	if (hasRequiredArtifact$1) return artifact;
+	if (hasRequiredArtifact$1) return artifact$1;
 	hasRequiredArtifact$1 = 1;
 	(function (exports) {
 		Object.defineProperty(exports, "__esModule", { value: true });
@@ -33445,8 +33449,8 @@ function requireArtifact$1 () {
 		    { name: "FinalizeMigratedArtifact", options: {}, I: exports.FinalizeMigratedArtifactRequest, O: exports.FinalizeMigratedArtifactResponse }
 		]);
 		
-	} (artifact));
-	return artifact;
+	} (artifact$1));
+	return artifact$1;
 }
 
 var artifact_twirpClient = {};
@@ -206272,10 +206276,10 @@ function requireInterfaces () {
 var hasRequiredArtifact;
 
 function requireArtifact () {
-	if (hasRequiredArtifact) return artifact$1;
+	if (hasRequiredArtifact) return artifact$2;
 	hasRequiredArtifact = 1;
 	(function (exports) {
-		var __createBinding = (artifact$1 && artifact$1.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+		var __createBinding = (artifact$2 && artifact$2.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
 		    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -206286,7 +206290,7 @@ function requireArtifact () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (artifact$1 && artifact$1.__exportStar) || function(m, exports) {
+		var __exportStar = (artifact$2 && artifact$2.__exportStar) || function(m, exports) {
 		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 		};
 		Object.defineProperty(exports, "__esModule", { value: true });
@@ -206297,172 +206301,155 @@ function requireArtifact () {
 		const client = new client_1.DefaultArtifactClient();
 		exports.default = client;
 		
-	} (artifact$1));
-	return artifact$1;
+	} (artifact$2));
+	return artifact$2;
+}
+
+var artifactExports = requireArtifact();
+var artifact = /*@__PURE__*/getDefaultExportFromCjs(artifactExports);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+/**
+ * Post-run configuration
+ * @typedef {Object} PostConfig
+ * @property {string} composeFile - Path to docker-compose.yml file
+ * @property {string} projectName - Docker Compose project name
+ */
+
+/**
+ * Main post-run cleanup function
+ */
+async function run() {
+    const config = getPostRunConfig();
+
+    try {
+        await collectAndUploadLogs(config);
+    } catch (error) {
+        core$1.warning(`Log collection failed: ${error.message}`);
+    }
+
+    try {
+        await cleanupDockerStack(config);
+    } catch (error) {
+        core$1.warning(`Stack cleanup failed: ${error.message}`);
+    }
 }
 
 /**
- * @fileoverview Post-run cleanup for the Dataverse GitHub Action.
- * Collects logs, uploads artifacts, and tears down the Docker Compose stack.
+ * Retrieves post-run configuration from saved state
+ * @returns {PostConfig} Post-run configuration
  */
+function getPostRunConfig() {
+    const composeFile = core$1.getState('compose_file') ||
+        require$$1$7.join(process.env.GITHUB_ACTION_PATH || __dirname, 'docker-compose.yml');
+    const projectName = core$1.getState('compose_project') || 'apitest';
 
-var hasRequiredPost;
-
-function requirePost () {
-	if (hasRequiredPost) return post$1;
-	hasRequiredPost = 1;
-	const core = requireCore$1();
-	const exec = requireExec();
-	const fs = require$$0$6;
-	const path = require$$1$7;
-	const artifact = requireArtifact();
-
-	/**
-	 * Post-run configuration
-	 * @typedef {Object} PostConfig
-	 * @property {string} composeFile - Path to docker-compose.yml file
-	 * @property {string} projectName - Docker Compose project name
-	 */
-
-	/**
-	 * Main post-run cleanup function
-	 */
-	async function run() {
-	    const config = getPostRunConfig();
-
-	    try {
-	        await collectAndUploadLogs(config);
-	    } catch (error) {
-	        core.warning(`Log collection failed: ${error.message}`);
-	    }
-
-	    try {
-	        await cleanupDockerStack(config);
-	    } catch (error) {
-	        core.warning(`Stack cleanup failed: ${error.message}`);
-	    }
-	}
-
-	/**
-	 * Retrieves post-run configuration from saved state
-	 * @returns {PostConfig} Post-run configuration
-	 */
-	function getPostRunConfig() {
-	    const composeFile = core.getState('compose_file') ||
-	        path.join(process.env.GITHUB_ACTION_PATH || __dirname, 'docker-compose.yml');
-	    const projectName = core.getState('compose_project') || 'apitest';
-
-	    return { composeFile, projectName };
-	}
-
-	/**
-	 * Collects Dataverse logs and uploads them as artifacts
-	 * @param {PostConfig} config - Post-run configuration
-	 */
-	async function collectAndUploadLogs(config) {
-	    core.startGroup('📦 Collect and upload Dataverse logs');
-
-	    const artifactsDir = createArtifactsDirectory();
-	    const logFile = await collectDataverseLogs(config, artifactsDir);
-	    await uploadLogArtifacts(logFile, artifactsDir);
-
-	    core.endGroup();
-	}
-
-	/**
-	 * Creates the artifacts directory for log collection
-	 * @returns {string} Path to artifacts directory
-	 */
-	function createArtifactsDirectory() {
-	    const artifactsDir = path.join(process.cwd(), 'artifacts');
-	    fs.mkdirSync(artifactsDir, { recursive: true });
-	    return artifactsDir;
-	}
-
-	/**
-	 * Collects Dataverse server logs from the container
-	 * @param {PostConfig} config - Post-run configuration
-	 * @param {string} artifactsDir - Directory to store artifacts
-	 * @returns {Promise<string>} Path to the collected log file
-	 */
-	async function collectDataverseLogs(config, artifactsDir) {
-	    const logFile = path.join(artifactsDir, 'dataverse-server.log');
-	    core.info('Collecting logs via Docker Compose...');
-	    await collectComposeServiceLogs(config, logFile);
-
-	    return logFile;
-	}
-
-	/**
-	 * Collects logs from the Dataverse service via Docker Compose
-	 * @param {PostConfig} config - Post-run configuration
-	 * @param {string} logFile - Path where to save the log file
-	 */
-	async function collectComposeServiceLogs(config, logFile) {
-	    try {
-	        let output = '';
-	        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', 'dataverse'], {
-	            listeners: {
-	                stdout: (data) => { output += data.toString(); }
-	            }
-	        });
-
-	        if (output) {
-	            fs.writeFileSync(logFile, output, 'utf8');
-	            core.info('✅ Collected logs via Docker Compose');
-	        } else {
-	            core.warning('No logs collected from Dataverse service');
-	        }
-	    } catch (error) {
-	        core.debug(`Could not collect compose logs: ${error.message}`);
-	        fs.writeFileSync(logFile, `Log collection failed: ${error.message}\n`, 'utf8');
-	    }
-	}
-
-	/**
-	 * Uploads collected logs as GitHub Actions artifacts
-	 * @param {string} logFile - Path to the log file
-	 * @param {string} artifactsDir - Directory containing artifacts
-	 */
-	async function uploadLogArtifacts(logFile, artifactsDir) {
-	    try {
-	        const client = artifact.create();
-	        const files = fs.existsSync(logFile) ? [logFile] : [];
-
-	        if (files.length === 0) {
-	            core.warning('No log files to upload');
-	            return;
-	        }
-
-	        await client.uploadArtifact('dataverse-logs', files, artifactsDir, {
-	            retentionDays: 14
-	        });
-
-	        core.info('✅ Successfully uploaded log artifacts');
-	    } catch (error) {
-	        throw new Error(`Artifact upload failed: ${error.message}`);
-	    }
-	}
-
-	/**
-	 * Tears down the Docker Compose stack and cleans up resources
-	 * @param {PostConfig} config - Post-run configuration
-	 */
-	async function cleanupDockerStack(config) {
-	    core.startGroup('🧹 Cleanup Dataverse stack');
-
-	    await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'down', '-v']);
-	    core.info('✅ Successfully cleaned up Docker stack');
-
-	    core.endGroup();
-	}
-
-	run();
-	return post$1;
+    return { composeFile, projectName };
 }
 
-var postExports = requirePost();
-var post = /*@__PURE__*/getDefaultExportFromCjs(postExports);
+/**
+ * Collects Dataverse logs and uploads them as artifacts
+ * @param {PostConfig} config - Post-run configuration
+ */
+async function collectAndUploadLogs(config) {
+    core$1.startGroup('📦 Collect and upload Dataverse logs');
 
-export { post as default };
+    const artifactsDir = createArtifactsDirectory();
+    const logFile = await collectDataverseLogs(config, artifactsDir);
+    await uploadLogArtifacts(logFile, artifactsDir);
+
+    core$1.endGroup();
+}
+
+/**
+ * Creates the artifacts directory for log collection
+ * @returns {string} Path to artifacts directory
+ */
+function createArtifactsDirectory() {
+    const artifactsDir = require$$1$7.join(process.cwd(), 'artifacts');
+    require$$0$6.mkdirSync(artifactsDir, { recursive: true });
+    return artifactsDir;
+}
+
+/**
+ * Collects Dataverse server logs from the container
+ * @param {PostConfig} config - Post-run configuration
+ * @param {string} artifactsDir - Directory to store artifacts
+ * @returns {Promise<string>} Path to the collected log file
+ */
+async function collectDataverseLogs(config, artifactsDir) {
+    const logFile = require$$1$7.join(artifactsDir, 'dataverse-server.log');
+    core$1.info('Collecting logs via Docker Compose...');
+    await collectComposeServiceLogs(config, logFile);
+
+    return logFile;
+}
+
+/**
+ * Collects logs from the Dataverse service via Docker Compose
+ * @param {PostConfig} config - Post-run configuration
+ * @param {string} logFile - Path where to save the log file
+ */
+async function collectComposeServiceLogs(config, logFile) {
+    try {
+        let output = '';
+        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', 'dataverse'], {
+            listeners: {
+                stdout: (data) => { output += data.toString(); }
+            }
+        });
+
+        if (output) {
+            require$$0$6.writeFileSync(logFile, output, 'utf8');
+            core$1.info('✅ Collected logs via Docker Compose');
+        } else {
+            core$1.warning('No logs collected from Dataverse service');
+        }
+    } catch (error) {
+        core$1.debug(`Could not collect compose logs: ${error.message}`);
+        require$$0$6.writeFileSync(logFile, `Log collection failed: ${error.message}\n`, 'utf8');
+    }
+}
+
+/**
+ * Uploads collected logs as GitHub Actions artifacts
+ * @param {string} logFile - Path to the log file
+ * @param {string} artifactsDir - Directory containing artifacts
+ */
+async function uploadLogArtifacts(logFile, artifactsDir) {
+    try {
+        const client = artifact.create();
+        const files = require$$0$6.existsSync(logFile) ? [logFile] : [];
+
+        if (files.length === 0) {
+            core$1.warning('No log files to upload');
+            return;
+        }
+
+        await client.uploadArtifact('dataverse-logs', files, artifactsDir, {
+            retentionDays: 14
+        });
+
+        core$1.info('✅ Successfully uploaded log artifacts');
+    } catch (error) {
+        throw new Error(`Artifact upload failed: ${error.message}`);
+    }
+}
+
+/**
+ * Tears down the Docker Compose stack and cleans up resources
+ * @param {PostConfig} config - Post-run configuration
+ */
+async function cleanupDockerStack(config) {
+    core$1.startGroup('🧹 Cleanup Dataverse stack');
+
+    await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'down', '-v']);
+    core$1.info('✅ Successfully cleaned up Docker stack');
+
+    core$1.endGroup();
+}
+
+run();
 //# sourceMappingURL=post.js.map
