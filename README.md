@@ -61,16 +61,45 @@ npm install
 npm run build
 ```
 
-This project provides a pre-commit hook to automatically build the action. To install the hook, run the following command:
+### Pre-commit Hook
+
+This project uses [Husky](https://typicode.github.io/husky/) to manage Git hooks. A pre-commit hook is automatically set up to build the action before each commit, ensuring the `dist/` files are always up-to-date.
+
+The hook will:
+
+- Automatically run `npm run build` before each commit
+- Install dependencies if `node_modules` doesn't exist
+- Verify that the build was successful
+- Add the built files to the commit
+
+#### Setup for New Contributors
+
+**Automatic setup:** The pre-commit hook will be automatically set up when you run `npm install` for the first time.
+
+**Manual setup:** If you need to manually set up the Git hooks, run:
 
 ```bash
-chmod +x .git/hooks/pre-commit
+npm run setup-hooks
 ```
 
-To remove the hook, run the following command:
+#### Managing the Hook
+
+**To disable the hook temporarily:**
 
 ```bash
-chmod -x .git/hooks/pre-commit
+chmod -x .husky/pre-commit
+```
+
+**To re-enable the hook:**
+
+```bash
+chmod +x .husky/pre-commit
+```
+
+**To test the hook manually:**
+
+```bash
+.husky/pre-commit
 ```
 
 ## License

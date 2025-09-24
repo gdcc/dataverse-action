@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Pre-commit hook to automatically build the Dataverse action
+echo " Building Dataverse action..."
+
+# Check if we're in the right directory
+if [ ! -f "package.json" ] || [ ! -f "rollup.config.js" ]; then
+    echo "❌ Not in the project root directory"
+    exit 1
+fi
+
+# Install dependencies if node_modules doesn't exist
+if [ ! -d "node_modules" ]; then
+    echo "📦 Installing dependencies..."
+    npm install
+fi
+
+# Build the action
+echo "🏗️  Running build..."
+npm run build
+
+# Check if build was successful
+if [ $? -ne 0 ]; then
+    echo "❌ Build failed! Commit aborted."
+    exit 1
+fi
+
+# Check if dist files exist
+if [ ! -f "dist/index.js" ] || [ ! -f "dist/post.js" ]; then
+    echo "❌ Build output files not found! Commit aborted."
+    exit 1
+fi
+
+echo "✅ Build successful! Proceeding with commit..."
+
+# Add the built files to the commit
+git add dist/
