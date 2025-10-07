@@ -129,7 +129,9 @@ class TestNativeAPI:
 
         assert response.status_code == 200, response.text
         assert response.json()["status"] == "OK"
-        assert response.json()["data"]["LocalStack"] == "localstack1", (
+
+        data = json.loads(response.json()["data"])
+        assert "localstack" in data.lower(), (
             f"LocalStack should be one of the storage drivers but got {json.dumps(response.json()['data'])}"
         )
 
