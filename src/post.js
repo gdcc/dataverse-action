@@ -55,8 +55,11 @@ function getPostRunConfig() {
 async function collectAndUploadLogs(config) {
     core.startGroup('📦 Collect and upload Dataverse logs');
 
+    core.info(`Collecting logs for config: ${JSON.stringify(config)}`);
+
+    // TODO: We hard-code localstack here because it's the only additional service we support for now, but we should make this dynamic in the future
     const artifactsDir = createArtifactsDirectory();
-    const logFiles = await collectDataverseLogs(config, artifactsDir);
+    const logFiles = await collectDataverseLogs(config, artifactsDir, ['localstack']);
 
     for (const logFile of logFiles) {
         core.info(`Uploading log file: ${logFile}`);
