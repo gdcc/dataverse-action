@@ -33,4 +33,4 @@ jobs:
           BASE_URL: ${{ steps.dataverse.outputs.base_url }}
           DV_VERSION: ${{ steps.dataverse.outputs.dv_version }}
         run: |
-          python3 -m pytest .github/workflows/scripts/test_dataverse.py
+          python3 -m pytest -vv .github/workflows/scripts/test_dataverse.py
