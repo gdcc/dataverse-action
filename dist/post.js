@@ -206363,9 +206363,9 @@ async function collectAndUploadLogs(config) {
     const artifactsDir = createArtifactsDirectory();
     const logFiles = await collectDataverseLogs(config, artifactsDir, ['localstack']);
 
-    for (const logFile of logFiles) {
-        core$1.info(`Uploading log file: ${logFile}`);
-        await uploadLogArtifacts(logFile, artifactsDir);
+    if (logFiles.length > 0) {
+        core$1.info(`Uploading ${logFiles.length} log files`);
+        await uploadLogArtifacts(logFiles, artifactsDir);
     }
 
     core$1.endGroup();
@@ -206450,19 +206450,19 @@ async function collectComposeServiceLogs(config, logFile, serviceName) {
 
 /**
  * Uploads collected logs as GitHub Actions artifacts
- * @param {string} logFile - Path to the log file
+ * @param {string[]} logFiles - Array of paths to log files
  * @param {string} artifactsDir - Directory containing artifacts
  */
-async function uploadLogArtifacts(logFile, artifactsDir) {
+async function uploadLogArtifacts(logFiles, artifactsDir) {
     try {
-        const files = require$$0$6.existsSync(logFile) ? [logFile] : [];
+        const existingFiles = logFiles.filter(file => require$$0$6.existsSync(file));
 
-        if (files.length === 0) {
+        if (existingFiles.length === 0) {
             core$1.warning('No log files to upload');
             return;
         }
 
-        await artifact.uploadArtifact('dataverse-logs', files, artifactsDir, {
+        await artifact.uploadArtifact('dataverse-logs', existingFiles, artifactsDir, {
             retentionDays: 14
         });
 
