@@ -18,6 +18,7 @@ const __root = path.dirname(__dirname);
  * @property {string} postgresqlVersion - PostgreSQL version override
  * @property {string} solrVersion - Solr version override
  * @property {string} jvmOptions - JVM configuration options
+ * @property {string} s3StorageDriver - S3 storage driver name (e.g., 'localstack')
  */
 
 /**
@@ -52,7 +53,8 @@ function getActionInputs() {
         imageConfigbaker: core.getInput('image_configbaker', { required: true }),
         postgresqlVersion: core.getInput('postgresql_version'),
         solrVersion: core.getInput('solr_version'),
-        jvmOptions: core.getInput('jvm_options') || ''
+        jvmOptions: core.getInput('jvm_options') || '',
+        s3StorageDriver: core.getInput('s3_storage_driver')
     };
 }
 
@@ -111,7 +113,10 @@ async function setupEnvironment(config, versions) {
  * @param {ActionConfig} config - Action configuration
  */
 async function setupJvmConfiguration(config) {
-    if (!config.jvmOptions.trim()) return;
+    const hasUserJvmOptions = config.jvmOptions.trim();
+    const hasS3Storage = config.s3StorageDriver === 'localstack';
+
+    if (!hasUserJvmOptions && !hasS3Storage) return;
 
     core.info('Setting up JVM configuration...');
 
@@ -119,13 +124,36 @@ async function setupJvmConfiguration(config) {
     const configDir = path.join(runnerTemp, 'dv', 'conf');
     fs.mkdirSync(configDir, { recursive: true });
 
-    // Parse JVM options (key=value lines) and create MicroProfile Config files
-    for (const line of config.jvmOptions.split(/\r?\n/)) {
-        if (!line.trim() || !line.includes('=')) continue;
+    // Parse user-provided JVM options (key=value lines) and create MicroProfile Config files
+    if (hasUserJvmOptions) {
+        for (const line of config.jvmOptions.split(/\r?\n/)) {
+            if (!line.trim() || !line.includes('=')) continue;
 
-        const [key, ...rest] = line.split('=');
-        const value = rest.join('=');
-        fs.writeFileSync(path.join(configDir, key), value || '', 'utf8');
+            const [key, ...rest] = line.split('=');
+            const value = rest.join('=');
+            fs.writeFileSync(path.join(configDir, key), value || '', 'utf8');
+        }
+    }
+
+    // Append LocalStack S3 storage configuration if enabled
+    if (hasS3Storage) {
+        core.info('Configuring LocalStack S3 storage driver...');
+        const localstackConfigs = {
+            'dataverse.files.localstack1.type': 's3',
+            'dataverse.files.localstack1.label': 'LocalStack',
+            'dataverse.files.localstack1.custom-endpoint-url': 'http://localstack:4566',
+            'dataverse.files.localstack1.custom-endpoint-region': 'us-east-2',
+            'dataverse.files.localstack1.bucket-name': 'mybucket',
+            'dataverse.files.localstack1.path-style-access': 'true',
+            'dataverse.files.localstack1.upload-redirect': 'true',
+            'dataverse.files.localstack1.download-redirect': 'true',
+            'dataverse.files.localstack1.access-key': 'default',
+            'dataverse.files.localstack1.secret-key': 'default'
+        };
+
+        for (const [key, value] of Object.entries(localstackConfigs)) {
+            fs.writeFileSync(path.join(configDir, key), value, 'utf8');
+        }
     }
 
     core.exportVariable('CONFIG_DIR', configDir);
