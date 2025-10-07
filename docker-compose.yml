@@ -109,6 +109,24 @@ services:
     tmpfs:
       - /mail:mode=770,size=128M,uid=1000,gid=1000
 
+  localstack:
+    container_name: 'localstack'
+    hostname: 'localstack'
+    image: localstack/localstack:4.2.0
+    restart: on-failure
+    ports:
+      - '127.0.0.1:4566:4566'
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME_EXTERNAL=localstack
+    networks:
+      - dataverse
+    volumes:
+      - ${PWD}/conf/localstack:/etc/localstack/init/ready.d
+    tmpfs:
+      - /localstack:mode=770,size=128M,uid=1000,gid=1000
+
 networks:
   dataverse:
     driver: bridge
