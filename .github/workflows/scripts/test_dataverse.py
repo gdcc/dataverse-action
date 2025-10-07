@@ -130,7 +130,7 @@ class TestNativeAPI:
         assert response.status_code == 200, response.text
         assert response.json()["status"] == "OK"
         assert response.json()["data"]["LocalStack"] == "localstack1", (
-            f"LocalStack should be one of the storage drivers but got {response.json()['data']}"
+            f"LocalStack should be one of the storage drivers but got {json.dumps(response.json()['data'])}"
         )
 
     def test_set_storage_driver(self):
