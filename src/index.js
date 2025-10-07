@@ -122,6 +122,7 @@ async function setupJvmConfiguration(config) {
 
     // Always export CONFIG_DIR for docker-compose to mount
     core.exportVariable('CONFIG_DIR', configDir);
+    core.info(`Setting CONFIG_DIR: ${configDir}`);
 
     if (!hasUserJvmOptions && !hasS3Storage) return;
 
@@ -134,6 +135,8 @@ async function setupJvmConfiguration(config) {
 
             const [key, ...rest] = line.split('=');
             const value = rest.join('=');
+
+            core.info(`Writing MicroProfile Config file: ${key} = ${value}`);
             fs.writeFileSync(path.join(configDir, key), value || '', 'utf8');
         }
     }
@@ -157,6 +160,7 @@ async function setupJvmConfiguration(config) {
         };
 
         for (const [key, value] of Object.entries(localstackConfigs)) {
+            core.info(`Writing MicroProfile Config file: ${key} = ${value}`);
             fs.writeFileSync(path.join(configDir, key), value, 'utf8');
         }
 

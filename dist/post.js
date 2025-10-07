@@ -1,5 +1,5 @@
 import Url, { fileURLToPath } from 'url';
-import require$$1$7, { dirname } from 'path';
+import path$1, { dirname } from 'path';
 import require$$0$4 from 'os';
 import require$$0$5 from 'crypto';
 import require$$0$6 from 'fs';
@@ -27,19 +27,19 @@ import require$$6$1 from 'string_decoder';
 import require$$0$f from 'diagnostics_channel';
 import require$$2$5 from 'child_process';
 import require$$6$2 from 'timers';
-import require$$1$8 from 'node:os';
+import require$$1$7 from 'node:os';
 import require$$2$6 from 'node:process';
 import require$$0$g from 'node:crypto';
-import require$$1$9 from 'node:http';
+import require$$1$8 from 'node:http';
 import require$$2$7 from 'node:https';
 import require$$3$1 from 'node:zlib';
-import require$$1$a from 'tty';
+import require$$1$9 from 'tty';
 import require$$2$8 from 'node:buffer';
-import require$$1$b from 'node:fs';
-import require$$1$d from 'fs/promises';
+import require$$1$a from 'node:fs';
+import require$$1$c from 'fs/promises';
 import require$$0$h from 'constants';
 import require$$2$a from 'node:url';
-import require$$1$c from 'node:path';
+import require$$1$b from 'node:path';
 import require$$5$2 from 'node:fs/promises';
 import require$$2$9 from 'node:string_decoder';
 import require$$0$i from 'punycode';
@@ -25555,7 +25555,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = void 0;
-	const path = __importStar(require$$1$7);
+	const path = __importStar(path$1);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -25642,7 +25642,7 @@ function requireIoUtil () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
 		const fs = __importStar(require$$0$6);
-		const path = __importStar(require$$1$7);
+		const path = __importStar(path$1);
 		_a = fs.promises
 		// export const {open} = 'fs'
 		, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
@@ -25832,7 +25832,7 @@ function requireIo () {
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = void 0;
 	const assert_1 = require$$0$9;
-	const path = __importStar(require$$1$7);
+	const path = __importStar(path$1);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
 	 * Copies a file or folder.
@@ -26140,7 +26140,7 @@ function requireToolrunner () {
 	const os = __importStar(require$$0$4);
 	const events = __importStar(require$$1$3);
 	const child = __importStar(require$$2$5);
-	const path = __importStar(require$$1$7);
+	const path = __importStar(path$1);
 	const io = __importStar(requireIo());
 	const ioUtil = __importStar(requireIoUtil());
 	const timers_1 = require$$6$2;
@@ -26984,7 +26984,7 @@ function requireCore$1 () {
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$7();
 		const os = __importStar(require$$0$4);
-		const path = __importStar(require$$1$7);
+		const path = __importStar(path$1);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -34200,7 +34200,7 @@ function requireUploadZipSpecification () {
 	uploadZipSpecification.getUploadZipSpecification = uploadZipSpecification.validateRootDirectory = void 0;
 	const fs = __importStar(require$$0$6);
 	const core_1 = requireCore$1();
-	const path_1 = require$$1$7;
+	const path_1 = path$1;
 	const path_and_artifact_name_validation_1 = requirePathAndArtifactNameValidation();
 	/**
 	 * Checks if a root directory exists and is valid
@@ -34804,7 +34804,7 @@ function requireLog$5 () {
 	Object.defineProperty(log$6, "__esModule", { value: true });
 	log$6.log = log;
 	const tslib_1 = require$$0$1;
-	const node_os_1 = require$$1$8;
+	const node_os_1 = require$$1$7;
 	const node_util_1 = tslib_1.__importDefault(require$$1$5);
 	const node_process_1 = tslib_1.__importDefault(require$$2$6);
 	function log(message, ...args) {
@@ -36054,7 +36054,7 @@ function requireNodeHttpClient () {
 	nodeHttpClient.getBodyLength = getBodyLength;
 	nodeHttpClient.createNodeHttpClient = createNodeHttpClient;
 	const tslib_1 = require$$0$1;
-	const node_http_1 = tslib_1.__importDefault(require$$1$9);
+	const node_http_1 = tslib_1.__importDefault(require$$1$8);
 	const node_https_1 = tslib_1.__importDefault(require$$2$7);
 	const node_zlib_1 = tslib_1.__importDefault(require$$3$1);
 	const node_stream_1 = require$$0$d;
@@ -36560,7 +36560,7 @@ function requireUserAgentPlatform$1 () {
 	userAgentPlatform$1.getHeaderName = getHeaderName;
 	userAgentPlatform$1.setPlatformSpecificData = setPlatformSpecificData;
 	const tslib_1 = require$$0$1;
-	const node_os_1 = tslib_1.__importDefault(require$$1$8);
+	const node_os_1 = tslib_1.__importDefault(require$$1$7);
 	const node_process_1 = tslib_1.__importDefault(require$$2$6);
 	/**
 	 * @internal
@@ -38133,7 +38133,7 @@ function requireSupportsColor () {
 	if (hasRequiredSupportsColor) return supportsColor_1;
 	hasRequiredSupportsColor = 1;
 	const os = require$$0$4;
-	const tty = require$$1$a;
+	const tty = require$$1$9;
 	const hasFlag = requireHasFlag();
 
 	const {env} = process;
@@ -38279,7 +38279,7 @@ function requireNode$1 () {
 	if (hasRequiredNode$1) return node$1.exports;
 	hasRequiredNode$1 = 1;
 	(function (module, exports) {
-		const tty = require$$1$a;
+		const tty = require$$1$9;
 		const util = require$$0$7;
 
 		/**
@@ -41311,7 +41311,7 @@ function requireUserAgentPlatform () {
 	userAgentPlatform.getHeaderName = getHeaderName;
 	userAgentPlatform.setPlatformSpecificData = setPlatformSpecificData;
 	const tslib_1 = require$$0$1;
-	const node_os_1 = tslib_1.__importDefault(require$$1$8);
+	const node_os_1 = tslib_1.__importDefault(require$$1$7);
 	const node_process_1 = tslib_1.__importDefault(require$$2$6);
 	/**
 	 * @internal
@@ -71785,7 +71785,7 @@ function requireUtils$4 () {
 	utils$4.streamToBuffer3 = streamToBuffer3;
 	utils$4.readStreamToLocalFile = readStreamToLocalFile;
 	const tslib_1 = require$$0$1;
-	const node_fs_1 = tslib_1.__importDefault(require$$1$b);
+	const node_fs_1 = tslib_1.__importDefault(require$$1$a);
 	const node_util_1 = tslib_1.__importDefault(require$$1$5);
 	const constants_js_1 = requireConstants$4();
 	/**
@@ -79525,7 +79525,7 @@ function requireReaddirGlob () {
 	const fs = require$$0$6;
 	const { EventEmitter } = require$$1$3;
 	const { Minimatch } = requireMinimatch();
-	const { resolve } = require$$1$7;
+	const { resolve } = path$1;
 
 	function readdir(dir, strict) {
 	  return new Promise((resolve, reject) => {
@@ -105676,10 +105676,10 @@ function requireCommonjs$1 () {
 	Object.defineProperty(commonjs$2, "__esModule", { value: true });
 	commonjs$2.PathScurry = commonjs$2.Path = commonjs$2.PathScurryDarwin = commonjs$2.PathScurryPosix = commonjs$2.PathScurryWin32 = commonjs$2.PathScurryBase = commonjs$2.PathPosix = commonjs$2.PathWin32 = commonjs$2.PathBase = commonjs$2.ChildrenCache = commonjs$2.ResolveCache = void 0;
 	const lru_cache_1 = /*@__PURE__*/ requireCommonjs$3();
-	const node_path_1 = require$$1$c;
+	const node_path_1 = require$$1$b;
 	const node_url_1 = require$$2$a;
 	const fs_1 = require$$0$6;
-	const actualFS = __importStar(require$$1$b);
+	const actualFS = __importStar(require$$1$a);
 	const realpathSync = fs_1.realpathSync.native;
 	// TODO: test perf of fs/promises realpath vs realpathCB,
 	// since the promises one uses realpath.native
@@ -109109,7 +109109,7 @@ function requireFile () {
 	if (hasRequiredFile) return file.exports;
 	hasRequiredFile = 1;
 	var fs = requireGracefulFs();
-	var path = require$$1$7;
+	var path = path$1;
 
 	var flatten = requireFlatten();
 	var difference = requireDifference();
@@ -109326,7 +109326,7 @@ function requireArchiverUtils () {
 	if (hasRequiredArchiverUtils) return archiverUtils.exports;
 	hasRequiredArchiverUtils = 1;
 	var fs = requireGracefulFs();
-	var path = require$$1$7;
+	var path = path$1;
 	var isStream = requireIsStream();
 	var lazystream = requireLazystream();
 	var normalizePath = requireNormalizePath();
@@ -109545,7 +109545,7 @@ function requireCore () {
 	var fs = require$$0$6;
 	var glob = requireReaddirGlob();
 	var async = require$$2$1;
-	var path = require$$1$7;
+	var path = path$1;
 	var util = requireArchiverUtils();
 
 	var inherits = require$$0$7.inherits;
@@ -116074,7 +116074,7 @@ function requireZip () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.createZipUploadStream = exports.ZipUploadStream = exports.DEFAULT_COMPRESSION_LEVEL = void 0;
 		const stream = __importStar(require$$0$b);
-		const promises_1 = require$$1$d;
+		const promises_1 = require$$1$c;
 		const archiver = __importStar(requireArchiver());
 		const core = __importStar(requireCore$1());
 		const config_1 = requireConfig();
@@ -203567,7 +203567,7 @@ var hasRequiredMkdirp;
 function requireMkdirp () {
 	if (hasRequiredMkdirp) return mkdirp;
 	hasRequiredMkdirp = 1;
-	var path = require$$1$7;
+	var path = path$1;
 	var fs = require$$0$6;
 	var _0777 = parseInt('0777', 8);
 
@@ -203679,7 +203679,7 @@ function requireExtract () {
 	if (hasRequiredExtract) return extract;
 	hasRequiredExtract = 1;
 	var fs = require$$0$6;
-	var path = require$$1$7;
+	var path = path$1;
 	var util = require$$0$7;
 	var mkdirp = requireMkdirp();
 	var Transform = require$$0$b.Transform;
@@ -203831,7 +203831,7 @@ function requireDownloadArtifact () {
 	};
 	Object.defineProperty(downloadArtifact, "__esModule", { value: true });
 	downloadArtifact.downloadArtifactInternal = downloadArtifact.downloadArtifactPublic = downloadArtifact.streamExtractExternal = void 0;
-	const promises_1 = __importDefault(require$$1$d);
+	const promises_1 = __importDefault(require$$1$c);
 	const crypto = __importStar(require$$0$5);
 	const stream = __importStar(require$$0$b);
 	const github = __importStar(requireGithub());
@@ -206310,7 +206310,7 @@ var artifact = /*@__PURE__*/getDefaultExportFromCjs(artifactExports);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const __root = require$$1$7.dirname(__dirname);
+const __root = path$1.dirname(__dirname);
 
 /**
  * Post-run configuration
@@ -206344,7 +206344,7 @@ async function run() {
  */
 function getPostRunConfig() {
     const composeFile = core$1.getState('compose_file') ||
-        require$$1$7.join(process.env.GITHUB_ACTION_PATH || __root, 'docker-compose.yml');
+        path$1.join(process.env.GITHUB_ACTION_PATH || __root, 'docker-compose.yml');
     const projectName = core$1.getState('compose_project') || 'apitest';
 
     return { composeFile, projectName };
@@ -206358,8 +206358,12 @@ async function collectAndUploadLogs(config) {
     core$1.startGroup('📦 Collect and upload Dataverse logs');
 
     const artifactsDir = createArtifactsDirectory();
-    const logFile = await collectDataverseLogs(config, artifactsDir);
-    await uploadLogArtifacts(logFile, artifactsDir);
+    const logFiles = await collectDataverseLogs(config, artifactsDir);
+
+    for (const logFile of logFiles) {
+        core$1.info(`Uploading log file: ${logFile}`);
+        await uploadLogArtifacts(logFile, artifactsDir);
+    }
 
     core$1.endGroup();
 }
@@ -206369,7 +206373,7 @@ async function collectAndUploadLogs(config) {
  * @returns {string} Path to artifacts directory
  */
 function createArtifactsDirectory() {
-    const artifactsDir = require$$1$7.join(process.cwd(), 'artifacts');
+    const artifactsDir = path$1.join(process.cwd(), 'artifacts');
     require$$0$6.mkdirSync(artifactsDir, { recursive: true });
     return artifactsDir;
 }
@@ -206378,14 +206382,41 @@ function createArtifactsDirectory() {
  * Collects Dataverse server logs from the container
  * @param {PostConfig} config - Post-run configuration
  * @param {string} artifactsDir - Directory to store artifacts
- * @returns {Promise<string>} Path to the collected log file
+ * @returns {Promise<string[]>} Paths to the collected log files
  */
-async function collectDataverseLogs(config, artifactsDir) {
-    const logFile = require$$1$7.join(artifactsDir, 'dataverse-server.log');
-    core$1.info('Collecting logs via Docker Compose...');
-    await collectComposeServiceLogs(config, logFile);
+async function collectDataverseLogs(config, artifactsDir, additionalServices = []) {
+    // Collect logs from all services to debug issues
+    const logFiles = [];
 
-    return logFile;
+    // Collect logs from dataverse
+    const logFile = path$1.join(artifactsDir, 'dataverse-server.log');
+    logFiles.push(logFile);
+    core$1.info('Collecting logs via Docker Compose...');
+    await collectComposeServiceLogs(config, logFile, 'dataverse');
+
+    // Collect logs from postgres
+    const postgresLogFile = path$1.join(artifactsDir, 'postgres.log');
+    logFiles.push(postgresLogFile);
+    await collectComposeServiceLogs(config, postgresLogFile, 'postgres');
+
+    // Collect logs from solr
+    const solrLogFile = path$1.join(artifactsDir, 'solr.log');
+    logFiles.push(solrLogFile);
+    await collectComposeServiceLogs(config, solrLogFile, 'solr');
+
+    // Collect logs from smtp
+    const smtpLogFile = path$1.join(artifactsDir, 'smtp.log');
+    logFiles.push(smtpLogFile);
+    await collectComposeServiceLogs(config, smtpLogFile, 'smtp');
+
+    // Collect logs from additional services
+    if (additionalServices.includes('localstack')) {
+        const localstackLogFile = path$1.join(artifactsDir, 'localstack.log');
+        logFiles.push(localstackLogFile);
+        await collectComposeServiceLogs(config, localstackLogFile, 'localstack');
+    }
+
+    return logFiles;
 }
 
 /**
@@ -206393,10 +206424,10 @@ async function collectDataverseLogs(config, artifactsDir) {
  * @param {PostConfig} config - Post-run configuration
  * @param {string} logFile - Path where to save the log file
  */
-async function collectComposeServiceLogs(config, logFile) {
+async function collectComposeServiceLogs(config, logFile, serviceName) {
     try {
         let output = '';
-        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', 'dataverse'], {
+        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', serviceName], {
             listeners: {
                 stdout: (data) => { output += data.toString(); }
             }
@@ -206406,7 +206437,7 @@ async function collectComposeServiceLogs(config, logFile) {
             require$$0$6.writeFileSync(logFile, output, 'utf8');
             core$1.info('✅ Collected logs via Docker Compose');
         } else {
-            core$1.warning('No logs collected from Dataverse service');
+            core$1.warning(`No logs collected from ${serviceName} service`);
         }
     } catch (error) {
         core$1.debug(`Could not collect compose logs: ${error.message}`);

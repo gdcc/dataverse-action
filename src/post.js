@@ -56,8 +56,12 @@ async function collectAndUploadLogs(config) {
     core.startGroup('📦 Collect and upload Dataverse logs');
 
     const artifactsDir = createArtifactsDirectory();
-    const logFile = await collectDataverseLogs(config, artifactsDir);
-    await uploadLogArtifacts(logFile, artifactsDir);
+    const logFiles = await collectDataverseLogs(config, artifactsDir);
+
+    for (const logFile of logFiles) {
+        core.info(`Uploading log file: ${logFile}`);
+        await uploadLogArtifacts(logFile, artifactsDir);
+    }
 
     core.endGroup();
 }
@@ -76,14 +80,41 @@ function createArtifactsDirectory() {
  * Collects Dataverse server logs from the container
  * @param {PostConfig} config - Post-run configuration
  * @param {string} artifactsDir - Directory to store artifacts
- * @returns {Promise<string>} Path to the collected log file
+ * @returns {Promise<string[]>} Paths to the collected log files
  */
-async function collectDataverseLogs(config, artifactsDir) {
-    const logFile = path.join(artifactsDir, 'dataverse-server.log');
-    core.info('Collecting logs via Docker Compose...');
-    await collectComposeServiceLogs(config, logFile);
+async function collectDataverseLogs(config, artifactsDir, additionalServices = []) {
+    // Collect logs from all services to debug issues
+    const logFiles = [];
 
-    return logFile;
+    // Collect logs from dataverse
+    const logFile = path.join(artifactsDir, 'dataverse-server.log');
+    logFiles.push(logFile);
+    core.info('Collecting logs via Docker Compose...');
+    await collectComposeServiceLogs(config, logFile, 'dataverse');
+
+    // Collect logs from postgres
+    const postgresLogFile = path.join(artifactsDir, 'postgres.log');
+    logFiles.push(postgresLogFile);
+    await collectComposeServiceLogs(config, postgresLogFile, 'postgres');
+
+    // Collect logs from solr
+    const solrLogFile = path.join(artifactsDir, 'solr.log');
+    logFiles.push(solrLogFile);
+    await collectComposeServiceLogs(config, solrLogFile, 'solr');
+
+    // Collect logs from smtp
+    const smtpLogFile = path.join(artifactsDir, 'smtp.log');
+    logFiles.push(smtpLogFile);
+    await collectComposeServiceLogs(config, smtpLogFile, 'smtp');
+
+    // Collect logs from additional services
+    if (additionalServices.includes('localstack')) {
+        const localstackLogFile = path.join(artifactsDir, 'localstack.log');
+        logFiles.push(localstackLogFile);
+        await collectComposeServiceLogs(config, localstackLogFile, 'localstack');
+    }
+
+    return logFiles;
 }
 
 /**
@@ -91,10 +122,10 @@ async function collectDataverseLogs(config, artifactsDir) {
  * @param {PostConfig} config - Post-run configuration
  * @param {string} logFile - Path where to save the log file
  */
-async function collectComposeServiceLogs(config, logFile) {
+async function collectComposeServiceLogs(config, logFile, serviceName) {
     try {
         let output = '';
-        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', 'dataverse'], {
+        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', serviceName], {
             listeners: {
                 stdout: (data) => { output += data.toString(); }
             }
@@ -104,7 +135,7 @@ async function collectComposeServiceLogs(config, logFile) {
             fs.writeFileSync(logFile, output, 'utf8');
             core.info('✅ Collected logs via Docker Compose');
         } else {
-            core.warning('No logs collected from Dataverse service');
+            core.warning(`No logs collected from ${serviceName} service`);
         }
     } catch (error) {
         core.debug(`Could not collect compose logs: ${error.message}`);
