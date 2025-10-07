@@ -27365,13 +27365,16 @@ async function setupJvmConfiguration(config) {
     const hasUserJvmOptions = config.jvmOptions.trim();
     const hasS3Storage = config.s3StorageDriver === 'localstack';
 
-    if (!hasUserJvmOptions && !hasS3Storage) return;
-
-    core.info('Setting up JVM configuration...');
-
     const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
     const configDir = path.join(runnerTemp, 'dv', 'conf');
     fs.mkdirSync(configDir, { recursive: true });
+
+    // Always export CONFIG_DIR for docker-compose to mount
+    core.exportVariable('CONFIG_DIR', configDir);
+
+    if (!hasUserJvmOptions && !hasS3Storage) return;
+
+    core.info('Setting up JVM configuration...');
 
     // Parse user-provided JVM options (key=value lines) and create MicroProfile Config files
     if (hasUserJvmOptions) {
@@ -27384,9 +27387,11 @@ async function setupJvmConfiguration(config) {
         }
     }
 
-    // Append LocalStack S3 storage configuration if enabled
+    // Setup LocalStack S3 storage if enabled
     if (hasS3Storage) {
         core.info('Configuring LocalStack S3 storage driver...');
+
+        // Create MicroProfile Config files for S3 storage
         const localstackConfigs = {
             'dataverse.files.localstack1.type': 's3',
             'dataverse.files.localstack1.label': 'LocalStack',
@@ -27403,9 +27408,18 @@ async function setupJvmConfiguration(config) {
         for (const [key, value] of Object.entries(localstackConfigs)) {
             fs.writeFileSync(path.join(configDir, key), value, 'utf8');
         }
-    }
 
-    core.exportVariable('CONFIG_DIR', configDir);
+        // Copy localstack init scripts to runtime directory
+        const localstackDir = path.join(configDir, 'localstack');
+        fs.mkdirSync(localstackDir, { recursive: true });
+
+        const sourceScript = path.join(__root, 'dv', 'conf', 'localstack', 'init-s3.sh');
+        const destScript = path.join(localstackDir, 'init-s3.sh');
+        fs.copyFileSync(sourceScript, destScript);
+
+        // Make the script executable
+        fs.chmodSync(destScript, 0o755);
+    }
 }
 
 /**
