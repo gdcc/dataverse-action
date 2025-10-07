@@ -96,7 +96,7 @@ class TestNativeAPI:
             headers=self.construct_header(),
             json={
                 "name": "TestAction",
-                "alias": "test_colleczion",
+                "alias": "test_collection",
                 "dataverseContacts": [
                     {"contactEmail": "burrito@burritoplace.com"},
                 ],
@@ -108,6 +108,30 @@ class TestNativeAPI:
 
         assert response.status_code == 201, response.text
         assert response.json()["status"] == "OK"
+
+    def test_has_localstack_storage_driver(self):
+        """
+        Test case for checking if the LocalStack storage driver is available.
+        """
+
+        url = self.construct_url("api/admin/dataverse/root/storageDriver")
+        response = requests.get(url, headers=self.construct_header())
+
+        # Expecting, which should list LocalStack as one of the storage drivers
+        # {
+        #     "status": "OK",
+        #     "data": {
+        #         "LocalStack": "localstack1",
+        #         "Local": "local",
+        #         "Filesystem": "file1"
+        #     }
+        # }
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+        assert response.json()["data"]["LocalStack"] == "localstack1", (
+            f"LocalStack should be one of the storage drivers but got {response.json()['data']}"
+        )
 
     def test_set_storage_driver(self):
         """
