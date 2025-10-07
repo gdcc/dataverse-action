@@ -28,6 +28,8 @@ services:
         condition: service_started
       dv_initializer:
         condition: service_completed_successfully
+      localstack:
+        condition: service_healthy
     volumes:
       - ${RUNNER_TEMP}/dv/data:/dv
       - ${CONFIG_DIR}:/secrets
@@ -126,6 +128,11 @@ services:
       - ${RUNNER_TEMP}/dv/conf/localstack:/etc/localstack/init/ready.d
     tmpfs:
       - /localstack:mode=770,size=128M,uid=1000,gid=1000
+    healthcheck:
+      test: awslocal s3 ls s3://mybucket || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
 networks:
   dataverse:
