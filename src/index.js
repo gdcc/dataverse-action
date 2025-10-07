@@ -28,13 +28,25 @@ async function run() {
     try {
         const config = getActionInputs();
 
+        // Pull Docker images
         await pullDockerImages(config);
+
+        // Resolve dependency versions
         const versions = await resolveDependencyVersions(config);
+
+        // Setup environment
         await setupEnvironment(config, versions);
         await setupJvmConfiguration(config);
-
         const composeConfig = await startDataverseStack();
+
+        // Note: This is a workaround to allow Payara to read the files in /secrets
+        // because apparently this is not working as expected without it
+        await configurePayaraDirectorySource();
+
+        // Bootstrap Dataverse
         await bootstrapDataverse(config, composeConfig);
+
+        // Set action outputs
         await setActionOutputs();
 
     } catch (error) {
@@ -286,6 +298,44 @@ async function resolveImageLabelOrInput(inputValue, imageRef, labelKey) {
         core.debug(`Could not inspect image label ${labelKey}: ${error.message}`);
         return '';
     }
+}
+
+/**
+ * Configures Payara to use /secrets (MicroProfile Directory)
+ */
+async function configurePayaraDirectorySource() {
+    core.startGroup('🔧 Configure Payara to use /secrets (MicroProfile Directory)');
+
+    // Make sure the files are readable by the 'payara' user in the container
+    await exec.exec('docker', [
+        'exec', 'dataverse',
+        'bash', '-lc',
+        // read + execute for dirs, read for files (safe and simple)
+        'chmod -R a+rX /secrets || true'
+    ]);
+
+    // Configure Payara to use /secrets (MicroProfile Directory)
+    // Note: This is a workaround to allow Payara to read the files in /secrets
+    const asadminCmds = [
+        'asadmin set-config-dir --directory=/secrets',
+        'asadmin set-config-ordinal --source=directory --ordinal=300',
+        'asadmin list-config-sources'
+    ];
+
+    // Retry because asadmin needs the server up; Payara might still be booting
+    for (const cmd of asadminCmds) {
+        let ok = false;
+        for (let i = 0; i < 30; i++) {
+            const res = await exec.exec('docker', [
+                'exec', 'dataverse', 'bash', '-lc', cmd
+            ], { ignoreReturnCode: true });
+            if (res === 0) { ok = true; break; }
+            await new Promise(r => setTimeout(r, 2000));
+        }
+        if (!ok) throw new Error(`Failed to run: ${cmd}`);
+    }
+
+    core.endGroup();
 }
 
 run();
