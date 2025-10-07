@@ -38,6 +38,7 @@ run: |
 | <a name="input_jvm_options"></a>[jvm_options](#input_jvm_options)                      | string | false    |                                | Line separated key-value pairs of <br>JVM options to be set <br>before startup. Example: dataverse.spi.exporters.directory=/... |
 | <a name="input_postgresql_version"></a>[postgresql_version](#input_postgresql_version) | string | false    |                                | Override the PostgreSQL version to <br>use                                                                                      |
 | <a name="input_solr_version"></a>[solr_version](#input_solr_version)                   | string | false    |                                | Override the Solr version to <br>use                                                                                            |
+| <a name="input_s3_storage_driver"></a>[s3_storage_driver](#input_s3_storage_driver)    | string | true     | `"localstack"`                 | Provide a name for the S3 <br>storage driver. Currently <br>only 'localstack' is supported.                                     |
 
 <!-- AUTO-DOC-INPUT:END -->
 
