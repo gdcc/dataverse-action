@@ -123,7 +123,7 @@ services:
     networks:
       - dataverse
     volumes:
-      - ${PWD}/conf/localstack:/etc/localstack/init/ready.d
+      - ${RUNNER_TEMP}/dv/conf/localstack:/etc/localstack/init/ready.d
     tmpfs:
       - /localstack:mode=770,size=128M,uid=1000,gid=1000
 
