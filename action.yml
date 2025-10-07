@@ -23,6 +23,10 @@ inputs:
   jvm_options:
     description: "Line separated key-value pairs of JVM options to be set before startup. Example: dataverse.spi.exporters.directory=/..."
     required: false
+  s3_storage_driver:
+    description: "Provide a name for the S3 storage driver. Currently only 'localstack' is supported."
+    required: true
+    default: "localstack"
 outputs:
   api_token:
     description: "API Token of dataverseAdmin superuser"
