@@ -130,7 +130,7 @@ class TestNativeAPI:
         assert response.status_code == 200, response.text
         assert response.json()["status"] == "OK"
 
-        data = json.loads(response.json()["data"])
+        data = json.dumps(response.json()["data"])
         assert "localstack" in data.lower(), (
             f"LocalStack should be one of the storage drivers but got {json.dumps(response.json()['data'])}"
         )
@@ -223,7 +223,7 @@ class TestNativeAPI:
 
         # Next create a new dataset
         url = self.construct_url("api/dataverses/test_direct_upload_ticket/datasets")
-        with open(".github/workflows/scripts/initial_dataset.json", "r") as f:
+        with open(".github/workflows/scripts/initial-dataset.json", "r") as f:
             initial_dataset = json.load(f)
 
         response = requests.post(
