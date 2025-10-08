@@ -56,3 +56,63 @@ export function getDefaultProjectName() {
     return 'apitest';
 }
 
+/**
+ * Creates multiple directories recursively, ensuring parent directories exist.
+ * This is a convenience wrapper around fs.mkdirSync with recursive option.
+ * 
+ * @param {...string} dirs - Directory paths to create
+ */
+export function ensureDirectories(...dirs) {
+    for (const dir of dirs) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+}
+
+/**
+ * Copies all files from a source directory to a destination directory.
+ * If the source directory doesn't exist, this function does nothing.
+ * 
+ * @param {string} srcDir - Source directory path
+ * @param {string} destDir - Destination directory path
+ * @param {Object} options - Copy options
+ * @param {boolean} options.executable - Whether to make copied files executable (default: false)
+ * @returns {number} Number of files copied
+ */
+export function copyDirectoryFiles(srcDir, destDir, { executable = false } = {}) {
+    if (!fs.existsSync(srcDir)) {
+        return 0;
+    }
+
+    const files = fs.readdirSync(srcDir);
+    for (const file of files) {
+        const srcPath = path.join(srcDir, file);
+        const destPath = path.join(destDir, file);
+        fs.copyFileSync(srcPath, destPath);
+
+        if (executable) {
+            fs.chmodSync(destPath, 0o755);
+        }
+    }
+
+    return files.length;
+}
+
+/**
+ * Gets the standard volume mount paths for the Dataverse Docker setup.
+ * Uses RUNNER_TEMP environment variable if available, otherwise falls back to local tmp directory.
+ * 
+ * @returns {Object} Object containing all volume mount paths
+ */
+export function getVolumeMountPaths() {
+    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
+
+    return {
+        runnerTemp,
+        dvDir: path.join(runnerTemp, 'dv'),
+        dvDataDir: path.join(runnerTemp, 'dv', 'data'),
+        dvConfLocalstackDir: path.join(runnerTemp, 'dv', 'conf', 'localstack'),
+        solrDataDir: path.join(runnerTemp, 'solr', 'data'),
+        solrConfDir: path.join(runnerTemp, 'solr', 'conf')
+    };
+}
+

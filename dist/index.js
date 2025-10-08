@@ -31363,6 +31363,66 @@ function getDefaultProjectName() {
 }
 
 /**
+ * Creates multiple directories recursively, ensuring parent directories exist.
+ * This is a convenience wrapper around fs.mkdirSync with recursive option.
+ * 
+ * @param {...string} dirs - Directory paths to create
+ */
+function ensureDirectories(...dirs) {
+    for (const dir of dirs) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+}
+
+/**
+ * Copies all files from a source directory to a destination directory.
+ * If the source directory doesn't exist, this function does nothing.
+ * 
+ * @param {string} srcDir - Source directory path
+ * @param {string} destDir - Destination directory path
+ * @param {Object} options - Copy options
+ * @param {boolean} options.executable - Whether to make copied files executable (default: false)
+ * @returns {number} Number of files copied
+ */
+function copyDirectoryFiles(srcDir, destDir, { executable = false } = {}) {
+    if (!fs.existsSync(srcDir)) {
+        return 0;
+    }
+
+    const files = fs.readdirSync(srcDir);
+    for (const file of files) {
+        const srcPath = path.join(srcDir, file);
+        const destPath = path.join(destDir, file);
+        fs.copyFileSync(srcPath, destPath);
+
+        if (executable) {
+            fs.chmodSync(destPath, 0o755);
+        }
+    }
+
+    return files.length;
+}
+
+/**
+ * Gets the standard volume mount paths for the Dataverse Docker setup.
+ * Uses RUNNER_TEMP environment variable if available, otherwise falls back to local tmp directory.
+ * 
+ * @returns {Object} Object containing all volume mount paths
+ */
+function getVolumeMountPaths() {
+    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
+
+    return {
+        runnerTemp,
+        dvDir: path.join(runnerTemp, 'dv'),
+        dvDataDir: path.join(runnerTemp, 'dv', 'data'),
+        dvConfLocalstackDir: path.join(runnerTemp, 'dv', 'conf', 'localstack'),
+        solrDataDir: path.join(runnerTemp, 'solr', 'data'),
+        solrConfDir: path.join(runnerTemp, 'solr', 'conf')
+    };
+}
+
+/**
  * Configuration object for the action
  * @typedef {Object} ActionConfig
  * @property {string} imageTag - Docker image tag to use
@@ -31519,48 +31579,39 @@ async function modifyComposeWithJvmOptions(config, composeFile) {
  * @returns {Promise<{composeFile: string, projectName: string}>} Compose configuration
  */
 async function startDataverseStack(composeFilePath) {
-    const composeFile = composeFilePath;
     const projectName = getDefaultProjectName();
 
     // Save state for post-run cleanup - this ensures post.js uses the same files
-    core$1.saveState('compose_file', composeFile);
+    core$1.saveState('compose_file', composeFilePath);
     core$1.saveState('compose_project', projectName);
 
     // Create directory structure before Docker Compose starts to ensure correct permissions
     // This prevents Docker from creating directories as root which would cause permission issues
-    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
-    const dvDir = path.join(runnerTemp, 'dv');
-    const dvDataDir = path.join(dvDir, 'data');
-    const dvConfLocalstackDir = path.join(dvDir, 'conf', 'localstack');
-    const solrDataDir = path.join(runnerTemp, 'solr', 'data');
-    const solrConfDir = path.join(runnerTemp, 'solr', 'conf');
-
-    fs.mkdirSync(dvDataDir, { recursive: true });
-    fs.mkdirSync(dvConfLocalstackDir, { recursive: true });
-    fs.mkdirSync(solrDataDir, { recursive: true });
-    fs.mkdirSync(solrConfDir, { recursive: true });
+    const paths = getVolumeMountPaths();
+    ensureDirectories(
+        paths.dvDataDir,
+        paths.dvConfLocalstackDir,
+        paths.solrDataDir,
+        paths.solrConfDir
+    );
 
     // Copy localstack initialization scripts from workspace to temp directory
     const workspaceLocalstackDir = path.join(process.cwd(), 'dv', 'conf', 'localstack');
-    if (fs.existsSync(workspaceLocalstackDir)) {
-        const files = fs.readdirSync(workspaceLocalstackDir);
-        for (const file of files) {
-            const srcPath = path.join(workspaceLocalstackDir, file);
-            const destPath = path.join(dvConfLocalstackDir, file);
-            fs.copyFileSync(srcPath, destPath);
-            // Ensure scripts are executable
-            fs.chmodSync(destPath, 0o755);
-        }
-        core$1.info(`Copied ${files.length} localstack initialization script(s)`);
+    const filesCopied = copyDirectoryFiles(workspaceLocalstackDir, paths.dvConfLocalstackDir, {
+        executable: true
+    });
+
+    if (filesCopied > 0) {
+        core$1.info(`Copied ${filesCopied} localstack initialization script(s)`);
     }
 
-    core$1.info(`Created volume mount directories under: ${runnerTemp}`);
+    core$1.info(`Created volume mount directories under: ${paths.runnerTemp}`);
 
     core$1.startGroup('🥎 Start Dataverse service in background');
-    await exec.exec('docker', ['compose', '-f', composeFile, '-p', projectName, 'up', '-d', '--quiet-pull']);
+    await exec.exec('docker', ['compose', '-f', composeFilePath, '-p', projectName, 'up', '-d', '--quiet-pull']);
     core$1.endGroup();
 
-    return { composeFile, projectName };
+    return { composeFile: composeFilePath, projectName };
 }
 
 /**
@@ -31571,9 +31622,8 @@ async function startDataverseStack(composeFilePath) {
 async function bootstrapDataverse(config, composeConfig) {
     core$1.startGroup('🤖 Bootstrap Dataverse service');
 
-    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
-    const dvDir = path.join(runnerTemp, 'dv');
-    const exposeEnv = path.join(dvDir, 'bootstrap.exposed.env');
+    const paths = getVolumeMountPaths();
+    const exposeEnv = path.join(paths.dvDir, 'bootstrap.exposed.env');
 
     // Create the bootstrap environment file (directory already exists from startDataverseStack)
     fs.closeSync(fs.openSync(exposeEnv, 'w'));
@@ -31596,8 +31646,8 @@ async function bootstrapDataverse(config, composeConfig) {
  * Sets action outputs from bootstrap results and API calls
  */
 async function setActionOutputs() {
-    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
-    const exposeEnv = path.join(runnerTemp, 'dv', 'bootstrap.exposed.env');
+    const paths = getVolumeMountPaths();
+    const exposeEnv = path.join(paths.dvDir, 'bootstrap.exposed.env');
 
     // Read API token from bootstrap output
     const envContent = fs.readFileSync(exposeEnv, 'utf8');

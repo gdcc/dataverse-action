@@ -3,7 +3,7 @@ import exec from '@actions/exec';
 import fs from 'fs';
 import path from 'path';
 import artifact from '@actions/artifact';
-import { getActiveComposeFilePath, getDefaultProjectName } from './utils.js';
+import { getActiveComposeFilePath, getDefaultProjectName, ensureDirectories } from './utils.js';
 
 /**
  * Post-run configuration
@@ -61,7 +61,7 @@ async function collectAndUploadLogs(config) {
 
     core.info(`Collecting logs for config: ${JSON.stringify(config)}`);
 
-    // TODO: We hard-code localstack here because it's the only additional service we support for now, but we should make this dynamic in the future
+    // Include localstack as an additional service for log collection
     const artifactsDir = createArtifactsDirectory();
     const logFiles = await collectDataverseLogs(config, artifactsDir, ['localstack']);
 
@@ -79,61 +79,47 @@ async function collectAndUploadLogs(config) {
  */
 function createArtifactsDirectory() {
     const artifactsDir = path.join(process.cwd(), 'artifacts');
-    fs.mkdirSync(artifactsDir, { recursive: true });
+    ensureDirectories(artifactsDir);
     return artifactsDir;
 }
 
 /**
- * Collects Dataverse server logs from the container
+ * Collects logs from Docker Compose services
  * @param {PostConfig} config - Post-run configuration
  * @param {string} artifactsDir - Directory to store artifacts
+ * @param {string[]} additionalServices - Additional services beyond core services
  * @returns {Promise<string[]>} Paths to the collected log files
  */
 async function collectDataverseLogs(config, artifactsDir, additionalServices = []) {
-    // Collect logs from all services to debug issues
+    const coreServices = ['dataverse', 'postgres', 'solr', 'smtp'];
+    const services = [...coreServices, ...additionalServices];
+
+    core.info('Collecting logs via Docker Compose...');
     const logFiles = [];
 
-    // Collect logs from dataverse
-    const logFile = path.join(artifactsDir, 'dataverse-server.log');
-    logFiles.push(logFile);
-    core.info('Collecting logs via Docker Compose...');
-    await collectComposeServiceLogs(config, logFile, 'dataverse');
+    // Collect logs from all services
+    for (const service of services) {
+        const logFileName = service === 'dataverse' ? 'dataverse-server.log' : `${service}.log`;
+        const logFile = path.join(artifactsDir, logFileName);
+        logFiles.push(logFile);
+        await collectComposeServiceLogs(config, logFile, service);
+    }
 
-    // Collect logs from postgres
-    const postgresLogFile = path.join(artifactsDir, 'postgres.log');
-    logFiles.push(postgresLogFile);
-    await collectComposeServiceLogs(config, postgresLogFile, 'postgres');
-
-    // Collect logs from solr
-    const solrLogFile = path.join(artifactsDir, 'solr.log');
-    logFiles.push(solrLogFile);
-    await collectComposeServiceLogs(config, solrLogFile, 'solr');
-
-    // Collect logs from smtp
-    const smtpLogFile = path.join(artifactsDir, 'smtp.log');
-    logFiles.push(smtpLogFile);
-    await collectComposeServiceLogs(config, smtpLogFile, 'smtp');
-
-    // Modified compose file
-    const modifiedComposeFile = path.join(artifactsDir, 'docker-compose.yml');
-    const modifiedComposeFileContent = fs.readFileSync(modifiedComposeFile, 'utf8');
-    fs.writeFileSync(modifiedComposeFile, modifiedComposeFileContent, 'utf8');
-    logFiles.push(modifiedComposeFile);
-
-    // Collect logs from additional services
-    if (additionalServices.includes('localstack')) {
-        const localstackLogFile = path.join(artifactsDir, 'localstack.log');
-        logFiles.push(localstackLogFile);
-        await collectComposeServiceLogs(config, localstackLogFile, 'localstack');
+    // Copy the compose file to artifacts for debugging
+    const composeFile = path.join(artifactsDir, 'docker-compose.yml');
+    if (fs.existsSync(config.composeFile)) {
+        fs.copyFileSync(config.composeFile, composeFile);
+        logFiles.push(composeFile);
     }
 
     return logFiles;
 }
 
 /**
- * Collects logs from the Dataverse service via Docker Compose
+ * Collects logs from a specific Docker Compose service
  * @param {PostConfig} config - Post-run configuration
  * @param {string} logFile - Path where to save the log file
+ * @param {string} serviceName - Name of the service to collect logs from
  */
 async function collectComposeServiceLogs(config, logFile, serviceName) {
     try {

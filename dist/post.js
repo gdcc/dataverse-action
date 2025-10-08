@@ -1,22 +1,22 @@
 import require$$0$4 from 'os';
 import require$$0$5 from 'crypto';
-import require$$0$6 from 'fs';
+import fs from 'fs';
 import path$1, { dirname } from 'path';
 import require$$2$3 from 'http';
 import require$$1$2 from 'https';
-import require$$0$a from 'net';
+import require$$0$9 from 'net';
 import require$$1$4 from 'tls';
 import require$$1$3 from 'events';
-import require$$0$9 from 'assert';
-import require$$0$7 from 'util';
-import require$$0$b from 'stream';
-import require$$0$8 from 'buffer';
+import require$$0$8 from 'assert';
+import require$$0$6 from 'util';
+import require$$0$a from 'stream';
+import require$$0$7 from 'buffer';
 import require$$8 from 'querystring';
 import require$$14 from 'stream/web';
-import require$$0$d from 'node:stream';
+import require$$0$c from 'node:stream';
 import require$$1$5 from 'node:util';
-import require$$0$c from 'node:events';
-import require$$0$e from 'worker_threads';
+import require$$0$b from 'node:events';
+import require$$0$d from 'worker_threads';
 import require$$2$4 from 'perf_hooks';
 import require$$5$1 from 'util/types';
 import require$$4$1 from 'async_hooks';
@@ -24,12 +24,12 @@ import require$$1$6 from 'console';
 import Url, { fileURLToPath } from 'url';
 import zlib from 'zlib';
 import require$$6$1 from 'string_decoder';
-import require$$0$f from 'diagnostics_channel';
+import require$$0$e from 'diagnostics_channel';
 import require$$2$5 from 'child_process';
 import require$$6$2 from 'timers';
 import require$$1$7 from 'node:os';
 import require$$2$6 from 'node:process';
-import require$$0$g from 'node:crypto';
+import require$$0$f from 'node:crypto';
 import require$$1$8 from 'node:http';
 import require$$2$7 from 'node:https';
 import require$$3$1 from 'node:zlib';
@@ -37,12 +37,12 @@ import require$$1$9 from 'tty';
 import require$$2$8 from 'node:buffer';
 import require$$1$a from 'node:fs';
 import require$$1$c from 'fs/promises';
-import require$$0$h from 'constants';
+import require$$0$g from 'constants';
 import require$$2$a from 'node:url';
 import require$$1$b from 'node:path';
 import require$$5$2 from 'node:fs/promises';
 import require$$2$9 from 'node:string_decoder';
-import require$$0$i from 'punycode';
+import require$$0$h from 'punycode';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -271,7 +271,7 @@ function requireFileCommand () {
 	// We use any as a valid input type
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	const crypto = __importStar(require$$0$5);
-	const fs = __importStar(require$$0$6);
+	const fs$1 = __importStar(fs);
 	const os = __importStar(require$$0$4);
 	const utils_1 = requireUtils$7();
 	function issueFileCommand(command, message) {
@@ -279,10 +279,10 @@ function requireFileCommand () {
 	    if (!filePath) {
 	        throw new Error(`Unable to find environment variable for file command ${command}`);
 	    }
-	    if (!fs.existsSync(filePath)) {
+	    if (!fs$1.existsSync(filePath)) {
 	        throw new Error(`Missing file at path: ${filePath}`);
 	    }
-	    fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
+	    fs$1.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
 	        encoding: 'utf8'
 	    });
 	}
@@ -425,7 +425,7 @@ function requireTunnel$1 () {
 	var http = require$$2$3;
 	var https = require$$1$2;
 	var events = require$$1$3;
-	var util = require$$0$7;
+	var util = require$$0$6;
 
 
 	tunnel$1.httpOverHttp = httpOverHttp;
@@ -1139,14 +1139,14 @@ function requireUtil$c () {
 	if (hasRequiredUtil$c) return util$c;
 	hasRequiredUtil$c = 1;
 
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { kDestroyed, kBodyUsed } = requireSymbols$4();
 	const { IncomingMessage } = require$$2$3;
-	const stream = require$$0$b;
-	const net = require$$0$a;
+	const stream = require$$0$a;
+	const net = require$$0$9;
 	const { InvalidArgumentError } = requireErrors$2();
-	const { Blob } = require$$0$8;
-	const nodeUtil = require$$0$7;
+	const { Blob } = require$$0$7;
+	const nodeUtil = require$$0$6;
 	const { stringify } = require$$8;
 	const { headerNameLowerCasedRecord } = requireConstants$b();
 
@@ -1802,7 +1802,7 @@ function requireSbmh () {
 	 * Based heavily on the Streaming Boyer-Moore-Horspool C++ implementation
 	 * by Hongli Lai at: https://github.com/FooBarWidget/boyer-moore-horspool
 	 */
-	const EventEmitter = require$$0$c.EventEmitter;
+	const EventEmitter = require$$0$b.EventEmitter;
 	const inherits = require$$1$5.inherits;
 
 	function SBMH (needle) {
@@ -2013,7 +2013,7 @@ function requirePartStream () {
 	hasRequiredPartStream = 1;
 
 	const inherits = require$$1$5.inherits;
-	const ReadableStream = require$$0$d.Readable;
+	const ReadableStream = require$$0$c.Readable;
 
 	function PartStream (opts) {
 	  ReadableStream.call(this, opts);
@@ -2057,7 +2057,7 @@ function requireHeaderParser () {
 	if (hasRequiredHeaderParser) return HeaderParser_1;
 	hasRequiredHeaderParser = 1;
 
-	const EventEmitter = require$$0$c.EventEmitter;
+	const EventEmitter = require$$0$b.EventEmitter;
 	const inherits = require$$1$5.inherits;
 	const getLimit = requireGetLimit();
 
@@ -2165,7 +2165,7 @@ function requireDicer () {
 	if (hasRequiredDicer) return Dicer_1;
 	hasRequiredDicer = 1;
 
-	const WritableStream = require$$0$d.Writable;
+	const WritableStream = require$$0$c.Writable;
 	const inherits = require$$1$5.inherits;
 
 	const StreamSearch = requireSbmh();
@@ -2742,7 +2742,7 @@ function requireMultipart$1 () {
 	//  * support limits.fieldNameSize
 	//     -- this will require modifications to utils.parseParams
 
-	const { Readable } = require$$0$d;
+	const { Readable } = require$$0$c;
 	const { inherits } = require$$1$5;
 
 	const Dicer = requireDicer();
@@ -3308,7 +3308,7 @@ function requireMain () {
 	if (hasRequiredMain) return main.exports;
 	hasRequiredMain = 1;
 
-	const WritableStream = require$$0$d.Writable;
+	const WritableStream = require$$0$c.Writable;
 	const { inherits } = require$$1$5;
 	const Dicer = requireDicer();
 
@@ -3401,7 +3401,7 @@ function requireConstants$a () {
 	if (hasRequiredConstants$a) return constants$a;
 	hasRequiredConstants$a = 1;
 
-	const { MessageChannel, receiveMessageOnPort } = require$$0$e;
+	const { MessageChannel, receiveMessageOnPort } = require$$0$d;
 
 	const corsSafeListedMethods = ['GET', 'HEAD', 'POST'];
 	const corsSafeListedMethodsSet = new Set(corsSafeListedMethods);
@@ -3612,7 +3612,7 @@ function requireUtil$b () {
 	const { getGlobalOrigin } = requireGlobal$1();
 	const { performance } = require$$2$4;
 	const { isBlobLike, toUSVString, ReadableStreamFrom } = requireUtil$c();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { isUint8Array } = require$$5$1;
 
 	let supportedHashes = [];
@@ -4777,7 +4777,7 @@ function requireWebidl () {
 	if (hasRequiredWebidl) return webidl_1;
 	hasRequiredWebidl = 1;
 
-	const { types } = require$$0$7;
+	const { types } = require$$0$6;
 	const { hasOwn, toUSVString } = requireUtil$b();
 
 	/** @type {import('../../types/webidl').Webidl} */
@@ -5430,8 +5430,8 @@ var hasRequiredDataURL;
 function requireDataURL () {
 	if (hasRequiredDataURL) return dataURL;
 	hasRequiredDataURL = 1;
-	const assert = require$$0$9;
-	const { atob } = require$$0$8;
+	const assert = require$$0$8;
+	const { atob } = require$$0$7;
 	const { isomorphicDecode } = requireUtil$b();
 
 	const encoder = new TextEncoder();
@@ -6067,8 +6067,8 @@ function requireFile$2 () {
 	if (hasRequiredFile$2) return file$2;
 	hasRequiredFile$2 = 1;
 
-	const { Blob, File: NativeFile } = require$$0$8;
-	const { types } = require$$0$7;
+	const { Blob, File: NativeFile } = require$$0$7;
+	const { types } = require$$0$6;
 	const { kState } = requireSymbols$3();
 	const { isBlobLike } = requireUtil$b();
 	const { webidl } = requireWebidl();
@@ -6423,7 +6423,7 @@ function requireFormdata () {
 	const { kState } = requireSymbols$3();
 	const { File: UndiciFile, FileLike, isFileLike } = requireFile$2();
 	const { webidl } = requireWebidl();
-	const { Blob, File: NativeFile } = require$$0$8;
+	const { Blob, File: NativeFile } = require$$0$7;
 
 	/** @type {globalThis['File']} */
 	const File = NativeFile ?? UndiciFile;
@@ -6706,9 +6706,9 @@ function requireBody () {
 	const { kState } = requireSymbols$3();
 	const { webidl } = requireWebidl();
 	const { DOMException, structuredClone } = requireConstants$a();
-	const { Blob, File: NativeFile } = require$$0$8;
+	const { Blob, File: NativeFile } = require$$0$7;
 	const { kBodyUsed } = requireSymbols$4();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { isErrored } = requireUtil$c();
 	const { isUint8Array, isArrayBuffer } = require$$5$1;
 	const { File: UndiciFile } = requireFile$2();
@@ -7317,7 +7317,7 @@ function requireRequest$1 () {
 	  InvalidArgumentError,
 	  NotSupportedError
 	} = requireErrors$2();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { kHTTP2BuildRequest, kHTTP2CopyHeaders, kHTTP1BuildRequest } = requireSymbols$4();
 	const util = requireUtil$c();
 
@@ -8047,8 +8047,8 @@ function requireConnect () {
 	if (hasRequiredConnect) return connect;
 	hasRequiredConnect = 1;
 
-	const net = require$$0$a;
-	const assert = require$$0$9;
+	const net = require$$0$9;
+	const assert = require$$0$8;
 	const util = requireUtil$c();
 	const { InvalidArgumentError, ConnectTimeoutError } = requireErrors$2();
 
@@ -8553,7 +8553,7 @@ function requireRedirectHandler () {
 
 	const util = requireUtil$c();
 	const { kBodyUsed } = requireSymbols$4();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { InvalidArgumentError } = requireErrors$2();
 	const EE = require$$1$3;
 
@@ -8813,10 +8813,10 @@ function requireClient$1 () {
 
 	/* global WebAssembly */
 
-	const assert = require$$0$9;
-	const net = require$$0$a;
+	const assert = require$$0$8;
+	const net = require$$0$9;
 	const http = require$$2$3;
-	const { pipeline } = require$$0$b;
+	const { pipeline } = require$$0$a;
 	const util = requireUtil$c();
 	const timers = requireTimers();
 	const Request = requireRequest$1();
@@ -11998,8 +11998,8 @@ function requireReadable$2 () {
 	if (hasRequiredReadable$2) return readable$2;
 	hasRequiredReadable$2 = 1;
 
-	const assert = require$$0$9;
-	const { Readable } = require$$0$b;
+	const assert = require$$0$8;
+	const { Readable } = require$$0$a;
 	const { RequestAbortedError, NotSupportedError, InvalidArgumentError } = requireErrors$2();
 	const util = requireUtil$c();
 	const { ReadableStreamFrom, toUSVString } = requireUtil$c();
@@ -12325,7 +12325,7 @@ var hasRequiredUtil$a;
 function requireUtil$a () {
 	if (hasRequiredUtil$a) return util$a;
 	hasRequiredUtil$a = 1;
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const {
 	  ResponseStatusCodeError
 	} = requireErrors$2();
@@ -12631,7 +12631,7 @@ function requireApiStream () {
 	if (hasRequiredApiStream) return apiStream;
 	hasRequiredApiStream = 1;
 
-	const { finished, PassThrough } = require$$0$b;
+	const { finished, PassThrough } = require$$0$a;
 	const {
 	  InvalidArgumentError,
 	  InvalidReturnValueError,
@@ -12863,7 +12863,7 @@ function requireApiPipeline () {
 	  Readable,
 	  Duplex,
 	  PassThrough
-	} = require$$0$b;
+	} = require$$0$a;
 	const {
 	  InvalidArgumentError,
 	  InvalidReturnValueError,
@@ -12872,7 +12872,7 @@ function requireApiPipeline () {
 	const util = requireUtil$c();
 	const { AsyncResource } = require$$4$1;
 	const { addSignal, removeSignal } = requireAbortSignal();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 
 	const kResume = Symbol('resume');
 
@@ -13120,7 +13120,7 @@ function requireApiUpgrade () {
 	const { AsyncResource } = require$$4$1;
 	const util = requireUtil$c();
 	const { addSignal, removeSignal } = requireAbortSignal();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 
 	class UpgradeHandler extends AsyncResource {
 	  constructor (opts, callback) {
@@ -13425,7 +13425,7 @@ function requireMockUtils () {
 	  types: {
 	    isPromise
 	  }
-	} = require$$0$7;
+	} = require$$0$6;
 
 	function matchValue (match, value) {
 	  if (typeof match === 'string') {
@@ -13985,7 +13985,7 @@ function requireMockClient () {
 	if (hasRequiredMockClient) return mockClient;
 	hasRequiredMockClient = 1;
 
-	const { promisify } = require$$0$7;
+	const { promisify } = require$$0$6;
 	const Client = requireClient$1();
 	const { buildMockDispatch } = requireMockUtils();
 	const {
@@ -14052,7 +14052,7 @@ function requireMockPool () {
 	if (hasRequiredMockPool) return mockPool;
 	hasRequiredMockPool = 1;
 
-	const { promisify } = require$$0$7;
+	const { promisify } = require$$0$6;
 	const Pool = requirePool();
 	const { buildMockDispatch } = requireMockUtils();
 	const {
@@ -14156,7 +14156,7 @@ function requirePendingInterceptorsFormatter () {
 	if (hasRequiredPendingInterceptorsFormatter) return pendingInterceptorsFormatter;
 	hasRequiredPendingInterceptorsFormatter = 1;
 
-	const { Transform } = require$$0$b;
+	const { Transform } = require$$0$a;
 	const { Console } = require$$1$6;
 
 	/**
@@ -14579,7 +14579,7 @@ var hasRequiredRetryHandler;
 function requireRetryHandler () {
 	if (hasRequiredRetryHandler) return RetryHandler_1;
 	hasRequiredRetryHandler = 1;
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 
 	const { kRetryHandlerDefaultRetry } = requireSymbols$4();
 	const { RequestRetryError } = requireErrors$2();
@@ -15016,9 +15016,9 @@ function requireHeaders$1 () {
 	  isValidHeaderName,
 	  isValidHeaderValue
 	} = requireUtil$b();
-	const util = require$$0$7;
+	const util = require$$0$6;
 	const { webidl } = requireWebidl();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 
 	const kHeadersMap = Symbol('headers map');
 	const kHeadersSortedMap = Symbol('headers map sorted');
@@ -15624,8 +15624,8 @@ function requireResponse$1 () {
 	const { getGlobalOrigin } = requireGlobal$1();
 	const { URLSerializer } = requireDataURL();
 	const { kHeadersList, kConstruct } = requireSymbols$4();
-	const assert = require$$0$9;
-	const { types } = require$$0$7;
+	const assert = require$$0$8;
+	const { types } = require$$0$6;
 
 	const ReadableStream = globalThis.ReadableStream || require$$14.ReadableStream;
 	const textEncoder = new TextEncoder('utf-8');
@@ -16208,7 +16208,7 @@ function requireRequest () {
 	const { getGlobalOrigin } = requireGlobal$1();
 	const { URLSerializer } = requireDataURL();
 	const { kHeadersList, kConstruct } = requireSymbols$4();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = require$$1$3;
 
 	let TransformStream = globalThis.TransformStream;
@@ -17174,7 +17174,7 @@ function requireFetch () {
 	  urlHasHttpsScheme
 	} = requireUtil$b();
 	const { kState, kHeaders, kGuard, kRealm } = requireSymbols$3();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { safelyExtractBody } = requireBody();
 	const {
 	  redirectStatusSet,
@@ -17186,7 +17186,7 @@ function requireFetch () {
 	} = requireConstants$a();
 	const { kHeadersList } = requireSymbols$4();
 	const EE = require$$1$3;
-	const { Readable, pipeline } = require$$0$b;
+	const { Readable, pipeline } = require$$0$a;
 	const { addAbortListener, isErrored, isReadable, nodeMajor, nodeMinor } = requireUtil$c();
 	const { dataURLProcessor, serializeAMimeType } = requireDataURL();
 	const { TransformStream } = require$$14;
@@ -17919,7 +17919,7 @@ function requireFetch () {
 	    }
 	    case 'blob:': {
 	      if (!resolveObjectURL) {
-	        resolveObjectURL = require$$0$8.resolveObjectURL;
+	        resolveObjectURL = require$$0$7.resolveObjectURL;
 	      }
 
 	      // 1. Let blobURLEntry be request’s current URL’s blob URL entry.
@@ -19626,9 +19626,9 @@ function requireUtil$9 () {
 	const { getEncoding } = requireEncoding();
 	const { DOMException } = requireConstants$a();
 	const { serializeAMimeType, parseMIMEType } = requireDataURL();
-	const { types } = require$$0$7;
+	const { types } = require$$0$6;
 	const { StringDecoder } = require$$6$1;
-	const { btoa } = require$$0$8;
+	const { btoa } = require$$0$7;
 
 	/** @type {PropertyDescriptor} */
 	const staticPropertyDescriptors = {
@@ -20380,7 +20380,7 @@ function requireUtil$8 () {
 	if (hasRequiredUtil$8) return util$8;
 	hasRequiredUtil$8 = 1;
 
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { URLSerializer } = requireDataURL();
 	const { isValidHeaderName } = requireUtil$b();
 
@@ -20447,7 +20447,7 @@ function requireCache$1 () {
 	const { kState, kHeaders, kGuard, kRealm } = requireSymbols$3();
 	const { fetching } = requireFetch();
 	const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = requireUtil$b();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 	const { getGlobalDispatcher } = requireGlobal();
 
 	/**
@@ -21740,7 +21740,7 @@ function requireParse () {
 	const { maxNameValuePairSize, maxAttributeValueSize } = requireConstants$8();
 	const { isCTLExcludingHtab } = requireUtil$7();
 	const { collectASequenceOfCodePointsFast } = requireDataURL();
-	const assert = require$$0$9;
+	const assert = require$$0$8;
 
 	/**
 	 * @description Parses the field-value attributes of a set-cookie header string.
@@ -22334,7 +22334,7 @@ function requireEvents () {
 
 	const { webidl } = requireWebidl();
 	const { kEnumerableProperty } = requireUtil$c();
-	const { MessagePort } = require$$0$e;
+	const { MessagePort } = require$$0$d;
 
 	/**
 	 * @see https://html.spec.whatwg.org/multipage/comms.html#messageevent
@@ -22851,7 +22851,7 @@ function requireConnection () {
 	if (hasRequiredConnection) return connection;
 	hasRequiredConnection = 1;
 
-	const diagnosticsChannel = require$$0$f;
+	const diagnosticsChannel = require$$0$e;
 	const { uid, states } = requireConstants$7();
 	const {
 	  kReadyState,
@@ -23231,8 +23231,8 @@ function requireReceiver () {
 	if (hasRequiredReceiver) return receiver;
 	hasRequiredReceiver = 1;
 
-	const { Writable } = require$$0$b;
-	const diagnosticsChannel = require$$0$f;
+	const { Writable } = require$$0$a;
+	const diagnosticsChannel = require$$0$e;
 	const { parserStates, opcodes, states, emptyBuffer } = requireConstants$7();
 	const { kReadyState, kSentClose, kResponse, kReceivedClose } = requireSymbols();
 	const { isValidStatusCode, failWebsocketConnection, websocketMessageReceived } = requireUtil$6();
@@ -23603,7 +23603,7 @@ function requireWebsocket () {
 	const { ByteParser } = requireReceiver();
 	const { kEnumerableProperty, isBlobLike } = requireUtil$c();
 	const { getGlobalDispatcher } = requireGlobal();
-	const { types } = require$$0$7;
+	const { types } = require$$0$6;
 
 	let experimentalWarned = false;
 
@@ -25249,7 +25249,7 @@ function requireSummary () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
 		const os_1 = require$$0$4;
-		const fs_1 = require$$0$6;
+		const fs_1 = fs;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 		exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
@@ -25641,16 +25641,16 @@ function requireIoUtil () {
 		var _a;
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
-		const fs = __importStar(require$$0$6);
+		const fs$1 = __importStar(fs);
 		const path = __importStar(path$1);
-		_a = fs.promises
+		_a = fs$1.promises
 		// export const {open} = 'fs'
 		, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 		// export const {open} = 'fs'
 		exports.IS_WINDOWS = process.platform === 'win32';
 		// See https://github.com/nodejs/node/blob/d0153aee367422d0858105abec186da4dff0a0c5/deps/uv/include/uv/win.h#L691
 		exports.UV_FS_O_EXLOCK = 0x10000000;
-		exports.READONLY = fs.constants.O_RDONLY;
+		exports.READONLY = fs$1.constants.O_RDONLY;
 		function exists(fsPath) {
 		    return __awaiter(this, void 0, void 0, function* () {
 		        try {
@@ -25831,7 +25831,7 @@ function requireIo () {
 	};
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = void 0;
-	const assert_1 = require$$0$9;
+	const assert_1 = require$$0$8;
 	const path = __importStar(path$1);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
@@ -34198,7 +34198,7 @@ function requireUploadZipSpecification () {
 	};
 	Object.defineProperty(uploadZipSpecification, "__esModule", { value: true });
 	uploadZipSpecification.getUploadZipSpecification = uploadZipSpecification.validateRootDirectory = void 0;
-	const fs = __importStar(require$$0$6);
+	const fs$1 = __importStar(fs);
 	const core_1 = requireCore$1();
 	const path_1 = path$1;
 	const path_and_artifact_name_validation_1 = requirePathAndArtifactNameValidation();
@@ -34207,10 +34207,10 @@ function requireUploadZipSpecification () {
 	 * @param rootDirectory an absolute root directory path common to all input files that that will be trimmed from the final zip structure
 	 */
 	function validateRootDirectory(rootDirectory) {
-	    if (!fs.existsSync(rootDirectory)) {
+	    if (!fs$1.existsSync(rootDirectory)) {
 	        throw new Error(`The provided rootDirectory ${rootDirectory} does not exist`);
 	    }
-	    if (!fs.statSync(rootDirectory).isDirectory()) {
+	    if (!fs$1.statSync(rootDirectory).isDirectory()) {
 	        throw new Error(`The provided rootDirectory ${rootDirectory} is not a valid directory`);
 	    }
 	    (0, core_1.info)(`Root directory input is valid!`);
@@ -34253,7 +34253,7 @@ function requireUploadZipSpecification () {
 	            - file3.txt
 	    */
 	    for (let file of filesToZip) {
-	        const stats = fs.lstatSync(file, { throwIfNoEntry: false });
+	        const stats = fs$1.lstatSync(file, { throwIfNoEntry: false });
 	        if (!stats) {
 	            throw new Error(`File ${file} does not exist`);
 	        }
@@ -35290,7 +35290,7 @@ function requireUuidUtils () {
 	// Licensed under the MIT License.
 	Object.defineProperty(uuidUtils, "__esModule", { value: true });
 	uuidUtils.randomUUID = randomUUID;
-	const node_crypto_1 = require$$0$g;
+	const node_crypto_1 = require$$0$f;
 	// NOTE: This is a workaround until we can use `globalThis.crypto.randomUUID` in Node.js 19+.
 	const uuidFunction = typeof globalThis?.crypto?.randomUUID === "function"
 	    ? globalThis.crypto.randomUUID.bind(globalThis.crypto)
@@ -36057,7 +36057,7 @@ function requireNodeHttpClient () {
 	const node_http_1 = tslib_1.__importDefault(require$$1$8);
 	const node_https_1 = tslib_1.__importDefault(require$$2$7);
 	const node_zlib_1 = tslib_1.__importDefault(require$$3$1);
-	const node_stream_1 = require$$0$d;
+	const node_stream_1 = require$$0$c;
 	const AbortError_js_1 = requireAbortError$1();
 	const httpHeaders_js_1 = requireHttpHeaders$1();
 	const restError_js_1 = requireRestError$2();
@@ -38280,7 +38280,7 @@ function requireNode$1 () {
 	hasRequiredNode$1 = 1;
 	(function (module, exports) {
 		const tty = require$$1$9;
-		const util = require$$0$7;
+		const util = require$$0$6;
 
 		/**
 		 * This is the Node.js implementation of `debug()`.
@@ -38671,7 +38671,7 @@ function requireDist$3 () {
 		};
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.Agent = void 0;
-		const net = __importStar(require$$0$a);
+		const net = __importStar(require$$0$9);
 		const http = __importStar(require$$2$3);
 		const https_1 = require$$1$2;
 		__exportStar(requireHelpers(), exports);
@@ -38967,9 +38967,9 @@ function requireDist$2 () {
 	};
 	Object.defineProperty(dist$3, "__esModule", { value: true });
 	dist$3.HttpsProxyAgent = void 0;
-	const net = __importStar(require$$0$a);
+	const net = __importStar(require$$0$9);
 	const tls = __importStar(require$$1$4);
-	const assert_1 = __importDefault(require$$0$9);
+	const assert_1 = __importDefault(require$$0$8);
 	const debug_1 = __importDefault(requireSrc$1());
 	const agent_base_1 = requireDist$3();
 	const url_1 = Url;
@@ -39156,7 +39156,7 @@ function requireDist$1 () {
 	};
 	Object.defineProperty(dist$1, "__esModule", { value: true });
 	dist$1.HttpProxyAgent = void 0;
-	const net = __importStar(require$$0$a);
+	const net = __importStar(require$$0$9);
 	const tls = __importStar(require$$1$4);
 	const debug_1 = __importDefault(requireSrc$1());
 	const events_1 = require$$1$3;
@@ -39610,7 +39610,7 @@ function requireConcat () {
 	// Licensed under the MIT License.
 	Object.defineProperty(concat$2, "__esModule", { value: true });
 	concat$2.concat = concat;
-	const stream_1 = require$$0$b;
+	const stream_1 = require$$0$a;
 	const typeGuards_js_1 = requireTypeGuards$1();
 	async function* streamAsyncIterator() {
 	    const reader = this.getReader();
@@ -41458,7 +41458,7 @@ function requireSha256 () {
 	Object.defineProperty(sha256, "__esModule", { value: true });
 	sha256.computeSha256Hmac = computeSha256Hmac;
 	sha256.computeSha256Hash = computeSha256Hash;
-	const node_crypto_1 = require$$0$g;
+	const node_crypto_1 = require$$0$f;
 	/**
 	 * Generates a SHA-256 HMAC signature.
 	 * @param key - The HMAC key represented as a base64 string, used to generate the cryptographic HMAC hash.
@@ -49101,7 +49101,7 @@ function requireStorageSharedKeyCredential$1 () {
 	// Licensed under the MIT License.
 	Object.defineProperty(StorageSharedKeyCredential$1, "__esModule", { value: true });
 	StorageSharedKeyCredential$1.StorageSharedKeyCredential = void 0;
-	const node_crypto_1 = require$$0$g;
+	const node_crypto_1 = require$$0$f;
 	const StorageSharedKeyCredentialPolicy_js_1 = requireStorageSharedKeyCredentialPolicy$1();
 	const Credential_js_1 = requireCredential$1();
 	/**
@@ -49236,7 +49236,7 @@ function requireBuffersStream () {
 	// Licensed under the MIT License.
 	Object.defineProperty(BuffersStream, "__esModule", { value: true });
 	BuffersStream.BuffersStream = void 0;
-	const node_stream_1 = require$$0$d;
+	const node_stream_1 = require$$0$c;
 	/**
 	 * This class generates a readable stream from the data in an array of buffers.
 	 */
@@ -50956,7 +50956,7 @@ function requireStorageSharedKeyCredential () {
 	// Licensed under the MIT License.
 	Object.defineProperty(StorageSharedKeyCredential, "__esModule", { value: true });
 	StorageSharedKeyCredential.StorageSharedKeyCredential = void 0;
-	const node_crypto_1 = require$$0$g;
+	const node_crypto_1 = require$$0$f;
 	const StorageSharedKeyCredentialPolicy_js_1 = requireStorageSharedKeyCredentialPolicy();
 	const Credential_js_1 = requireCredential();
 	/**
@@ -51614,7 +51614,7 @@ function requireStorageSharedKeyCredentialPolicyV2$1 () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.storageSharedKeyCredentialPolicyName = void 0;
 		exports.storageSharedKeyCredentialPolicy = storageSharedKeyCredentialPolicy;
-		const node_crypto_1 = require$$0$g;
+		const node_crypto_1 = require$$0$f;
 		const constants_js_1 = requireConstants$3();
 		const utils_common_js_1 = requireUtils_common$1();
 		const SharedKeyComparator_js_1 = requireSharedKeyComparator();
@@ -52024,7 +52024,7 @@ function requireStorageSharedKeyCredentialPolicyV2 () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.storageSharedKeyCredentialPolicyName = void 0;
 		exports.storageSharedKeyCredentialPolicy = storageSharedKeyCredentialPolicy;
-		const node_crypto_1 = require$$0$g;
+		const node_crypto_1 = require$$0$f;
 		const constants_js_1 = requireConstants$4();
 		const utils_common_js_1 = requireUtils_common$2();
 		const SharedKeyComparator_js_1 = requireSharedKeyComparator$1();
@@ -66776,7 +66776,7 @@ function requireUserDelegationKeyCredential () {
 	// Licensed under the MIT License.
 	Object.defineProperty(UserDelegationKeyCredential, "__esModule", { value: true });
 	UserDelegationKeyCredential.UserDelegationKeyCredential = void 0;
-	const node_crypto_1 = require$$0$g;
+	const node_crypto_1 = require$$0$f;
 	/**
 	 * ONLY AVAILABLE IN NODE.JS RUNTIME.
 	 *
@@ -68117,7 +68117,7 @@ function requireRetriableReadableStream () {
 	Object.defineProperty(RetriableReadableStream, "__esModule", { value: true });
 	RetriableReadableStream.RetriableReadableStream = void 0;
 	const abort_controller_1 = /*@__PURE__*/ requireCommonjs$f();
-	const node_stream_1 = require$$0$d;
+	const node_stream_1 = require$$0$c;
 	/**
 	 * ONLY AVAILABLE IN NODE.JS RUNTIME.
 	 *
@@ -69271,7 +69271,7 @@ function requireAvroReadableFromStream () {
 	AvroReadableFromStream.AvroReadableFromStream = void 0;
 	const AvroReadable_js_1 = requireAvroReadable();
 	const abort_controller_1 = /*@__PURE__*/ requireCommonjs$f();
-	const buffer_1 = require$$0$8;
+	const buffer_1 = require$$0$7;
 	const ABORT_ERROR = new abort_controller_1.AbortError("Reading from the avro stream was aborted.");
 	let AvroReadableFromStream$1 = class AvroReadableFromStream extends AvroReadable_js_1.AvroReadable {
 	    _position;
@@ -69387,7 +69387,7 @@ function requireBlobQuickQueryStream () {
 	// Licensed under the MIT License.
 	Object.defineProperty(BlobQuickQueryStream, "__esModule", { value: true });
 	BlobQuickQueryStream.BlobQuickQueryStream = void 0;
-	const node_stream_1 = require$$0$d;
+	const node_stream_1 = require$$0$c;
 	const index_js_1 = requireInternalAvro();
 	/**
 	 * ONLY AVAILABLE IN NODE.JS RUNTIME.
@@ -78191,7 +78191,7 @@ function requireBlobUpload () {
 	const config_1 = requireConfig();
 	const core = __importStar(requireCore$1());
 	const crypto = __importStar(require$$0$5);
-	const stream = __importStar(require$$0$b);
+	const stream = __importStar(require$$0$a);
 	const errors_1 = requireErrors$1();
 	function uploadZipToBlobStorage(authenticatedUploadURL, zipUploadStream) {
 	    return __awaiter(this, void 0, void 0, function* () {
@@ -79522,14 +79522,14 @@ function requireReaddirGlob () {
 	hasRequiredReaddirGlob = 1;
 	readdirGlob_1 = readdirGlob;
 
-	const fs = require$$0$6;
+	const fs$1 = fs;
 	const { EventEmitter } = require$$1$3;
 	const { Minimatch } = requireMinimatch();
 	const { resolve } = path$1;
 
 	function readdir(dir, strict) {
 	  return new Promise((resolve, reject) => {
-	    fs.readdir(dir, {withFileTypes: true} ,(err, files) => {
+	    fs$1.readdir(dir, {withFileTypes: true} ,(err, files) => {
 	      if(err) {
 	        switch (err.code) {
 	          case 'ENOTDIR':      // Not a directory
@@ -79558,7 +79558,7 @@ function requireReaddirGlob () {
 	}
 	function stat(file, followSymlinks) {
 	  return new Promise((resolve, reject) => {
-	    const statFunc = followSymlinks ? fs.stat : fs.lstat;
+	    const statFunc = followSymlinks ? fs$1.stat : fs$1.lstat;
 	    statFunc(file, (err, stats) => {
 	      if(err) {
 	        switch (err.code) {
@@ -85831,7 +85831,7 @@ var hasRequiredPolyfills;
 function requirePolyfills () {
 	if (hasRequiredPolyfills) return polyfills;
 	hasRequiredPolyfills = 1;
-	var constants = require$$0$h;
+	var constants = require$$0$g;
 
 	var origCwd = process.cwd;
 	var cwd = null;
@@ -86195,7 +86195,7 @@ var hasRequiredLegacyStreams;
 function requireLegacyStreams () {
 	if (hasRequiredLegacyStreams) return legacyStreams;
 	hasRequiredLegacyStreams = 1;
-	var Stream = require$$0$b.Stream;
+	var Stream = require$$0$a.Stream;
 
 	legacyStreams = legacy;
 
@@ -86353,12 +86353,12 @@ var hasRequiredGracefulFs;
 function requireGracefulFs () {
 	if (hasRequiredGracefulFs) return gracefulFs;
 	hasRequiredGracefulFs = 1;
-	var fs = require$$0$6;
+	var fs$1 = fs;
 	var polyfills = requirePolyfills();
 	var legacy = requireLegacyStreams();
 	var clone = requireClone();
 
-	var util = require$$0$7;
+	var util = require$$0$6;
 
 	/* istanbul ignore next - node 0.x polyfill */
 	var gracefulQueue;
@@ -86395,18 +86395,18 @@ function requireGracefulFs () {
 	  };
 
 	// Once time initialization
-	if (!fs[gracefulQueue]) {
+	if (!fs$1[gracefulQueue]) {
 	  // This queue can be shared by multiple loaded instances
 	  var queue = commonjsGlobal[gracefulQueue] || [];
-	  publishQueue(fs, queue);
+	  publishQueue(fs$1, queue);
 
 	  // Patch fs.close/closeSync to shared queue version, because we need
 	  // to retry() whenever a close happens *anywhere* in the program.
 	  // This is essential when multiple graceful-fs instances are
 	  // in play at the same time.
-	  fs.close = (function (fs$close) {
+	  fs$1.close = (function (fs$close) {
 	    function close (fd, cb) {
-	      return fs$close.call(fs, fd, function (err) {
+	      return fs$close.call(fs$1, fd, function (err) {
 	        // This function uses the graceful-fs shared queue
 	        if (!err) {
 	          resetQueue();
@@ -86421,12 +86421,12 @@ function requireGracefulFs () {
 	      value: fs$close
 	    });
 	    return close
-	  })(fs.close);
+	  })(fs$1.close);
 
-	  fs.closeSync = (function (fs$closeSync) {
+	  fs$1.closeSync = (function (fs$closeSync) {
 	    function closeSync (fd) {
 	      // This function uses the graceful-fs shared queue
-	      fs$closeSync.apply(fs, arguments);
+	      fs$closeSync.apply(fs$1, arguments);
 	      resetQueue();
 	    }
 
@@ -86434,24 +86434,24 @@ function requireGracefulFs () {
 	      value: fs$closeSync
 	    });
 	    return closeSync
-	  })(fs.closeSync);
+	  })(fs$1.closeSync);
 
 	  if (/\bgfs4\b/i.test(process.env.NODE_DEBUG || '')) {
 	    process.on('exit', function() {
-	      debug(fs[gracefulQueue]);
-	      require$$0$9.equal(fs[gracefulQueue].length, 0);
+	      debug(fs$1[gracefulQueue]);
+	      require$$0$8.equal(fs$1[gracefulQueue].length, 0);
 	    });
 	  }
 	}
 
 	if (!commonjsGlobal[gracefulQueue]) {
-	  publishQueue(commonjsGlobal, fs[gracefulQueue]);
+	  publishQueue(commonjsGlobal, fs$1[gracefulQueue]);
 	}
 
-	gracefulFs = patch(clone(fs));
-	if (process.env.TEST_GRACEFUL_FS_GLOBAL_PATCH && !fs.__patched) {
-	    gracefulFs = patch(fs);
-	    fs.__patched = true;
+	gracefulFs = patch(clone(fs$1));
+	if (process.env.TEST_GRACEFUL_FS_GLOBAL_PATCH && !fs$1.__patched) {
+	    gracefulFs = patch(fs$1);
+	    fs$1.__patched = true;
 	}
 
 	function patch (fs) {
@@ -86725,7 +86725,7 @@ function requireGracefulFs () {
 
 	function enqueue (elem) {
 	  debug('ENQUEUE', elem[0].name, elem[1]);
-	  fs[gracefulQueue].push(elem);
+	  fs$1[gracefulQueue].push(elem);
 	  retry();
 	}
 
@@ -86737,12 +86737,12 @@ function requireGracefulFs () {
 	// delay between attempts so that we'll retry these jobs sooner
 	function resetQueue () {
 	  var now = Date.now();
-	  for (var i = 0; i < fs[gracefulQueue].length; ++i) {
+	  for (var i = 0; i < fs$1[gracefulQueue].length; ++i) {
 	    // entries that are only a length of 2 are from an older version, don't
 	    // bother modifying those since they'll be retried anyway.
-	    if (fs[gracefulQueue][i].length > 2) {
-	      fs[gracefulQueue][i][3] = now; // startTime
-	      fs[gracefulQueue][i][4] = now; // lastTime
+	    if (fs$1[gracefulQueue][i].length > 2) {
+	      fs$1[gracefulQueue][i][3] = now; // startTime
+	      fs$1[gracefulQueue][i][4] = now; // lastTime
 	    }
 	  }
 	  // call retry to make sure we're actively processing the queue
@@ -86754,10 +86754,10 @@ function requireGracefulFs () {
 	  clearTimeout(retryTimer);
 	  retryTimer = undefined;
 
-	  if (fs[gracefulQueue].length === 0)
+	  if (fs$1[gracefulQueue].length === 0)
 	    return
 
-	  var elem = fs[gracefulQueue].shift();
+	  var elem = fs$1[gracefulQueue].shift();
 	  var fn = elem[0];
 	  var args = elem[1];
 	  // these items may be unset if they were added by an older graceful-fs
@@ -86792,7 +86792,7 @@ function requireGracefulFs () {
 	    } else {
 	      // if we can't do this job yet, push it to the end of the queue
 	      // and let the next iteration check again
-	      fs[gracefulQueue].push(elem);
+	      fs$1[gracefulQueue].push(elem);
 	    }
 	  }
 
@@ -86915,7 +86915,7 @@ var hasRequiredStream$1;
 function requireStream$1 () {
 	if (hasRequiredStream$1) return stream$1;
 	hasRequiredStream$1 = 1;
-	stream$1 = require$$0$b;
+	stream$1 = require$$0$a;
 	return stream$1;
 }
 
@@ -86929,7 +86929,7 @@ function requireSafeBuffer$1 () {
 	if (hasRequiredSafeBuffer$1) return safeBuffer$1.exports;
 	hasRequiredSafeBuffer$1 = 1;
 	(function (module, exports) {
-		var buffer = require$$0$8;
+		var buffer = require$$0$7;
 		var Buffer = buffer.Buffer;
 
 		// alternative to using Object.keys for old browsers
@@ -87103,7 +87103,7 @@ function requireUtil$3 () {
 	}
 	util$3.isPrimitive = isPrimitive;
 
-	util$3.isBuffer = require$$0$8.Buffer.isBuffer;
+	util$3.isBuffer = require$$0$7.Buffer.isBuffer;
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -87179,7 +87179,7 @@ function requireBufferList () {
 		function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 		var Buffer = requireSafeBuffer$1().Buffer;
-		var util = require$$0$7;
+		var util = require$$0$6;
 
 		function copyBuffer(src, target, offset) {
 		  src.copy(target, offset);
@@ -87358,7 +87358,7 @@ function requireNode () {
 	 * For Node.js, simply re-export the core `util.deprecate` function.
 	 */
 
-	node = require$$0$7.deprecate;
+	node = require$$0$6.deprecate;
 	return node;
 }
 
@@ -88473,7 +88473,7 @@ function require_stream_readable () {
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var debugUtil = require$$0$7;
+	var debugUtil = require$$0$6;
 	var debug = void 0;
 	if (debugUtil && debugUtil.debuglog) {
 	  debug = debugUtil.debuglog('stream');
@@ -89619,7 +89619,7 @@ function requireReadable$1 () {
 	if (hasRequiredReadable$1) return readable$1.exports;
 	hasRequiredReadable$1 = 1;
 	(function (module, exports) {
-		var Stream = require$$0$b;
+		var Stream = require$$0$a;
 		if (process.env.READABLE_STREAM === 'disable' && Stream) {
 		  module.exports = Stream;
 		  exports = module.exports = Stream.Readable;
@@ -89658,7 +89658,7 @@ var hasRequiredLazystream;
 function requireLazystream () {
 	if (hasRequiredLazystream) return lazystream;
 	hasRequiredLazystream = 1;
-	var util = require$$0$7;
+	var util = require$$0$6;
 	var PassThrough = requirePassthrough$1();
 
 	lazystream = {
@@ -92942,7 +92942,7 @@ function requireUtil$2 () {
 	hasRequiredUtil$2 = 1;
 	(function (module) {
 
-		const bufferModule = require$$0$8;
+		const bufferModule = require$$0$7;
 		const { format, inspect } = requireInspect();
 		const {
 		  codes: { ERR_INVALID_ARG_TYPE }
@@ -94736,7 +94736,7 @@ function requireBuffer_list () {
 	hasRequiredBuffer_list = 1;
 
 	const { StringPrototypeSlice, SymbolIterator, TypedArrayPrototypeSet, Uint8Array } = requirePrimordials();
-	const { Buffer } = require$$0$8;
+	const { Buffer } = require$$0$7;
 	const { inspect } = requireUtil$2();
 	buffer_list = class BufferList {
 	  constructor() {
@@ -94953,7 +94953,7 @@ function requireSafeBuffer () {
 	hasRequiredSafeBuffer = 1;
 	(function (module, exports) {
 		/* eslint-disable node/no-deprecated-api */
-		var buffer = require$$0$8;
+		var buffer = require$$0$7;
 		var Buffer = buffer.Buffer;
 
 		// alternative to using Object.keys for old browsers
@@ -95315,7 +95315,7 @@ function requireFrom () {
 	/* replacement end */
 
 	const { PromisePrototypeThen, SymbolAsyncIterator, SymbolIterator } = requirePrimordials();
-	const { Buffer } = require$$0$8;
+	const { Buffer } = require$$0$7;
 	const { ERR_INVALID_ARG_TYPE, ERR_STREAM_NULL_VALUES } = requireErrors().codes;
 	function from(Readable, iterable, opts) {
 	  let iterator;
@@ -95438,7 +95438,7 @@ function requireReadable () {
 	Readable.ReadableState = ReadableState;
 	const { EventEmitter: EE } = require$$1$3;
 	const { Stream, prependListener } = requireLegacy();
-	const { Buffer } = require$$0$8;
+	const { Buffer } = require$$0$7;
 	const { addAbortSignal } = requireAddAbortSignal();
 	const eos = requireEndOfStream();
 	let debug = requireUtil$2().debuglog('stream', (fn) => {
@@ -96712,7 +96712,7 @@ function requireWritable () {
 	Writable.WritableState = WritableState;
 	const { EventEmitter: EE } = require$$1$3;
 	const Stream = requireLegacy().Stream;
-	const { Buffer } = require$$0$8;
+	const { Buffer } = require$$0$7;
 	const destroyImpl = requireDestroy();
 	const { addAbortSignal } = requireAddAbortSignal();
 	const { getHighWaterMark, getDefaultHighWaterMark } = requireState();
@@ -97496,7 +97496,7 @@ function requireDuplexify () {
 
 	/* replacement end */
 
-	;	const bufferModule = require$$0$8;
+	;	const bufferModule = require$$0$7;
 	const {
 	  isReadable,
 	  isWritable,
@@ -99346,7 +99346,7 @@ function requireStream () {
 
 	/* replacement start */
 
-	const { Buffer } = require$$0$8;
+	const { Buffer } = require$$0$7;
 
 	/* replacement end */
 
@@ -99475,7 +99475,7 @@ function requireOurs () {
 	hasRequiredOurs = 1;
 	(function (module) {
 
-		const Stream = require$$0$b;
+		const Stream = require$$0$a;
 		if (Stream && process.env.READABLE_STREAM === 'disable') {
 		  const promises = Stream.promises;
 
@@ -104625,8 +104625,8 @@ function requireCommonjs$2 () {
 		        stdout: null,
 		        stderr: null,
 		    };
-		const node_events_1 = require$$0$c;
-		const node_stream_1 = __importDefault(require$$0$d);
+		const node_events_1 = require$$0$b;
+		const node_stream_1 = __importDefault(require$$0$c);
 		const node_string_decoder_1 = require$$2$9;
 		/**
 		 * Return true if the argument is a Minipass stream, Node stream, or something
@@ -105678,7 +105678,7 @@ function requireCommonjs$1 () {
 	const lru_cache_1 = /*@__PURE__*/ requireCommonjs$3();
 	const node_path_1 = require$$1$b;
 	const node_url_1 = require$$2$a;
-	const fs_1 = require$$0$6;
+	const fs_1 = fs;
 	const actualFS = __importStar(require$$1$a);
 	const realpathSync = fs_1.realpathSync.native;
 	// TODO: test perf of fs/promises realpath vs realpathCB,
@@ -109332,7 +109332,7 @@ function requireArchiverUtils () {
 	var normalizePath = requireNormalizePath();
 	var defaults = requireDefaults();
 
-	require$$0$b.Stream;
+	require$$0$a.Stream;
 	var PassThrough = requireOurs().PassThrough;
 
 	var utils = archiverUtils.exports = {};
@@ -109492,7 +109492,7 @@ function requireError () {
 	if (hasRequiredError) return error.exports;
 	hasRequiredError = 1;
 	(function (module, exports) {
-		var util = require$$0$7;
+		var util = require$$0$6;
 
 		const ERROR_CODES = {
 		  'ABORTED': 'archive was aborted',
@@ -109542,13 +109542,13 @@ var hasRequiredCore;
 function requireCore () {
 	if (hasRequiredCore) return core;
 	hasRequiredCore = 1;
-	var fs = require$$0$6;
+	var fs$1 = fs;
 	var glob = requireReaddirGlob();
 	var async = require$$2$1;
 	var path = path$1;
 	var util = requireArchiverUtils();
 
-	var inherits = require$$0$7.inherits;
+	var inherits = require$$0$6.inherits;
 	var ArchiverError = requireError();
 	var Transform = requireOurs().Transform;
 
@@ -109645,7 +109645,7 @@ function requireCore () {
 	  task.data = data;
 	  this._entriesCount++;
 
-	  if (data.stats && data.stats instanceof fs.Stats) {
+	  if (data.stats && data.stats instanceof fs$1.Stats) {
 	    task = this._updateQueueTaskWithStats(task, data.stats);
 	    if (task) {
 	      if (data.stats.size) {
@@ -109956,7 +109956,7 @@ function requireCore () {
 	    return;
 	  }
 
-	  fs.lstat(task.filepath, function(err, stats) {
+	  fs$1.lstat(task.filepath, function(err, stats) {
 	    if (this._state.aborted) {
 	      setImmediate(callback);
 	      return;
@@ -110036,7 +110036,7 @@ function requireCore () {
 	    task.data.sourceType = 'buffer';
 	    task.source = Buffer.concat([]);
 	  } else if (stats.isSymbolicLink() && this._moduleSupports('symlink')) {
-	    var linkPath = fs.readlinkSync(task.filepath);
+	    var linkPath = fs$1.readlinkSync(task.filepath);
 	    var dirName = path.dirname(task.filepath);
 	    task.data.type = 'symlink';
 	    task.data.linkname = path.relative(dirName, path.resolve(dirName, linkPath));
@@ -110897,7 +110897,7 @@ var hasRequiredZipArchiveEntry;
 function requireZipArchiveEntry () {
 	if (hasRequiredZipArchiveEntry) return zipArchiveEntry.exports;
 	hasRequiredZipArchiveEntry = 1;
-	var inherits = require$$0$7.inherits;
+	var inherits = require$$0$6.inherits;
 	var normalizePath = requireNormalizePath();
 
 	var ArchiveEntry = requireArchiveEntry();
@@ -111323,7 +111323,7 @@ var hasRequiredUtil;
 function requireUtil () {
 	if (hasRequiredUtil) return util.exports;
 	hasRequiredUtil = 1;
-	require$$0$b.Stream;
+	require$$0$a.Stream;
 	var PassThrough = requireOurs().PassThrough;
 	var isStream = requireIsStream();
 
@@ -111359,7 +111359,7 @@ var hasRequiredArchiveOutputStream;
 function requireArchiveOutputStream () {
 	if (hasRequiredArchiveOutputStream) return archiveOutputStream.exports;
 	hasRequiredArchiveOutputStream = 1;
-	var inherits = require$$0$7.inherits;
+	var inherits = require$$0$6.inherits;
 	var isStream = requireIsStream();
 	var Transform = requireOurs().Transform;
 
@@ -111753,7 +111753,7 @@ var hasRequiredZipArchiveOutputStream;
 function requireZipArchiveOutputStream () {
 	if (hasRequiredZipArchiveOutputStream) return zipArchiveOutputStream.exports;
 	hasRequiredZipArchiveOutputStream = 1;
-	var inherits = require$$0$7.inherits;
+	var inherits = require$$0$6.inherits;
 	var crc32 = requireCrc32();
 	var {CRC32Stream} = requireLib$1();
 	var {DeflateCRC32Stream} = requireLib$1();
@@ -112222,7 +112222,7 @@ var hasRequiredZipStream;
 function requireZipStream () {
 	if (hasRequiredZipStream) return zipStream.exports;
 	hasRequiredZipStream = 1;
-	var inherits = require$$0$7.inherits;
+	var inherits = require$$0$6.inherits;
 
 	var ZipArchiveOutputStream = requireCompressCommons().ZipArchiveOutputStream;
 	var ZipArchiveEntry = requireCompressCommons().ZipArchiveEntry;
@@ -115833,7 +115833,7 @@ var hasRequiredJson;
 function requireJson () {
 	if (hasRequiredJson) return json;
 	hasRequiredJson = 1;
-	var inherits = require$$0$7.inherits;
+	var inherits = require$$0$6.inherits;
 	var Transform = requireOurs().Transform;
 
 	var crc32 = requireDist();
@@ -116073,7 +116073,7 @@ function requireZip () {
 		};
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.createZipUploadStream = exports.ZipUploadStream = exports.DEFAULT_COMPRESSION_LEVEL = void 0;
-		const stream = __importStar(require$$0$b);
+		const stream = __importStar(require$$0$a);
 		const promises_1 = require$$1$c;
 		const archiver = __importStar(requireArchiver());
 		const core = __importStar(requireCore$1());
@@ -116284,7 +116284,7 @@ function requireContext () {
 	hasRequiredContext = 1;
 	Object.defineProperty(context, "__esModule", { value: true });
 	context.Context = void 0;
-	const fs_1 = require$$0$6;
+	const fs_1 = fs;
 	const os_1 = require$$0$4;
 	class Context {
 	    /**
@@ -194897,7 +194897,7 @@ function requireTr46 () {
 	if (hasRequiredTr46) return tr46;
 	hasRequiredTr46 = 1;
 
-	var punycode = require$$0$i;
+	var punycode = require$$0$h;
 	var mappingTable = require$$1;
 
 	var PROCESSING_OPTIONS = {
@@ -195097,7 +195097,7 @@ function requireUrlStateMachine () {
 	if (hasRequiredUrlStateMachine) return urlStateMachine.exports;
 	hasRequiredUrlStateMachine = 1;
 	(function (module) {
-		const punycode = require$$0$i;
+		const punycode = require$$0$h;
 		const tr46 = requireTr46();
 
 		const specialSchemes = {
@@ -196831,7 +196831,7 @@ var whatwgUrl = /*@__PURE__*/getDefaultExportFromCjs(publicApiExports);
 // Based on https://github.com/tmpvar/jsdom/blob/aa85b2abf07766ff7bf5c1f6daafb3726f2f2db5/lib/jsdom/living/blob.js
 
 // fix for "Readable" isn't a named export issue
-const Readable = require$$0$b.Readable;
+const Readable = require$$0$a.Readable;
 
 const BUFFER = Symbol('buffer');
 const TYPE = Symbol('type');
@@ -196983,7 +196983,7 @@ try {
 const INTERNALS = Symbol('Body internals');
 
 // fix an issue where "PassThrough" isn't a named export for node <10
-const PassThrough = require$$0$b.PassThrough;
+const PassThrough = require$$0$a.PassThrough;
 
 /**
  * Body mixin
@@ -197016,7 +197016,7 @@ function Body(body) {
 	} else if (ArrayBuffer.isView(body)) {
 		// body is ArrayBufferView
 		body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-	} else if (body instanceof require$$0$b) ; else {
+	} else if (body instanceof require$$0$a) ; else {
 		// none of the above
 		// coerce to string then buffer
 		body = Buffer.from(String(body));
@@ -197029,7 +197029,7 @@ function Body(body) {
 	this.size = size;
 	this.timeout = timeout;
 
-	if (body instanceof require$$0$b) {
+	if (body instanceof require$$0$a) {
 		body.on('error', function (err) {
 			const error = err.name === 'AbortError' ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, 'system', err);
 			_this[INTERNALS].error = error;
@@ -197185,7 +197185,7 @@ function consumeBody() {
 	}
 
 	// istanbul ignore if: should never happen
-	if (!(body instanceof require$$0$b)) {
+	if (!(body instanceof require$$0$a)) {
 		return Body.Promise.resolve(Buffer.alloc(0));
 	}
 
@@ -197358,7 +197358,7 @@ function clone(instance) {
 
 	// check that body is a stream and not form-data object
 	// note: we can't clone the form-data object without having it as a dependency
-	if (body instanceof require$$0$b && typeof body.getBoundary !== 'function') {
+	if (body instanceof require$$0$a && typeof body.getBoundary !== 'function') {
 		// tee instance body
 		p1 = new PassThrough();
 		p2 = new PassThrough();
@@ -197406,7 +197406,7 @@ function extractContentType(body) {
 	} else if (typeof body.getBoundary === 'function') {
 		// detect form data input from form-data module
 		return `multipart/form-data;boundary=${body.getBoundary()}`;
-	} else if (body instanceof require$$0$b) {
+	} else if (body instanceof require$$0$a) {
 		// body is stream
 		// can't really do much about this
 		return null;
@@ -197985,7 +197985,7 @@ function parseURL(urlStr) {
 	return parse_url(urlStr);
 }
 
-const streamDestructionSupported = 'destroy' in require$$0$b.Readable.prototype;
+const streamDestructionSupported = 'destroy' in require$$0$a.Readable.prototype;
 
 /**
  * Check if a value is an instance of Request.
@@ -198148,7 +198148,7 @@ function getNodeRequestOptions(request) {
 		throw new TypeError('Only HTTP(S) protocols are supported');
 	}
 
-	if (request.signal && request.body instanceof require$$0$b.Readable && !streamDestructionSupported) {
+	if (request.signal && request.body instanceof require$$0$a.Readable && !streamDestructionSupported) {
 		throw new Error('Cancellation of streamed requests with AbortSignal is not supported in node < 8');
 	}
 
@@ -198221,7 +198221,7 @@ AbortError.prototype.name = 'AbortError';
 const URL$1$1 = Url.URL || whatwgUrl.URL;
 
 // fix an issue where "PassThrough", "resolve" aren't a named export for node <10
-const PassThrough$1 = require$$0$b.PassThrough;
+const PassThrough$1 = require$$0$a.PassThrough;
 
 const isDomainOrSubdomain = function isDomainOrSubdomain(destination, original) {
 	const orig = new URL$1$1(original).hostname;
@@ -198274,7 +198274,7 @@ function fetch(url, opts) {
 		const abort = function abort() {
 			let error = new AbortError('The user aborted a request.');
 			reject(error);
-			if (request.body && request.body instanceof require$$0$b.Readable) {
+			if (request.body && request.body instanceof require$$0$a.Readable) {
 				destroyStream(request.body, error);
 			}
 			if (!response || !response.body) return;
@@ -202224,7 +202224,7 @@ function requireBinary () {
 		var EventEmitter = require$$1$3.EventEmitter;
 		var Buffers = requireBuffers();
 		var Vars = requireVars();
-		var Stream = require$$0$b.Stream;
+		var Stream = require$$0$a.Stream;
 
 		exports = module.exports = function (bufOrEm, eventName) {
 		    if (Buffer.isBuffer(bufOrEm)) {
@@ -202626,8 +202626,8 @@ var hasRequiredMatcherStream;
 function requireMatcherStream () {
 	if (hasRequiredMatcherStream) return matcherStream;
 	hasRequiredMatcherStream = 1;
-	var Transform = require$$0$b.Transform;
-	var util = require$$0$7;
+	var Transform = require$$0$a.Transform;
+	var util = require$$0$6;
 
 	function MatcherStream(patternDesc, matchFn) {
 	    if (!(this instanceof MatcherStream)) {
@@ -202730,8 +202730,8 @@ function requireEntry () {
 	if (hasRequiredEntry) return entry;
 	hasRequiredEntry = 1;
 
-	var stream = require$$0$b;
-	var inherits = require$$0$7.inherits;
+	var stream = require$$0$a;
+	var inherits = require$$0$6.inherits;
 
 	function Entry() {
 	    if (!(this instanceof Entry)) {
@@ -202763,8 +202763,8 @@ function requireUnzipStream () {
 	hasRequiredUnzipStream = 1;
 
 	var binary = requireBinary();
-	var stream = require$$0$b;
-	var util = require$$0$7;
+	var stream = require$$0$a;
+	var util = require$$0$6;
 	var zlib$1 = zlib;
 	var MatcherStream = requireMatcherStream();
 	var Entry = requireEntry();
@@ -203509,8 +203509,8 @@ var hasRequiredParserStream;
 function requireParserStream () {
 	if (hasRequiredParserStream) return parserStream;
 	hasRequiredParserStream = 1;
-	var Transform = require$$0$b.Transform;
-	var util = require$$0$7;
+	var Transform = require$$0$a.Transform;
+	var util = require$$0$6;
 	var UnzipStream = requireUnzipStream();
 
 	function ParserStream(opts) {
@@ -203568,7 +203568,7 @@ function requireMkdirp () {
 	if (hasRequiredMkdirp) return mkdirp;
 	hasRequiredMkdirp = 1;
 	var path = path$1;
-	var fs = require$$0$6;
+	var fs$1 = fs;
 	var _0777 = parseInt('0777', 8);
 
 	mkdirp = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
@@ -203583,7 +203583,7 @@ function requireMkdirp () {
 	    }
 	    
 	    var mode = opts.mode;
-	    var xfs = opts.fs || fs;
+	    var xfs = opts.fs || fs$1;
 	    
 	    if (mode === undefined) {
 	        mode = _0777;
@@ -203630,7 +203630,7 @@ function requireMkdirp () {
 	    }
 	    
 	    var mode = opts.mode;
-	    var xfs = opts.fs || fs;
+	    var xfs = opts.fs || fs$1;
 	    
 	    if (mode === undefined) {
 	        mode = _0777;
@@ -203678,11 +203678,11 @@ var hasRequiredExtract;
 function requireExtract () {
 	if (hasRequiredExtract) return extract;
 	hasRequiredExtract = 1;
-	var fs = require$$0$6;
+	var fs$1 = fs;
 	var path = path$1;
-	var util = require$$0$7;
+	var util = require$$0$6;
 	var mkdirp = requireMkdirp();
-	var Transform = require$$0$b.Transform;
+	var Transform = require$$0$a.Transform;
 	var UnzipStream = requireUnzipStream();
 
 	function Extract (opts) {
@@ -203735,7 +203735,7 @@ function requireExtract () {
 	    this.unfinishedEntries++;
 
 	    var writeFileFn = function() {
-	        var pipedStream = fs.createWriteStream(destPath);
+	        var pipedStream = fs$1.createWriteStream(destPath);
 
 	        pipedStream.on('close', function() {
 	            self.unfinishedEntries--;
@@ -203833,7 +203833,7 @@ function requireDownloadArtifact () {
 	downloadArtifact.downloadArtifactInternal = downloadArtifact.downloadArtifactPublic = downloadArtifact.streamExtractExternal = void 0;
 	const promises_1 = __importDefault(require$$1$c);
 	const crypto = __importStar(require$$0$5);
-	const stream = __importStar(require$$0$b);
+	const stream = __importStar(require$$0$a);
 	const github = __importStar(requireGithub());
 	const core = __importStar(requireCore$1());
 	const httpClient = __importStar(requireLib$2());
@@ -206340,7 +206340,7 @@ function getActiveComposeFilePath() {
     const modifiedPath = path$1.join(baseDir, 'docker-compose.yml');
 
     // Return modified file if it exists, otherwise return base file
-    if (require$$0$6.existsSync(modifiedPath)) {
+    if (fs.existsSync(modifiedPath)) {
         return modifiedPath;
     }
 
@@ -206359,6 +206359,18 @@ function getActiveComposeFilePath() {
  */
 function getDefaultProjectName() {
     return 'apitest';
+}
+
+/**
+ * Creates multiple directories recursively, ensuring parent directories exist.
+ * This is a convenience wrapper around fs.mkdirSync with recursive option.
+ * 
+ * @param {...string} dirs - Directory paths to create
+ */
+function ensureDirectories(...dirs) {
+    for (const dir of dirs) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
 }
 
 /**
@@ -206417,7 +206429,7 @@ async function collectAndUploadLogs(config) {
 
     core$1.info(`Collecting logs for config: ${JSON.stringify(config)}`);
 
-    // TODO: We hard-code localstack here because it's the only additional service we support for now, but we should make this dynamic in the future
+    // Include localstack as an additional service for log collection
     const artifactsDir = createArtifactsDirectory();
     const logFiles = await collectDataverseLogs(config, artifactsDir, ['localstack']);
 
@@ -206435,61 +206447,47 @@ async function collectAndUploadLogs(config) {
  */
 function createArtifactsDirectory() {
     const artifactsDir = path$1.join(process.cwd(), 'artifacts');
-    require$$0$6.mkdirSync(artifactsDir, { recursive: true });
+    ensureDirectories(artifactsDir);
     return artifactsDir;
 }
 
 /**
- * Collects Dataverse server logs from the container
+ * Collects logs from Docker Compose services
  * @param {PostConfig} config - Post-run configuration
  * @param {string} artifactsDir - Directory to store artifacts
+ * @param {string[]} additionalServices - Additional services beyond core services
  * @returns {Promise<string[]>} Paths to the collected log files
  */
 async function collectDataverseLogs(config, artifactsDir, additionalServices = []) {
-    // Collect logs from all services to debug issues
+    const coreServices = ['dataverse', 'postgres', 'solr', 'smtp'];
+    const services = [...coreServices, ...additionalServices];
+
+    core$1.info('Collecting logs via Docker Compose...');
     const logFiles = [];
 
-    // Collect logs from dataverse
-    const logFile = path$1.join(artifactsDir, 'dataverse-server.log');
-    logFiles.push(logFile);
-    core$1.info('Collecting logs via Docker Compose...');
-    await collectComposeServiceLogs(config, logFile, 'dataverse');
+    // Collect logs from all services
+    for (const service of services) {
+        const logFileName = service === 'dataverse' ? 'dataverse-server.log' : `${service}.log`;
+        const logFile = path$1.join(artifactsDir, logFileName);
+        logFiles.push(logFile);
+        await collectComposeServiceLogs(config, logFile, service);
+    }
 
-    // Collect logs from postgres
-    const postgresLogFile = path$1.join(artifactsDir, 'postgres.log');
-    logFiles.push(postgresLogFile);
-    await collectComposeServiceLogs(config, postgresLogFile, 'postgres');
-
-    // Collect logs from solr
-    const solrLogFile = path$1.join(artifactsDir, 'solr.log');
-    logFiles.push(solrLogFile);
-    await collectComposeServiceLogs(config, solrLogFile, 'solr');
-
-    // Collect logs from smtp
-    const smtpLogFile = path$1.join(artifactsDir, 'smtp.log');
-    logFiles.push(smtpLogFile);
-    await collectComposeServiceLogs(config, smtpLogFile, 'smtp');
-
-    // Modified compose file
-    const modifiedComposeFile = path$1.join(artifactsDir, 'docker-compose.yml');
-    const modifiedComposeFileContent = require$$0$6.readFileSync(modifiedComposeFile, 'utf8');
-    require$$0$6.writeFileSync(modifiedComposeFile, modifiedComposeFileContent, 'utf8');
-    logFiles.push(modifiedComposeFile);
-
-    // Collect logs from additional services
-    if (additionalServices.includes('localstack')) {
-        const localstackLogFile = path$1.join(artifactsDir, 'localstack.log');
-        logFiles.push(localstackLogFile);
-        await collectComposeServiceLogs(config, localstackLogFile, 'localstack');
+    // Copy the compose file to artifacts for debugging
+    const composeFile = path$1.join(artifactsDir, 'docker-compose.yml');
+    if (fs.existsSync(config.composeFile)) {
+        fs.copyFileSync(config.composeFile, composeFile);
+        logFiles.push(composeFile);
     }
 
     return logFiles;
 }
 
 /**
- * Collects logs from the Dataverse service via Docker Compose
+ * Collects logs from a specific Docker Compose service
  * @param {PostConfig} config - Post-run configuration
  * @param {string} logFile - Path where to save the log file
+ * @param {string} serviceName - Name of the service to collect logs from
  */
 async function collectComposeServiceLogs(config, logFile, serviceName) {
     try {
@@ -206501,14 +206499,14 @@ async function collectComposeServiceLogs(config, logFile, serviceName) {
         });
 
         if (output) {
-            require$$0$6.writeFileSync(logFile, output, 'utf8');
+            fs.writeFileSync(logFile, output, 'utf8');
             core$1.info('✅ Collected logs via Docker Compose');
         } else {
             core$1.warning(`No logs collected from ${serviceName} service`);
         }
     } catch (error) {
         core$1.debug(`Could not collect compose logs: ${error.message}`);
-        require$$0$6.writeFileSync(logFile, `Log collection failed: ${error.message}\n`, 'utf8');
+        fs.writeFileSync(logFile, `Log collection failed: ${error.message}\n`, 'utf8');
     }
 }
 
@@ -206519,7 +206517,7 @@ async function collectComposeServiceLogs(config, logFile, serviceName) {
  */
 async function uploadLogArtifacts(logFiles, artifactsDir) {
     try {
-        const existingFiles = logFiles.filter(file => require$$0$6.existsSync(file));
+        const existingFiles = logFiles.filter(file => fs.existsSync(file));
 
         if (existingFiles.length === 0) {
             core$1.warning('No log files to upload');
