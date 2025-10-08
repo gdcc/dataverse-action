@@ -104,7 +104,7 @@ Currently available presets:
 
 ### Docker Compose Modification
 
-When storage driver presets or custom JVM options are specified, the action automatically:
+When presets or custom JVM options are specified, the action automatically:
 
 1. Parses the base `docker-compose.yml` file using the `js-yaml` library
 2. Generates JVM options from the selected presets
@@ -113,11 +113,11 @@ When storage driver presets or custom JVM options are specified, the action auto
 5. Writes a new compose file with the prefix `docker-compose.yml`
 6. Uses the modified compose file to start the Dataverse stack
 
-This approach ensures that the YAML structure and formatting are preserved while making targeted modifications to the environment configuration. The original `docker-compose.yml` file remains unchanged.
+This approach ensures that the YAML structure and formatting are preserved while making targeted modifications to the environment configuration.
 
-### Storage Driver Presets
+### Contributing Presets
 
-Storage driver presets are defined in `src/presets.js` and provide pre-configured JVM options for common storage backends. Each preset is a function that generates the appropriate JVM system properties based on the provided configuration options.
+Presets are defined in `src/presets.js` and provide pre-configured JVM options for common operations, such as configuring a LocalStack S3 storage driver. Each preset is a function that generates the appropriate JVM system properties based on the provided configuration options.
 
 To add a new preset, define a function in `src/presets.js` and register it in the `PRESET_REGISTRY` object:
 
@@ -135,6 +135,8 @@ export const PRESET_REGISTRY = {
     custom: myCustomPreset
 };
 ```
+
+Finally, open a pull request to the `main` branch with your changes.
 
 ## Development
 
