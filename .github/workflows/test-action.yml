@@ -15,7 +15,8 @@ jobs:
         uses: ./
         with:
           postgresql_version: 15
-          s3_storage_driver: localstack
+          presets: localstack
+          min_part_size_mb: 10
           jvm_options: |
             dataverse.api.signature-secret=eikaizieb2Oghaex
             dataverse.pid.datacite.rest-api-url=https://api.datacite.org
