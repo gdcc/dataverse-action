@@ -17,9 +17,6 @@ jobs:
           postgresql_version: 15
           presets: localstack
           min_part_size_mb: 10
-          jvm_options: |
-            dataverse.api.signature-secret=eikaizieb2Oghaex
-            dataverse.pid.datacite.rest-api-url=https://api.datacite.org
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
