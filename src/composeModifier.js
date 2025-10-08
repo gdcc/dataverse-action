@@ -143,12 +143,15 @@ export function modifyComposeFile(composeFilePath, options) {
     const outputFilePath = path.join(dirname, `modified-${basename}`);
 
     // Write the modified compose file
-    const modifiedContent = yaml.dump(composeConfig, {
+    let modifiedContent = yaml.dump(composeConfig, {
         indent: 2,
         lineWidth: -1, // Disable line wrapping
         noRefs: true,  // Don't use anchors/aliases
-        sortKeys: false // Preserve key order
+        sortKeys: false // Preserve key order,
     });
+
+    // We need to replace "\$" with "$"
+    modifiedContent = modifiedContent.replace(/\$\$/g, '$');
 
     fs.writeFileSync(outputFilePath, modifiedContent, 'utf8');
 

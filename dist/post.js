@@ -206470,6 +206470,11 @@ async function collectDataverseLogs(config, artifactsDir, additionalServices = [
     logFiles.push(smtpLogFile);
     await collectComposeServiceLogs(config, smtpLogFile, 'smtp');
 
+    // Modified compose file
+    const modifiedComposeFile = path$1.join(artifactsDir, 'modified-docker-compose.yml');
+    logFiles.push(modifiedComposeFile);
+    await collectComposeServiceLogs(config, modifiedComposeFile, 'dataverse');
+
     // Collect logs from additional services
     if (additionalServices.includes('localstack')) {
         const localstackLogFile = path$1.join(artifactsDir, 'localstack.log');
