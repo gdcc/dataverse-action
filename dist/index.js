@@ -31315,11 +31315,6 @@ function modifyComposeFile(composeFilePath, options) {
         service.environment.JVM_ARGS = mergeJvmArgs(currentJvmArgs, allJvmOptions);
     }
 
-    // Generate output file path
-    const dirname = path.dirname(composeFilePath);
-    const basename = path.basename(composeFilePath, '.yml');
-    const outputFilePath = path.join(dirname, `${basename}-modified.yml`);
-
     // Write the modified compose file
     let modifiedContent = jsYaml.dump(composeConfig, {
         indent: 2,
@@ -31331,9 +31326,9 @@ function modifyComposeFile(composeFilePath, options) {
     // We need to replace "\$" with "$"
     modifiedContent = modifiedContent.replace(/\$\$/g, '$');
 
-    fs.writeFileSync(outputFilePath, modifiedContent, 'utf8');
+    fs.writeFileSync(composeFilePath, modifiedContent, 'utf8');
 
-    return outputFilePath;
+    return composeFilePath;
 }
 
 const __filename = fileURLToPath(import.meta.url);
