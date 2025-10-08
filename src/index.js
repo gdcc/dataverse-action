@@ -187,6 +187,7 @@ async function bootstrapDataverse(config, composeConfig) {
     const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
     const dvDir = path.join(runnerTemp, 'dv');
     fs.mkdirSync(dvDir, { recursive: true });
+    fs.chmodSync(dvDir, 0o777);
 
     core.info(`Bootstrap directory created at: ${dvDir}`);
 
