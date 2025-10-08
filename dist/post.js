@@ -1,8 +1,7 @@
-import Url, { fileURLToPath } from 'url';
-import path$1, { dirname } from 'path';
 import require$$0$4 from 'os';
 import require$$0$5 from 'crypto';
 import require$$0$6 from 'fs';
+import path$1, { dirname } from 'path';
 import require$$2$3 from 'http';
 import require$$1$2 from 'https';
 import require$$0$a from 'net';
@@ -22,6 +21,7 @@ import require$$2$4 from 'perf_hooks';
 import require$$5$1 from 'util/types';
 import require$$4$1 from 'async_hooks';
 import require$$1$6 from 'console';
+import Url, { fileURLToPath } from 'url';
 import zlib from 'zlib';
 import require$$6$1 from 'string_decoder';
 import require$$0$f from 'diagnostics_channel';
@@ -206313,6 +206313,55 @@ const __dirname = dirname(__filename);
 const __root = path$1.dirname(__dirname);
 
 /**
+ * Gets the base compose file path (original, unmodified).
+ * 
+ * This function returns the path to the original docker-compose.yml file
+ * that ships with the action. This file serves as the template for creating
+ * modified versions with preset JVM options.
+ * 
+ * @returns {string} Path to the base docker-compose.yml file
+ */
+function getBaseComposeFilePath() {
+    return path$1.join(process.env.GITHUB_ACTION_PATH || __root, 'docker-compose.yml');
+}
+
+/**
+ * Gets the modified compose file path if it exists, otherwise returns the base path.
+ * 
+ * This function checks if a modified compose file exists (created by applying presets)
+ * and returns its path. If no modified version exists, it returns the original compose
+ * file path as a fallback. This ensures that the system always has a valid compose file
+ * to work with, whether or not presets were applied.
+ * 
+ * @returns {string} Path to the compose file (modified if exists, base otherwise)
+ */
+function getActiveComposeFilePath() {
+    const baseDir = process.env.GITHUB_ACTION_PATH || __root;
+    const modifiedPath = path$1.join(baseDir, 'modified-docker-compose.yml');
+
+    // Return modified file if it exists, otherwise return base file
+    if (require$$0$6.existsSync(modifiedPath)) {
+        return modifiedPath;
+    }
+
+    return getBaseComposeFilePath();
+}
+
+/**
+ * Gets the default project name for Docker Compose operations.
+ * 
+ * This function returns a consistent project name used across the action
+ * lifecycle for Docker Compose operations. Using a consistent project name
+ * ensures that the same containers can be managed across different stages
+ * (startup, monitoring, cleanup).
+ * 
+ * @returns {string} The default Docker Compose project name
+ */
+function getDefaultProjectName() {
+    return 'apitest';
+}
+
+/**
  * Post-run configuration
  * @typedef {Object} PostConfig
  * @property {string} composeFile - Path to docker-compose.yml file
@@ -206339,13 +206388,22 @@ async function run() {
 }
 
 /**
- * Retrieves post-run configuration from saved state
+ * Retrieves post-run configuration from saved state.
+ * 
+ * This function retrieves the compose file path and project name that were saved
+ * during the main action run. If presets were applied, the compose file will be
+ * the modified version. If the state wasn't saved (e.g., early failure), it falls
+ * back to finding the active compose file (modified if exists, base otherwise).
+ * 
  * @returns {PostConfig} Post-run configuration
  */
 function getPostRunConfig() {
-    const composeFile = core$1.getState('compose_file') ||
-        path$1.join(process.env.GITHUB_ACTION_PATH || __root, 'docker-compose.yml');
-    const projectName = core$1.getState('compose_project') || 'apitest';
+    // Try to get the saved state first (this will be the modified file if presets were used)
+    const composeFile = core$1.getState('compose_file') || getActiveComposeFilePath();
+    const projectName = core$1.getState('compose_project') || getDefaultProjectName();
+
+    core$1.info(`Using compose file: ${composeFile}`);
+    core$1.info(`Using project name: ${projectName}`);
 
     return { composeFile, projectName };
 }
