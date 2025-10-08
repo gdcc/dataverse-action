@@ -1,2 +1,9 @@
 # IDE folders
 .idea/
+
+# Node modules
+node_modules/
+
+# Python
+__pycache__/
+.pytest_cache/

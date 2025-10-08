@@ -23,84 +23,22 @@ inputs:
   jvm_options:
     description: "Line separated key-value pairs of JVM options to be set before startup. Example: dataverse.spi.exporters.directory=/..."
     required: false
+  presets:
+    description: "Comma or line separated list of preset names to apply. Available presets: 'localstack'. Multiple presets can be combined."
+    required: false
+    default: "localstack"
+  min_part_size_mb:
+    description: "Minimum part size for multipart uploads in megabytes. Must be at least 5MB. Used by S3-compatible storage drivers."
+    required: false
+    default: "5"
 outputs:
   api_token:
     description: "API Token of dataverseAdmin superuser"
-    value: ${{ steps.bootstrap.outputs.API_TOKEN }}
   base_url:
     description: "Base URL where to reach the instance via HTTP"
-    value: ${{ steps.bootstrap.outputs.base_url }}
   dv_version:
     description: "Dataverse version"
-    value: ${{ steps.bootstrap.outputs.dv_version }}
 runs:
-  using: "composite"
-  steps:
-    - name: "Pull images for inspection and cache"
-      shell: bash
-      run: |
-        docker pull -q ${{ inputs.image_dataverse }}:${{ inputs.image_tag }}
-        docker pull -q ${{ inputs.image_configbaker }}:${{ inputs.image_tag }}
-    - name: "Prepare environment"
-      shell: bash
-      run: |
-        # Get PostgreSQL version from action config or application image metadata, fail otherwise
-        PG_VERSION="${{ inputs.postgresql_version }}"
-        PG_VERSION="${PG_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.postgresql.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
-        if [[ -z "${PG_VERSION}" ]]; then
-          echo "Cannot find PostgreSQL version"; exit 1
-        else
-          echo "POSTGRES_VERSION=$PG_VERSION" | tee -a "${GITHUB_ENV}" 
-        fi
-        
-        # Get Solr version from action config or application image metadata, fail otherwise
-        SOLR_VERSION=${{ inputs.solr_version }}
-        SOLR_VERSION="${SOLR_VERSION:-$(docker inspect -f '{{ index .Config.Labels "org.dataverse.deps.solr.version"}}' '${{ inputs.image_dataverse }}:${{ inputs.image_tag }}')}"
-        if [[ -z "${SOLR_VERSION}" ]]; then
-          echo "Cannot find Solr version"; exit 1
-        else
-          echo "SOLR_VERSION=$SOLR_VERSION" | tee -a "${GITHUB_ENV}" 
-        fi
-        
-        echo "CONFIGBAKER_IMAGE=${{ inputs.image_configbaker }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
-        echo "DATAVERSE_IMAGE=${{ inputs.image_dataverse }}:${{ inputs.image_tag }}" | tee -a "${GITHUB_ENV}"
-        echo "DATAVERSE_DB_USER=dataverse" | tee -a "${GITHUB_ENV}"
-        echo "DATAVERSE_DB_PASSWORD=secret" | tee -a "${GITHUB_ENV}"
-        
-        # We use the MicroProfile Config Source trick of reading properties from a directory.
-        # See also https://docs.payara.fish/community/docs/Technical%20Documentation/MicroProfile/Config/Directory.html
-        echo "CONFIG_DIR=${RUNNER_TEMP}/dv/conf" | tee -a "${GITHUB_ENV}"
-        mkdir -p "${RUNNER_TEMP}/dv/conf"
-        while IFS= read -r line; do
-          FILENAME="${RUNNER_TEMP}/dv/conf/$(echo "$line" | cut -f1 -d=)"
-          echo "$line" | cut -f2- -d= > "$FILENAME"
-        done < <(printf '%s' "${{ inputs.jvm_options }}")
-    - name: "Start Dataverse service in background"
-      shell: bash
-      run: |
-        echo "::group::🥎 Start Dataverse service in background"
-        docker compose -f ${{ github.action_path }}/docker-compose.yml -p apitest up -d --quiet-pull \
-          && echo -e "✅️ Dataverse containers have been started."
-        echo "::endgroup::"
-    # Bootstrap will wait up until accessible, so blocking here.
-    - name: "Bootstrap Dataverse service"
-      id: bootstrap
-      shell: bash
-      run: |
-        echo "::group::🤖 Bootstrap Dataverse service"
-        mkdir -p "${RUNNER_TEMP}/dv"
-        touch "${RUNNER_TEMP}/dv/bootstrap.exposed.env"
-        
-        docker run -i --network apitest_dataverse \
-          -v "${RUNNER_TEMP}/dv/bootstrap.exposed.env:/.env" \
-          "${CONFIGBAKER_IMAGE}" bootstrap.sh -e /.env dev
-        
-        # Expose outputs
-        grep "API_TOKEN" "${RUNNER_TEMP}/dv/bootstrap.exposed.env" >> "$GITHUB_OUTPUT"
-        echo "base_url=http://localhost:8080/" >> "$GITHUB_OUTPUT"
-        
-        # Expose version
-        version=$(curl -s 'http://localhost:8080/api/info/version' | jq -r '.data.version')
-        echo "dv_version=$version" >>"$GITHUB_OUTPUT"
-        
-        echo "::endgroup::"
+  using: "node20"
+  main: "dist/index.js"
+  post: "dist/post.js"
