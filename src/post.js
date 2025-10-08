@@ -1,14 +1,9 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import core from '@actions/core';
 import exec from '@actions/exec';
 import fs from 'fs';
 import path from 'path';
 import artifact from '@actions/artifact';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const __root = path.dirname(__dirname);
+import { getActiveComposeFilePath, getDefaultProjectName, ensureDirectories } from './utils.js';
 
 /**
  * Post-run configuration
@@ -37,13 +32,22 @@ async function run() {
 }
 
 /**
- * Retrieves post-run configuration from saved state
+ * Retrieves post-run configuration from saved state.
+ * 
+ * This function retrieves the compose file path and project name that were saved
+ * during the main action run. If presets were applied, the compose file will be
+ * the modified version. If the state wasn't saved (e.g., early failure), it falls
+ * back to finding the active compose file (modified if exists, base otherwise).
+ * 
  * @returns {PostConfig} Post-run configuration
  */
 function getPostRunConfig() {
-    const composeFile = core.getState('compose_file') ||
-        path.join(process.env.GITHUB_ACTION_PATH || __root, 'docker-compose.yml');
-    const projectName = core.getState('compose_project') || 'apitest';
+    // Try to get the saved state first (this will be the modified file if presets were used)
+    const composeFile = core.getState('compose_file') || getActiveComposeFilePath();
+    const projectName = core.getState('compose_project') || getDefaultProjectName();
+
+    core.info(`Using compose file: ${composeFile}`);
+    core.info(`Using project name: ${projectName}`);
 
     return { composeFile, projectName };
 }
@@ -55,9 +59,16 @@ function getPostRunConfig() {
 async function collectAndUploadLogs(config) {
     core.startGroup('📦 Collect and upload Dataverse logs');
 
+    core.info(`Collecting logs for config: ${JSON.stringify(config)}`);
+
+    // Include localstack as an additional service for log collection
     const artifactsDir = createArtifactsDirectory();
-    const logFile = await collectDataverseLogs(config, artifactsDir);
-    await uploadLogArtifacts(logFile, artifactsDir);
+    const logFiles = await collectDataverseLogs(config, artifactsDir, ['localstack']);
+
+    if (logFiles.length > 0) {
+        core.info(`Uploading ${logFiles.length} log files`);
+        await uploadLogArtifacts(logFiles, artifactsDir);
+    }
 
     core.endGroup();
 }
@@ -68,33 +79,52 @@ async function collectAndUploadLogs(config) {
  */
 function createArtifactsDirectory() {
     const artifactsDir = path.join(process.cwd(), 'artifacts');
-    fs.mkdirSync(artifactsDir, { recursive: true });
+    ensureDirectories(artifactsDir);
     return artifactsDir;
 }
 
 /**
- * Collects Dataverse server logs from the container
+ * Collects logs from Docker Compose services
  * @param {PostConfig} config - Post-run configuration
  * @param {string} artifactsDir - Directory to store artifacts
- * @returns {Promise<string>} Path to the collected log file
+ * @param {string[]} additionalServices - Additional services beyond core services
+ * @returns {Promise<string[]>} Paths to the collected log files
  */
-async function collectDataverseLogs(config, artifactsDir) {
-    const logFile = path.join(artifactsDir, 'dataverse-server.log');
-    core.info('Collecting logs via Docker Compose...');
-    await collectComposeServiceLogs(config, logFile);
+async function collectDataverseLogs(config, artifactsDir, additionalServices = []) {
+    const coreServices = ['dataverse', 'postgres', 'solr', 'smtp'];
+    const services = [...coreServices, ...additionalServices];
 
-    return logFile;
+    core.info('Collecting logs via Docker Compose...');
+    const logFiles = [];
+
+    // Collect logs from all services
+    for (const service of services) {
+        const logFileName = service === 'dataverse' ? 'dataverse-server.log' : `${service}.log`;
+        const logFile = path.join(artifactsDir, logFileName);
+        logFiles.push(logFile);
+        await collectComposeServiceLogs(config, logFile, service);
+    }
+
+    // Copy the compose file to artifacts for debugging
+    const composeFile = path.join(artifactsDir, 'docker-compose.yml');
+    if (fs.existsSync(config.composeFile)) {
+        fs.copyFileSync(config.composeFile, composeFile);
+        logFiles.push(composeFile);
+    }
+
+    return logFiles;
 }
 
 /**
- * Collects logs from the Dataverse service via Docker Compose
+ * Collects logs from a specific Docker Compose service
  * @param {PostConfig} config - Post-run configuration
  * @param {string} logFile - Path where to save the log file
+ * @param {string} serviceName - Name of the service to collect logs from
  */
-async function collectComposeServiceLogs(config, logFile) {
+async function collectComposeServiceLogs(config, logFile, serviceName) {
     try {
         let output = '';
-        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', 'dataverse'], {
+        await exec.exec('docker', ['compose', '-f', config.composeFile, '-p', config.projectName, 'logs', '--no-color', serviceName], {
             listeners: {
                 stdout: (data) => { output += data.toString(); }
             }
@@ -104,7 +134,7 @@ async function collectComposeServiceLogs(config, logFile) {
             fs.writeFileSync(logFile, output, 'utf8');
             core.info('✅ Collected logs via Docker Compose');
         } else {
-            core.warning('No logs collected from Dataverse service');
+            core.warning(`No logs collected from ${serviceName} service`);
         }
     } catch (error) {
         core.debug(`Could not collect compose logs: ${error.message}`);
@@ -114,19 +144,19 @@ async function collectComposeServiceLogs(config, logFile) {
 
 /**
  * Uploads collected logs as GitHub Actions artifacts
- * @param {string} logFile - Path to the log file
+ * @param {string[]} logFiles - Array of paths to log files
  * @param {string} artifactsDir - Directory containing artifacts
  */
-async function uploadLogArtifacts(logFile, artifactsDir) {
+async function uploadLogArtifacts(logFiles, artifactsDir) {
     try {
-        const files = fs.existsSync(logFile) ? [logFile] : [];
+        const existingFiles = logFiles.filter(file => fs.existsSync(file));
 
-        if (files.length === 0) {
+        if (existingFiles.length === 0) {
             core.warning('No log files to upload');
             return;
         }
 
-        await artifact.uploadArtifact('dataverse-logs', files, artifactsDir, {
+        await artifact.uploadArtifact('dataverse-logs', existingFiles, artifactsDir, {
             retentionDays: 14
         });
 

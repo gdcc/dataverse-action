@@ -1,5 +1,7 @@
+import json
 import os
 from urllib.parse import urljoin
+
 import requests
 
 
@@ -94,7 +96,7 @@ class TestNativeAPI:
             headers=self.construct_header(),
             json={
                 "name": "TestAction",
-                "alias": "test_colleczion",
+                "alias": "test_collection",
                 "dataverseContacts": [
                     {"contactEmail": "burrito@burritoplace.com"},
                 ],
@@ -106,3 +108,116 @@ class TestNativeAPI:
 
         assert response.status_code == 201, response.text
         assert response.json()["status"] == "OK"
+
+    def test_set_storage_driver(self):
+        """
+        Test case for setting the storage driver.
+
+        This test creates a new collection, sets the storage driver to LocalStack,
+        and then tests that the storage driver is set correctly.
+        """
+
+        # First create a new collection
+        url = self.construct_url("api/dataverses/root")
+        response = requests.post(
+            url=url,
+            headers=self.construct_header(),
+            json={
+                "name": "TestStorageDriver",
+                "alias": "test_storage_driver",
+                "dataverseContacts": [
+                    {"contactEmail": "burrito@burritoplace.com"},
+                ],
+                "affiliation": "Burrito Research University",
+                "description": "We do all the (burrito) science.",
+                "dataverseType": "LABORATORY",
+            },
+        )
+
+        # Next, set the storage driver to LocalStack
+        url = self.construct_url(
+            "api/admin/dataverse/test_storage_driver/storageDriver"
+        )
+
+        response = requests.put(
+            url,
+            headers=self.construct_header(),
+            data="LocalStack",
+        )
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+
+        # Next, test the storage driver
+        response = requests.get(url, headers=self.construct_header())
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+        assert response.json()["data"]["message"] == "localstack1"
+
+    def test_direct_upload_ticket(self):
+        """
+        Test case for creating a direct upload ticket.
+
+        This test sends a POST request to the specified URL with the necessary headers and payload
+        to create a direct upload ticket in the dataverse. It then asserts that the response status code is 201
+        and the response JSON contains a "status" key with the value "OK".
+        """
+
+        # First create a new collection
+        url = self.construct_url("api/dataverses/root")
+        response = requests.post(
+            url=url,
+            headers=self.construct_header(),
+            json={
+                "name": "TestDirectUploadTicket",
+                "alias": "test_direct_upload_ticket",
+                "dataverseContacts": [
+                    {"contactEmail": "burrito@burritoplace.com"},
+                ],
+                "affiliation": "Burrito Research University",
+                "description": "We do all the (burrito) science.",
+                "dataverseType": "LABORATORY",
+            },
+        )
+
+        # Next, set the storage driver to LocalStack
+        url = self.construct_url(
+            "api/admin/dataverse/test_direct_upload_ticket/storageDriver"
+        )
+
+        response = requests.put(
+            url,
+            headers=self.construct_header(),
+            data="LocalStack",
+        )
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+
+        # Next create a new dataset
+        url = self.construct_url("api/dataverses/test_direct_upload_ticket/datasets")
+        with open(".github/workflows/scripts/initial-dataset.json", "r") as f:
+            initial_dataset = json.load(f)
+
+        response = requests.post(
+            url=url,
+            headers=self.construct_header(),
+            json=initial_dataset,
+        )
+
+        response.raise_for_status()
+        pid = response.json()["data"]["persistentId"]
+
+        # Next, get the upload URLs
+        url = self.construct_url(
+            f"/api/datasets/:persistentId/uploadurls/?persistentId={pid}&size=72428800"
+        )
+
+        response = requests.get(url, headers=self.construct_header())
+
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "OK"
+
+        assert "urls" in response.json()["data"]
+        assert len(response.json()["data"]["urls"]) > 1

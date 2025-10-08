@@ -23,6 +23,14 @@ inputs:
   jvm_options:
     description: "Line separated key-value pairs of JVM options to be set before startup. Example: dataverse.spi.exporters.directory=/..."
     required: false
+  presets:
+    description: "Comma or line separated list of preset names to apply. Available presets: 'localstack'. Multiple presets can be combined."
+    required: false
+    default: "localstack"
+  min_part_size_mb:
+    description: "Minimum part size for multipart uploads in megabytes. Must be at least 5MB. Used by S3-compatible storage drivers."
+    required: false
+    default: "5"
 outputs:
   api_token:
     description: "API Token of dataverseAdmin superuser"

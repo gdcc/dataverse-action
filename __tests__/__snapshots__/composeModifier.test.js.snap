@@ -1,0 +1,259 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`modifyComposeFile snapshot: modified compose file with localstack preset 1`] = `
+"services:
+  dataverse:
+    container_name: dataverse
+    hostname: dataverse
+    image: \${DATAVERSE_IMAGE}
+    restart: on-failure
+    user: payara
+    environment:
+      DATAVERSE_DB_HOST: postgres
+      DATAVERSE_DB_USER: \${DATAVERSE_DB_USER}
+      DATAVERSE_DB_PASSWORD: \${DATAVERSE_DB_PASSWORD}
+      DATAVERSE_PID_PROVIDERS: fake
+      DATAVERSE_PID_DEFAULT_PROVIDER: fake
+      DATAVERSE_PID_FAKE_TYPE: FAKE
+      DATAVERSE_PID_FAKE_LABEL: Fake DOI Provider
+      DATAVERSE_PID_FAKE_AUTHORITY: 10.5072
+      DATAVERSE_PID_FAKE_SHOULDER: FK2/
+      JVM_ARGS: '-Ddataverse.files.localstack1.type=s3 -Ddataverse.files.localstack1.label=LocalStack -Ddataverse.files.localstack1.custom-endpoint-url=http://localstack:4566 -Ddataverse.files.localstack1.custom-endpoint-region=us-east-2 -Ddataverse.files.localstack1.bucket-name=mybucket -Ddataverse.files.localstack1.path-style-access=true -Ddataverse.files.localstack1.upload-redirect=true -Ddataverse.files.localstack1.download-redirect=true -Ddataverse.files.localstack1.access-key=default -Ddataverse.files.localstack1.secret-key=default -Ddataverse.files.localstack1.min-part-size=5242880'
+    ports:
+      - '8080:8080'
+    networks:
+      - dataverse
+    depends_on:
+      postgres:
+        condition: service_started
+      solr:
+        condition: service_started
+      dv_initializer:
+        condition: service_completed_successfully
+      localstack:
+        condition: service_healthy
+    volumes:
+      - \${RUNNER_TEMP}/dv/data:/dv
+    tmpfs:
+      - /dumps:mode=770,size=2052M,uid=1000,gid=1000
+      - /tmp:mode=770,size=2052M,uid=1000,gid=1000
+    mem_limit: 2147483648
+    mem_reservation: 1024m
+    privileged: false
+  dv_initializer:
+    container_name: dv_initializer
+    image: \${CONFIGBAKER_IMAGE}
+    restart: 'no'
+    command:
+      - sh
+      - '-c'
+      - fix-fs-perms.sh dv
+    volumes:
+      - \${RUNNER_TEMP}/dv/data:/dv
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:\${POSTGRES_VERSION}
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=\${DATAVERSE_DB_USER}
+      - POSTGRES_PASSWORD=\${DATAVERSE_DB_PASSWORD}
+    ports:
+      - '5432:5432'
+    networks:
+      - dataverse
+  solr_initializer:
+    container_name: solr_initializer
+    image: \${CONFIGBAKER_IMAGE}
+    restart: 'no'
+    command:
+      - sh
+      - '-c'
+      - fix-fs-perms.sh solr && cp -a /template/* /solr-template
+    volumes:
+      - \${RUNNER_TEMP}/solr/data:/var/solr
+      - \${RUNNER_TEMP}/solr/conf:/solr-template
+  solr:
+    container_name: solr
+    hostname: solr
+    image: solr:\${SOLR_VERSION}
+    depends_on:
+      solr_initializer:
+        condition: service_completed_successfully
+    restart: on-failure
+    ports:
+      - '8983:8983'
+    networks:
+      - dataverse
+    command:
+      - solr-precreate
+      - collection1
+      - /template
+    volumes:
+      - \${RUNNER_TEMP}/solr/data:/var/solr
+      - \${RUNNER_TEMP}/solr/conf:/template
+  smtp:
+    container_name: smtp
+    hostname: smtp
+    image: maildev/maildev:2.0.5
+    restart: on-failure
+    expose:
+      - '25'
+    environment:
+      - MAILDEV_SMTP_PORT=25
+      - MAILDEV_MAIL_DIRECTORY=/mail
+    networks:
+      - dataverse
+    tmpfs:
+      - /mail:mode=770,size=128M,uid=1000,gid=1000
+  localstack:
+    container_name: localstack
+    hostname: localstack
+    image: localstack/localstack:4.2.0
+    restart: on-failure
+    ports:
+      - 127.0.0.1:4566:4566
+    environment:
+      - DEBUG=\${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME_EXTERNAL=localstack
+    networks:
+      - dataverse
+    volumes:
+      - \${RUNNER_TEMP}/dv/conf/localstack:/etc/localstack/init/ready.d
+    tmpfs:
+      - /localstack:mode=770,size=128M,uid=1000,gid=1000
+networks:
+  dataverse:
+    driver: bridge
+"
+`;
+
+exports[`modifyComposeFile snapshot: modified compose file with localstack preset and custom options 1`] = `
+"services:
+  dataverse:
+    container_name: dataverse
+    hostname: dataverse
+    image: \${DATAVERSE_IMAGE}
+    restart: on-failure
+    user: payara
+    environment:
+      DATAVERSE_DB_HOST: postgres
+      DATAVERSE_DB_USER: \${DATAVERSE_DB_USER}
+      DATAVERSE_DB_PASSWORD: \${DATAVERSE_DB_PASSWORD}
+      DATAVERSE_PID_PROVIDERS: fake
+      DATAVERSE_PID_DEFAULT_PROVIDER: fake
+      DATAVERSE_PID_FAKE_TYPE: FAKE
+      DATAVERSE_PID_FAKE_LABEL: Fake DOI Provider
+      DATAVERSE_PID_FAKE_AUTHORITY: 10.5072
+      DATAVERSE_PID_FAKE_SHOULDER: FK2/
+      JVM_ARGS: '-Ddataverse.files.localstack1.type=s3 -Ddataverse.files.localstack1.label=LocalStack -Ddataverse.files.localstack1.custom-endpoint-url=http://localstack:4566 -Ddataverse.files.localstack1.custom-endpoint-region=us-east-2 -Ddataverse.files.localstack1.bucket-name=mybucket -Ddataverse.files.localstack1.path-style-access=true -Ddataverse.files.localstack1.upload-redirect=true -Ddataverse.files.localstack1.download-redirect=true -Ddataverse.files.localstack1.access-key=default -Ddataverse.files.localstack1.secret-key=default -Ddataverse.files.localstack1.min-part-size=10485760 -Ddataverse.spi.exporters.directory=/exports -Ddataverse.files.directory=/data'
+    ports:
+      - '8080:8080'
+    networks:
+      - dataverse
+    depends_on:
+      postgres:
+        condition: service_started
+      solr:
+        condition: service_started
+      dv_initializer:
+        condition: service_completed_successfully
+      localstack:
+        condition: service_healthy
+    volumes:
+      - \${RUNNER_TEMP}/dv/data:/dv
+    tmpfs:
+      - /dumps:mode=770,size=2052M,uid=1000,gid=1000
+      - /tmp:mode=770,size=2052M,uid=1000,gid=1000
+    mem_limit: 2147483648
+    mem_reservation: 1024m
+    privileged: false
+  dv_initializer:
+    container_name: dv_initializer
+    image: \${CONFIGBAKER_IMAGE}
+    restart: 'no'
+    command:
+      - sh
+      - '-c'
+      - fix-fs-perms.sh dv
+    volumes:
+      - \${RUNNER_TEMP}/dv/data:/dv
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:\${POSTGRES_VERSION}
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=\${DATAVERSE_DB_USER}
+      - POSTGRES_PASSWORD=\${DATAVERSE_DB_PASSWORD}
+    ports:
+      - '5432:5432'
+    networks:
+      - dataverse
+  solr_initializer:
+    container_name: solr_initializer
+    image: \${CONFIGBAKER_IMAGE}
+    restart: 'no'
+    command:
+      - sh
+      - '-c'
+      - fix-fs-perms.sh solr && cp -a /template/* /solr-template
+    volumes:
+      - \${RUNNER_TEMP}/solr/data:/var/solr
+      - \${RUNNER_TEMP}/solr/conf:/solr-template
+  solr:
+    container_name: solr
+    hostname: solr
+    image: solr:\${SOLR_VERSION}
+    depends_on:
+      solr_initializer:
+        condition: service_completed_successfully
+    restart: on-failure
+    ports:
+      - '8983:8983'
+    networks:
+      - dataverse
+    command:
+      - solr-precreate
+      - collection1
+      - /template
+    volumes:
+      - \${RUNNER_TEMP}/solr/data:/var/solr
+      - \${RUNNER_TEMP}/solr/conf:/template
+  smtp:
+    container_name: smtp
+    hostname: smtp
+    image: maildev/maildev:2.0.5
+    restart: on-failure
+    expose:
+      - '25'
+    environment:
+      - MAILDEV_SMTP_PORT=25
+      - MAILDEV_MAIL_DIRECTORY=/mail
+    networks:
+      - dataverse
+    tmpfs:
+      - /mail:mode=770,size=128M,uid=1000,gid=1000
+  localstack:
+    container_name: localstack
+    hostname: localstack
+    image: localstack/localstack:4.2.0
+    restart: on-failure
+    ports:
+      - 127.0.0.1:4566:4566
+    environment:
+      - DEBUG=\${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME_EXTERNAL=localstack
+    networks:
+      - dataverse
+    volumes:
+      - \${RUNNER_TEMP}/dv/conf/localstack:/etc/localstack/init/ready.d
+    tmpfs:
+      - /localstack:mode=770,size=128M,uid=1000,gid=1000
+networks:
+  dataverse:
+    driver: bridge
+"
+`;

@@ -17,6 +17,7 @@ services:
       DATAVERSE_PID_FAKE_LABEL: Fake DOI Provider
       DATAVERSE_PID_FAKE_AUTHORITY: 10.5072
       DATAVERSE_PID_FAKE_SHOULDER: FK2/
+      JVM_ARGS: ''
     ports:
       - '8080:8080'
     networks:
@@ -28,9 +29,10 @@ services:
         condition: service_started
       dv_initializer:
         condition: service_completed_successfully
+      localstack:
+        condition: service_healthy
     volumes:
       - ${RUNNER_TEMP}/dv/data:/dv
-      - ${CONFIG_DIR}:/secrets
     tmpfs:
       - /dumps:mode=770,size=2052M,uid=1000,gid=1000
       - /tmp:mode=770,size=2052M,uid=1000,gid=1000
@@ -108,6 +110,24 @@ services:
       - dataverse
     tmpfs:
       - /mail:mode=770,size=128M,uid=1000,gid=1000
+
+  localstack:
+    container_name: 'localstack'
+    hostname: 'localstack'
+    image: localstack/localstack:4.2.0
+    restart: on-failure
+    ports:
+      - '127.0.0.1:4566:4566'
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME_EXTERNAL=localstack
+    networks:
+      - dataverse
+    volumes:
+      - ${RUNNER_TEMP}/dv/conf/localstack:/etc/localstack/init/ready.d
+    tmpfs:
+      - /localstack:mode=770,size=128M,uid=1000,gid=1000
 
 networks:
   dataverse:
