@@ -31545,8 +31545,13 @@ async function bootstrapDataverse(config, composeConfig) {
     const dvDir = path.join(runnerTemp, 'dv');
     fs.mkdirSync(dvDir, { recursive: true });
 
+    core$1.info(`Bootstrap directory created at: ${dvDir}`);
+
     const exposeEnv = path.join(dvDir, 'bootstrap.exposed.env');
-    fs.closeSync(fs.openSync(exposeEnv, 'a'));
+    fs.closeSync(fs.openSync(exposeEnv, 'w'));
+    fs.chmodSync(exposeEnv, 0o777);
+
+    core$1.info(`Bootstrap environment file created at: ${exposeEnv}`);
 
     const networkName = `${composeConfig.projectName}_dataverse`;
     await exec.exec('docker', [
