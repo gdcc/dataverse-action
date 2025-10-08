@@ -109,8 +109,17 @@ describe('mergeJvmArgs', () => {
 describe('modifyComposeFile', () => {
     const originalComposePath = path.join(__root, 'docker-compose.yml');
 
+    // Helper function to create a temp copy of the compose file
+    const createTempCompose = () => {
+        const tempComposePath = path.join(tempDir, `docker-compose-${Date.now()}.yml`);
+        fs.copyFileSync(originalComposePath, tempComposePath);
+        return tempComposePath;
+    };
+
     test('should create modified compose file with localstack preset', () => {
-        const modifiedPath = modifyComposeFile(originalComposePath, {
+        const tempComposePath = createTempCompose();
+
+        const modifiedPath = modifyComposeFile(tempComposePath, {
             presets: ['localstack'],
             additionalJvmOptions: '',
             mbytes: 10,
@@ -126,12 +135,17 @@ describe('modifyComposeFile', () => {
         expect(modifiedContent).toContain('localstack1.custom-endpoint-url=http://localstack:4566');
         expect(modifiedContent).toContain('localstack1.min-part-size=10485760'); // 10MB in bytes
 
-        // Clean up
-        fs.unlinkSync(modifiedPath);
+        // Clean up temp files
+        fs.unlinkSync(tempComposePath);
+        if (fs.existsSync(modifiedPath)) {
+            fs.unlinkSync(modifiedPath);
+        }
     });
 
     test('should create modified compose file with localstack preset and custom JVM options', () => {
-        const modifiedPath = modifyComposeFile(originalComposePath, {
+        const tempComposePath = createTempCompose();
+
+        const modifiedPath = modifyComposeFile(tempComposePath, {
             presets: ['localstack'],
             additionalJvmOptions: 'dataverse.spi.exporters.directory=/exports\ndataverse.files.directory=/data',
             mbytes: 5,
@@ -149,12 +163,17 @@ describe('modifyComposeFile', () => {
         expect(modifiedContent).toContain('dataverse.spi.exporters.directory=/exports');
         expect(modifiedContent).toContain('dataverse.files.directory=/data');
 
-        // Clean up
-        fs.unlinkSync(modifiedPath);
+        // Clean up temp files
+        fs.unlinkSync(tempComposePath);
+        if (fs.existsSync(modifiedPath)) {
+            fs.unlinkSync(modifiedPath);
+        }
     });
 
     test('should create modified compose file with only custom JVM options', () => {
-        const modifiedPath = modifyComposeFile(originalComposePath, {
+        const tempComposePath = createTempCompose();
+
+        const modifiedPath = modifyComposeFile(tempComposePath, {
             presets: [],
             additionalJvmOptions: 'dataverse.spi.exporters.directory=/exports',
             mbytes: 5,
@@ -171,34 +190,49 @@ describe('modifyComposeFile', () => {
         // Should contain custom JVM option
         expect(modifiedContent).toContain('dataverse.spi.exporters.directory=/exports');
 
-        // Clean up
-        fs.unlinkSync(modifiedPath);
+        // Clean up temp files
+        fs.unlinkSync(tempComposePath);
+        if (fs.existsSync(modifiedPath)) {
+            fs.unlinkSync(modifiedPath);
+        }
     });
 
     test('should throw error for invalid preset', () => {
+        const tempComposePath = createTempCompose();
+
         expect(() => {
-            modifyComposeFile(originalComposePath, {
+            modifyComposeFile(tempComposePath, {
                 presets: ['invalid-preset'],
                 additionalJvmOptions: '',
                 mbytes: 5,
                 serviceName: 'dataverse'
             });
         }).toThrow("Preset 'invalid-preset' is not defined");
+
+        // Clean up temp file
+        fs.unlinkSync(tempComposePath);
     });
 
     test('should throw error for invalid service name', () => {
+        const tempComposePath = createTempCompose();
+
         expect(() => {
-            modifyComposeFile(originalComposePath, {
+            modifyComposeFile(tempComposePath, {
                 presets: ['localstack'],
                 additionalJvmOptions: '',
                 mbytes: 5,
                 serviceName: 'non-existent-service'
             });
         }).toThrow("Service 'non-existent-service' not found in compose file");
+
+        // Clean up temp file
+        fs.unlinkSync(tempComposePath);
     });
 
     test('snapshot: modified compose file with localstack preset', () => {
-        const modifiedPath = modifyComposeFile(originalComposePath, {
+        const tempComposePath = createTempCompose();
+
+        const modifiedPath = modifyComposeFile(tempComposePath, {
             presets: ['localstack'],
             additionalJvmOptions: '',
             mbytes: 5,
@@ -210,12 +244,17 @@ describe('modifyComposeFile', () => {
         // Snapshot test for the entire modified compose file
         expect(modifiedContent).toMatchSnapshot();
 
-        // Clean up
-        fs.unlinkSync(modifiedPath);
+        // Clean up temp files
+        fs.unlinkSync(tempComposePath);
+        if (fs.existsSync(modifiedPath)) {
+            fs.unlinkSync(modifiedPath);
+        }
     });
 
     test('snapshot: modified compose file with localstack preset and custom options', () => {
-        const modifiedPath = modifyComposeFile(originalComposePath, {
+        const tempComposePath = createTempCompose();
+
+        const modifiedPath = modifyComposeFile(tempComposePath, {
             presets: ['localstack'],
             additionalJvmOptions: 'dataverse.spi.exporters.directory=/exports\ndataverse.files.directory=/data',
             mbytes: 10,
@@ -227,8 +266,11 @@ describe('modifyComposeFile', () => {
         // Snapshot test for the entire modified compose file
         expect(modifiedContent).toMatchSnapshot();
 
-        // Clean up
-        fs.unlinkSync(modifiedPath);
+        // Clean up temp files
+        fs.unlinkSync(tempComposePath);
+        if (fs.existsSync(modifiedPath)) {
+            fs.unlinkSync(modifiedPath);
+        }
     });
 });
 

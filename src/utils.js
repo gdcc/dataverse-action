@@ -32,7 +32,7 @@ export function getBaseComposeFilePath() {
  */
 export function getActiveComposeFilePath() {
     const baseDir = process.env.GITHUB_ACTION_PATH || __root;
-    const modifiedPath = path.join(baseDir, 'modified-docker-compose.yml');
+    const modifiedPath = path.join(baseDir, 'docker-compose.yml');
 
     // Return modified file if it exists, otherwise return base file
     if (fs.existsSync(modifiedPath)) {

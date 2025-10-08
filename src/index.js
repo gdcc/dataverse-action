@@ -125,7 +125,7 @@ async function setupEnvironment(config, versions) {
  * 
  * This function uses the composeModifier module to properly parse the YAML
  * configuration, apply preset JVM options and custom JVM options, and generate
- * a new compose file with a "modified-" prefix.
+ * a new compose file.
  * 
  * @param {ActionConfig} config - Action configuration
  * @param {string} composeFile - Path to the original compose file

@@ -76,7 +76,7 @@ export function mergeJvmArgs(currentJvmArgs, newJvmOptions) {
  * 3. Generates JVM options from selected presets
  * 4. Merges preset JVM options with any additional custom JVM options
  * 5. Updates the JVM_ARGS environment variable in the specified service
- * 6. Writes the modified configuration to a new file with "modified-" prefix
+ * 6. Writes the modified configuration to the same file
  * 
  * The function ensures that the YAML structure and formatting are preserved while
  * making targeted modifications to the environment configuration.
@@ -139,8 +139,8 @@ export function modifyComposeFile(composeFilePath, options) {
 
     // Generate output file path
     const dirname = path.dirname(composeFilePath);
-    const basename = path.basename(composeFilePath);
-    const outputFilePath = path.join(dirname, `modified-${basename}`);
+    const basename = path.basename(composeFilePath, '.yml');
+    const outputFilePath = path.join(dirname, `${basename}-modified.yml`);
 
     // Write the modified compose file
     let modifiedContent = yaml.dump(composeConfig, {

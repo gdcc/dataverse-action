@@ -206337,7 +206337,7 @@ function getBaseComposeFilePath() {
  */
 function getActiveComposeFilePath() {
     const baseDir = process.env.GITHUB_ACTION_PATH || __root;
-    const modifiedPath = path$1.join(baseDir, 'modified-docker-compose.yml');
+    const modifiedPath = path$1.join(baseDir, 'docker-compose.yml');
 
     // Return modified file if it exists, otherwise return base file
     if (require$$0$6.existsSync(modifiedPath)) {
@@ -206471,9 +206471,10 @@ async function collectDataverseLogs(config, artifactsDir, additionalServices = [
     await collectComposeServiceLogs(config, smtpLogFile, 'smtp');
 
     // Modified compose file
-    const modifiedComposeFile = path$1.join(artifactsDir, 'modified-docker-compose.yml');
+    const modifiedComposeFile = path$1.join(artifactsDir, 'docker-compose.yml');
+    const modifiedComposeFileContent = require$$0$6.readFileSync(modifiedComposeFile, 'utf8');
+    require$$0$6.writeFileSync(modifiedComposeFile, modifiedComposeFileContent, 'utf8');
     logFiles.push(modifiedComposeFile);
-    await collectComposeServiceLogs(config, modifiedComposeFile, 'dataverse');
 
     // Collect logs from additional services
     if (additionalServices.includes('localstack')) {
