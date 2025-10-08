@@ -31526,6 +31526,36 @@ async function startDataverseStack(composeFilePath) {
     core$1.saveState('compose_file', composeFile);
     core$1.saveState('compose_project', projectName);
 
+    // Create directory structure before Docker Compose starts to ensure correct permissions
+    // This prevents Docker from creating directories as root which would cause permission issues
+    const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
+    const dvDir = path.join(runnerTemp, 'dv');
+    const dvDataDir = path.join(dvDir, 'data');
+    const dvConfLocalstackDir = path.join(dvDir, 'conf', 'localstack');
+    const solrDataDir = path.join(runnerTemp, 'solr', 'data');
+    const solrConfDir = path.join(runnerTemp, 'solr', 'conf');
+
+    fs.mkdirSync(dvDataDir, { recursive: true });
+    fs.mkdirSync(dvConfLocalstackDir, { recursive: true });
+    fs.mkdirSync(solrDataDir, { recursive: true });
+    fs.mkdirSync(solrConfDir, { recursive: true });
+
+    // Copy localstack initialization scripts from workspace to temp directory
+    const workspaceLocalstackDir = path.join(process.cwd(), 'dv', 'conf', 'localstack');
+    if (fs.existsSync(workspaceLocalstackDir)) {
+        const files = fs.readdirSync(workspaceLocalstackDir);
+        for (const file of files) {
+            const srcPath = path.join(workspaceLocalstackDir, file);
+            const destPath = path.join(dvConfLocalstackDir, file);
+            fs.copyFileSync(srcPath, destPath);
+            // Ensure scripts are executable
+            fs.chmodSync(destPath, 0o755);
+        }
+        core$1.info(`Copied ${files.length} localstack initialization script(s)`);
+    }
+
+    core$1.info(`Created volume mount directories under: ${runnerTemp}`);
+
     core$1.startGroup('🥎 Start Dataverse service in background');
     await exec.exec('docker', ['compose', '-f', composeFile, '-p', projectName, 'up', '-d', '--quiet-pull']);
     core$1.endGroup();
@@ -31543,14 +31573,11 @@ async function bootstrapDataverse(config, composeConfig) {
 
     const runnerTemp = process.env.RUNNER_TEMP || path.join(process.cwd(), 'tmp');
     const dvDir = path.join(runnerTemp, 'dv');
-    fs.mkdirSync(dvDir, { recursive: true });
-    fs.chmodSync(dvDir, 0o777);
-
-    core$1.info(`Bootstrap directory created at: ${dvDir}`);
-
     const exposeEnv = path.join(dvDir, 'bootstrap.exposed.env');
+
+    // Create the bootstrap environment file (directory already exists from startDataverseStack)
     fs.closeSync(fs.openSync(exposeEnv, 'w'));
-    fs.chmodSync(exposeEnv, 0o777);
+    fs.chmodSync(exposeEnv, 0o666);
 
     core$1.info(`Bootstrap environment file created at: ${exposeEnv}`);
 
